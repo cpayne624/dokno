@@ -13,3 +13,19 @@
  *= require_tree .
  *= require_self
  */
+
+svg.feather {
+  vertical-align: sub;
+}
+
+div#dokno-content-container a {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #2c5282;
+}
+
+div#dokno-content-container a:visited,
+div#dokno-content-container a:active {
+  text-decoration: underline;
+  color: #4299e1;
+}

@@ -1,0 +1,24 @@
+<%= form_with do %>
+  <section class="p-10 bg-gray-200">
+    <h1 class="text-4xl font-semibold">New Category</h1>
+
+    <% if Dokno::Category.exists? %>
+      <div class="mt-10">
+        <div class="text-lg"><label for="category_id">Parent Category</label></div>
+        <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 max-w-full mt-2">
+          <option></option>
+          <%= Dokno::Category.select_option_markup(selected_category_id: @parent_category_id).html_safe %>
+        </select>
+        <div class="text-gray-500 mt-2">The existing category to which this category will belong.</div>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="p-10 bg-gray-100">
+    <div class="p-10 bg-white rounded-lg shadow">
+      <input placeholder="Category Name" type="text" name="name" id="name" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/3" />
+      <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 ml-5 text-lg font-bold"><i data-feather="save" class="inline"></i> SAVE CATEGORY</button>
+      <span class="text-lg ml-5"><a class="no-underline" href="<%= category_path(@parent_category_id) %>">Cancel</a></span>
+    </div>
+  </section>
+<% end %>

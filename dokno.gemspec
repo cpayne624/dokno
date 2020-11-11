@@ -8,14 +8,14 @@ Gem::Specification.new do |spec|
   spec.version     = Dokno::VERSION
   spec.authors     = ["Courtney Payne"]
   spec.email       = ["cpayne624@gmail.com"]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of Dokno."
-  spec.description = "TODO: Description of Dokno."
+  spec.homepage    = "https://github.com/cpayne624/dokno"
+  spec.summary     = "Dokno (prounounced dough-no) is a lightweight Rails Engine for storing and managing your app's Domain Knowledge."
   spec.license     = "MIT"
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.add_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
+  spec.add_dependency "redcarpet", "~> 3.5" # Markdown -> HTML processor
 
   spec.add_development_dependency "pg"
 end

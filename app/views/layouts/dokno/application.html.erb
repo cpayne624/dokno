@@ -7,11 +7,23 @@
 
   <%= stylesheet_link_tag    "dokno/application", media: "all" %>
   <%= javascript_include_tag 'dokno/application' %>
-
 </head>
-<body>
+<body class="bg-gray-900">
+  <nav id="dokno-nav-container" class="bg-green-900 text-white p-10">
+    <a href="<%= root_path %>">
+      <i data-feather="layers" class="inline"></i>
+      <span class="font-semibold uppercase ml-2 text-lg">Application Knowledgebase / <%= Dokno.config.app_name %></span>
+    </a>
+  </nav>
 
-<%= yield %>
+  <div id="dokno-content-container">
+    <%= yield %>
+  </div>
 
+  <footer id="dokno-footer-container" class="p-10 text-gray-200">
+    <%= Dokno.config.inspect %>
+  </footer>
+
+  <%= javascript_include_tag 'init' %>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<section class="p-10 bg-gray-200">
+  <div class="float-right mt-2">
+    <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
+    <button class="bg-yellow-700 text-yellow-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="clock" class="inline h-5"></i> DEPRECATE</button>
+    <button class="bg-red-700 text-red-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="x-octagon" class="inline h-5"></i> DELETE</button>
+  </div>
+
+  <h1 class="text-4xl font-semibold mb-10"><%= @article.title %></h1>
+  <div class="text-2xl mb-10"><%= @article.summary %></div>
+
+  <% @article.categories.map{ |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
+    <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
+  <% end %>
+</section>
+
+<section class="p-10 bg-gray-100 text-lg">
+  <% if @article.markdown.present? %>
+    <%= @article.markdown_parsed %>
+  <% else %>
+    No article content
+  <% end %>
+
+  <div class="mt-10 text-xs text-gray-700">
+    <div class="float-right">
+      <i data-feather="edit-2" class="inline h-4"></i>
+      Last updated: <%= @article.updated_at %>
+    </div>
+    <i data-feather="layers" class="inline h-4"></i> Slug: <%= @article.slug %>
+  </div>
+</section>
