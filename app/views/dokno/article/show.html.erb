@@ -5,12 +5,8 @@
     <button class="bg-red-700 text-red-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="x-octagon" class="inline h-5"></i> DELETE</button>
   </div>
 
-  <h1 class="text-4xl font-semibold mb-10"><%= @article.title %></h1>
-  <div class="text-2xl mb-10"><%= @article.summary %></div>
-
-  <% @article.categories.map{ |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
-    <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
-  <% end %>
+  <h1 class="text-4xl font-semibold mb-8"><%= @article.title %></h1>
+  <div class="text-2xl"><%= @article.summary %></div>
 </section>
 
 <section class="p-10 bg-gray-100 text-lg">
@@ -21,6 +17,15 @@
   <% end %>
 
   <div class="mt-10 text-xs text-gray-700">
+    <% if @article.categories.exists? %>
+      <div class="mb-10">
+        <div><%= 'Category'.pluralize @article.categories.count %></div>
+        <% @article.categories.map { |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
+          <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="float-right">
       <i data-feather="edit-2" class="inline h-4"></i>
       Last updated: <%= @article.updated_at %>

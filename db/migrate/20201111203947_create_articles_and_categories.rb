@@ -5,6 +5,6 @@ class CreateArticlesAndCategories < ActiveRecord::Migration[6.0]
       t.belongs_to :category
     end
 
-    add_index :dokno_articles_categories, [:article_id, :caregory_id], unique: true
+    add_index :dokno_articles_categories, [:article_id, :category_id], unique: true
   end
 end

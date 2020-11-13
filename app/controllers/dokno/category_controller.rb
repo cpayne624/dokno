@@ -30,6 +30,7 @@ module Dokno
     def update
       category = Dokno::Category.find_by(id: params[:id].to_i)
       return redirect_to category_path if category.blank?
+      return redirect_to category_path if category.id == params[:category_id].to_i
 
       category.update!(name: params[:name], category_id: params[:category_id])
       redirect_to category_path(category)

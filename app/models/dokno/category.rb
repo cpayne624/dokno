@@ -25,7 +25,11 @@ module Dokno
 
     # (ActiveRecord::Relation) Returns all Articles in the context Category instance, including child Categories
     def articles_in_branch
-      Dokno::Article.joins(:categories).where(dokno_categories: {id: self.class.branch(id).pluck(:id)}).order(:title).all
+      Dokno::Article
+        .select('dokno_articles.id, dokno_articles.slug, dokno_articles.title, dokno_articles.summary, dokno_articles.markdown')
+        .joins(:categories)
+        .where(dokno_categories: { id: self.class.branch(id).pluck(:id) })
+        .order(:title).all.uniq
     end
 
     # (Array) Returns the given Category and all child related Categories. Useful for filtering associated articles.
@@ -45,8 +49,10 @@ module Dokno
     end
 
     # (String) Returns HTML markup for Category SELECT field OPTION lists
-    def self.select_option_markup(selected_category_id: nil)
-      breadcrumbs = all.map { |category| { id: category.id, name: category.breadcrumb } }
+    def self.select_option_markup(selected_category_id: nil, exclude_category_id: nil)
+      breadcrumbs = all
+        .reject { |category| category.id == exclude_category_id.to_i }
+        .map { |category| { id: category.id, name: category.breadcrumb } }
       breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
         %(<option value="#{category_hash[:id]}" #{'selected="selected"' if selected_category_id.to_i == category_hash[:id].to_i}>#{category_hash[:name]}</option>)
       end.join

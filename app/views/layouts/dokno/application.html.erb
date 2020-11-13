@@ -12,7 +12,7 @@
   <nav id="dokno-nav-container" class="bg-green-900 text-white p-10">
     <a href="<%= root_path %>">
       <i data-feather="layers" class="inline"></i>
-      <span class="font-semibold uppercase ml-2 text-lg">Application Knowledgebase / <%= Dokno.config.app_name %></span>
+      <span class="font-semibold uppercase ml-2 text-lg">Knowledgebase / <%= Dokno.config.app_name %></span>
     </a>
   </nav>
 
@@ -21,6 +21,7 @@
   </div>
 
   <footer id="dokno-footer-container" class="p-10 text-gray-200">
+    <div>Dokno.config:</div>
     <%= Dokno.config.inspect %>
   </footer>
 

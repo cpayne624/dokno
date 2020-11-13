@@ -3,14 +3,15 @@
 
   <section class="p-10 bg-gray-200">
     <h1 class="text-4xl font-semibold">Edit Category</h1>
+    <h2 class="text-2xl font-semibold"><%= @category.breadcrumb %></h2>
 
     <div class="mt-10">
       <div class="text-lg"><label for="category_id">Parent Category</label></div>
       <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 max-w-full mt-2">
         <option></option>
-        <%= Dokno::Category.select_option_markup(selected_category_id: @category.parent&.id).html_safe %>
+        <%= Dokno::Category.select_option_markup(selected_category_id: @category.parent&.id, exclude_category_id: @category.id).html_safe %>
       </select>
-      <div class="text-gray-500 mt-2">The existing category to which this category will belong.</div>
+      <div class="text-gray-500 mt-2">The existing category to which this category belongs.</div>
     </div>
   </section>
 

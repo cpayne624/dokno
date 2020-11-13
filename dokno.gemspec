@@ -17,5 +17,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
   spec.add_dependency "redcarpet", "~> 3.5" # Markdown -> HTML processor
 
-  spec.add_development_dependency "pg"
+  spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
+  spec.add_development_dependency "rspec", "~> 3.10"
+  spec.add_development_dependency "pry-byebug", "~> 3.9"
 end

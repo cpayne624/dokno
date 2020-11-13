@@ -27,7 +27,7 @@ module Dokno
     ATTR_WHITELIST = %w[href]
 
     def initialize
-      self.app_name       = Rails.application.class.parent.name.underscore.humanize.capitalize
+      self.app_name       = Rails.application.class.module_parent.name.underscore.humanize.capitalize
       self.tag_whitelist  = TAG_WHITELIST
       self.attr_whitelist = ATTR_WHITELIST
     end
