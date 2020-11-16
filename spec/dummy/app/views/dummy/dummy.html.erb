@@ -1,1 +1,17 @@
-<a href="<%= dokno_path %>">Dokno</a>
+<div>
+  <a target="_blank" href="<%= dokno_path %>">Dokno Dashboard</a>
+</div>
+
+<br />
+
+<div>
+  &lt;%= dokno_article_modal({link-text}, slug: {article-slug}) %&gt;
+</div>
+
+<br />
+
+<ul>
+  <% Dokno::Article.select(:slug, :title).order(:title).each do |article| %>
+    <li><%= dokno_article_modal(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
+  <% end %>
+</ul>

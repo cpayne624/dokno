@@ -35,12 +35,7 @@ And then execute:
 $ bundle
 ```
 
-Import database migrations:
-```bash
-$ rake dokno:install:migrations
-```
-
-Run migrations:
+Run Dokno migrations:
 ```bash
 $ rake db:migrate
 ```
@@ -53,6 +48,12 @@ mount Dokno::Engine, at: "/dokno"
 Add the Dokno initializer:
 ```bash
 $ rails g dokno:install
+```
+
+Include the Dokno article panel markup, CSS, and JS to the bottom of your application's app/views/layouts/application.html.erb, 
+just above the closing `</body>`:
+```erb
+<%= render 'dokno/article_panel' %>
 ```
 
 ## Contributing

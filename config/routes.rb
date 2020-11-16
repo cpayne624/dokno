@@ -9,6 +9,7 @@ Dokno::Engine.routes.draw do
 
   # Articles
   get 'article/(:article_id)',              to: 'article#show',  as: :article
+  get 'article_panel/(:slug)',              to: 'article#panel', as: :panel
   get 'new_article/(:category_id)',         to: 'article#new',   as: :new_article
 
   post 'new_article',                       to: 'article#create'

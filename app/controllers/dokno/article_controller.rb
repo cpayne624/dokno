@@ -10,6 +10,20 @@ module Dokno
       return redirect_to root_path if @article.blank?
     end
 
+    def panel
+      article = Dokno::Article.find_by(slug: params[:slug]&.strip)
+      response = {
+        id:         article&.id,
+        slug:       article&.slug,
+        title:      article&.title,
+        summary:    article&.summary,
+        markdown:   article&.markdown_parsed,
+        categories: article&.category_name_list
+      }
+
+      render json: response, layout: false
+    end
+
     def new
       @category_id = params[:category_id].to_i
       @article = Dokno::Article.new
