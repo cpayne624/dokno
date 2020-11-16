@@ -5,7 +5,8 @@ module Dokno
 
     has_and_belongs_to_many :articles
 
-    validates :name, presence: true
+    validates :name, presence: true, uniqueness: true
+    validate :circular_parent_check
 
     # (String) Returns a breadcrumb for display for a Category instance
     def breadcrumb
@@ -49,13 +50,22 @@ module Dokno
     end
 
     # (String) Returns HTML markup for Category SELECT field OPTION lists
-    def self.select_option_markup(selected_category_id: nil, exclude_category_id: nil)
+    def self.select_option_markup(selected_category_ids: nil, exclude_category_id: nil)
       breadcrumbs = all
         .reject { |category| category.id == exclude_category_id.to_i }
         .map { |category| { id: category.id, name: category.breadcrumb } }
       breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
-        %(<option value="#{category_hash[:id]}" #{'selected="selected"' if selected_category_id.to_i == category_hash[:id].to_i}>#{category_hash[:name]}</option>)
+        %(<option value="#{category_hash[:id]}" #{'selected="selected"' if selected_category_ids&.include?(category_hash[:id].to_i)}>#{category_hash[:name]}</option>)
       end.join
+    end
+
+    private
+
+    # Never allow setting of parent to self
+    def circular_parent_check
+      return unless persisted? && id.to_i == category_id.to_i
+
+      errors.add(:category_id, "can't set parent category to self")
     end
   end
 end

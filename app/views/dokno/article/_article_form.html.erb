@@ -1,0 +1,46 @@
+<section class="p-10 bg-gray-200">
+  <h1 class="text-4xl font-semibold"><%= @article.persisted? ? 'Edit' : 'New' %> Article</h1>
+
+  <div class="mt-10">
+    <div class="text-lg font-semibold"><label for="category_id">Categories</label></div>
+    <select name="category_id[]" id="category_id" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow p-2 w-1/2 max-w-full mt-2">
+      <option></option>
+      <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
+    </select>
+    <div class="text-gray-500 mt-2">
+      If applicable, select one or more categories to which this article will belong (optional).
+      Note: articles will be automatically included in parent categories.
+      CTRL/CMD to select multiple.
+    </div>
+  </div>
+</section>
+
+<section class="p-10 bg-gray-100">
+  <div class="p-10 bg-white rounded-lg shadow">
+    <div class="mb-5">
+      <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
+      <input placeholder="Article unique identifier" type="text" name="slug" id="slug" value="<%= article.slug %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/5" />
+    </div>
+
+    <div class="mb-5">
+      <div class="text-lg font-semibold"><label for="title">Title</label></div>
+      <input placeholder="Article title" type="text" name="title" id="title" value="<%= article.title %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/2" />
+    </div>
+
+    <div class="mb-5">
+      <div class="text-lg font-semibold"><label for="summary">Summary</label></div>
+      <input placeholder="Brief article summary" type="text" name="summary" id="summary" value="<%= article.summary %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" />
+    </div>
+
+    <div class="mb-5">
+      <div class="text-lg font-semibold"><label for="markdown">Content</label></div>
+      <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
+      <div class="text-gray-500">You can use basic HTML and Markdown</div>
+    </div>
+
+    <div>
+      <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 text-lg font-bold"><i data-feather="save" class="inline"></i> SAVE ARTICLE</button>
+      <span class="text-lg ml-5"><a class="no-underline" href="<%= root_path %>">Cancel</a></span>
+    </div>
+  </div>
+</section>

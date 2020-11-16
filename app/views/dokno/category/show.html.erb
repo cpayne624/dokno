@@ -13,7 +13,7 @@
     <div class="mt-10">
       <select name="category_id" id="category_id" size="1" class="rounded text-xl shadow p-2 w-full max-w-full" onchange="location.href='<%= category_path %>/' + this.value;">
         <option>Select a category</option>
-        <%= Dokno::Category.select_option_markup(selected_category_id: @category&.id.to_i).html_safe %>
+        <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
       </select>
     </div>
   <% end %>
@@ -43,12 +43,17 @@
     </div>
   <% else %>
     <% @articles.each_with_index do |article, i| %>
-      <div class="p-10 bg-white rounded-lg shadow text-lg <%= 'mt-10' if i > 0 %>">
-        <div><a href="<%= article_path article.id %>"><%= article.title %></a></div>
-        <div class="text-gray-500"><%= article.category_name_list %></div>
-        <% if article.summary.present? %>
-          <div class="mt-2"><%= article.summary %></div>
-        <% end %>
+      <div class="flex p-10 bg-white rounded-lg shadow text-lg <%= 'mt-10' if i > 0 %>">
+        <div class="w-16">
+          <i data-feather="file-text" class="inline text-2xl"></i>
+        </div>
+        <div class="w-full">
+          <div><a href="<%= article_path article.id %>"><%= article.title %></a></div>
+          <div class="text-gray-500"><%= article.category_name_list %></div>
+          <% if article.summary.present? %>
+            <div class="mt-2"><%= article.summary %></div>
+          <% end %>
+        </div>
       </div>
     <% end %>
   <% end %>

@@ -2,16 +2,16 @@
   div#dokno-panel-container {
     right: -600px;
     z-index: 9999;
-    position: fixed; 
+    position: fixed;
     top: 0;
     bottom: 0;
-    width: 600px; 
-    max-width: 100vw; 
+    width: 600px;
+    max-width: 100vw;
     overflow: hidden;
     overflow-y: auto;
-    background-color: #fff; 
+    background-color: #fff;
     color: #2d3748;
-    transition: all .25s ease-in-out;
+    transition: all .15s ease-in-out;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
@@ -35,7 +35,7 @@
     font-size: 170%;
     font-weight: 600;
     background-color: #22543d;
-    color: #ebf8ff;	
+    color: #ebf8ff;
   }
 
   div#dokno-panel-summary {
@@ -91,7 +91,7 @@
           console.log(err.message + " in " + request.responseText);
           return;
         }
-        
+
         dokno__id = data.id;
         document.getElementById('dokno-panel-title').innerHTML = data.title;
         document.getElementById('dokno-panel-summary').innerHTML = data.summary;

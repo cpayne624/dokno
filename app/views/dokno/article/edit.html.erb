@@ -1,0 +1,4 @@
+<%= form_with do %>
+  <input type="hidden" name="article_id" id="article_id" value="<%= @article.id %>" />
+  <%= render 'article_form', article: @article %>
+<% end %>

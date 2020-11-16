@@ -50,10 +50,16 @@ Add the Dokno initializer:
 $ rails g dokno:install
 ```
 
-Include the Dokno article panel markup, CSS, and JS to the bottom of your application's app/views/layouts/application.html.erb, 
+Include the Dokno article panel markup, CSS, and JS to the bottom of your application's app/views/layouts/application.html.erb,
 just above the closing `</body>`:
 ```erb
 <%= render 'dokno/article_panel' %>
+```
+
+## Testing
+From `/spec/dummy`:
+```bash
+$ rspec
 ```
 
 ## Contributing

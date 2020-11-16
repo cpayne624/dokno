@@ -1,6 +1,6 @@
-<section class="p-10 bg-gray-200">
+<section id="dokno-article-header-section" class="p-10 bg-gray-200">
   <div class="float-right mt-2">
-    <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
+    <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-3 py-1 px-4 font-bold" onclick="location.href='<%= edit_article_path(@article.id) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
     <button class="bg-yellow-700 text-yellow-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="clock" class="inline h-5"></i> DEPRECATE</button>
     <button class="bg-red-700 text-red-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="x-octagon" class="inline h-5"></i> DELETE</button>
   </div>
@@ -9,7 +9,7 @@
   <div class="text-2xl"><%= @article.summary %></div>
 </section>
 
-<section class="p-10 bg-gray-100 text-lg">
+<section id="dokno-article-content-section" class="p-10 bg-gray-100 text-lg">
   <% if @article.markdown.present? %>
     <%= @article.markdown_parsed %>
   <% else %>

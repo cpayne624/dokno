@@ -2,44 +2,47 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class ArticleController < ApplicationController
-    def show
-      article_id = params[:article_id]
-      return redirect_to root_path if article_id.blank?
+    before_action :fetch_article, only: [:show, :edit, :update, :panel]
 
-      @article = Dokno::Article.find_by(id: article_id.to_i)
+    def show
       return redirect_to root_path if @article.blank?
     end
 
-    def panel
-      article = Dokno::Article.find_by(slug: params[:slug]&.strip)
-      response = {
-        id:         article&.id,
-        slug:       article&.slug,
-        title:      article&.title,
-        summary:    article&.summary,
-        markdown:   article&.markdown_parsed,
-        categories: article&.category_name_list
-      }
-
-      render json: response, layout: false
-    end
-
     def new
-      @category_id = params[:category_id].to_i
+      @category_ids = [] << params[:category_id].to_i
       @article = Dokno::Article.new
     end
 
+    def edit
+      @category_ids = @article&.categories.pluck(:id)
+    end
+
     def create
-      category_ids = params[:category_id]
       article = Dokno::Article.create!(article_params)
-      article.categories = Dokno::Category.where(id: category_ids)
+      article.categories = Dokno::Category.where(id: params[:category_id]) if params[:category_id].present?
       redirect_to article_path article
+    end
+
+    def update
+      @article.update!(article_params)
+      @article.categories = Dokno::Category.where(id: params[:category_id])
+      redirect_to article_path @article
+    end
+
+    # Ajax-fetched slide-in article panel for the host app
+    def panel
+      render json: @article&.host_panel_hash, layout: false
     end
 
     private
 
     def article_params
       params.permit(:slug, :title, :summary, :markdown)
+    end
+
+    def fetch_article
+      @article = Dokno::Article.find_by(slug: params[:slug].strip)    if params[:slug].present?
+      @article = Dokno::Article.find_by(id: params[:article_id].to_i) if @article.blank?
     end
   end
 end
