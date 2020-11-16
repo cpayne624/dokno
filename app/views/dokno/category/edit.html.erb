@@ -1,25 +1,4 @@
 <%= form_with do %>
-  <input type="hidden" name="category_id" id="category_id" value="<%= @category.id %>" />
-
-  <section class="p-10 bg-gray-200">
-    <h1 class="text-4xl font-semibold">Edit Category</h1>
-    <h2 class="text-2xl font-semibold"><%= @category.breadcrumb %></h2>
-
-    <div class="mt-10">
-      <div class="text-lg"><label for="category_id">Parent Category</label></div>
-      <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 max-w-full mt-2">
-        <option></option>
-        <%= Dokno::Category.select_option_markup(selected_category_ids: [@category.parent&.id], exclude_category_id: @category.id).html_safe %>
-      </select>
-      <div class="text-gray-500 mt-2">The existing category to which this category belongs.</div>
-    </div>
-  </section>
-
-  <section class="p-10 bg-gray-100">
-    <div class="p-10 bg-white rounded-lg shadow">
-      <input placeholder="Category Name" type="text" name="name" id="name" value="<%= @category.name %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/3" />
-      <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 ml-5 text-lg font-bold"><i data-feather="save" class="inline"></i> UPDATE CATEGORY</button>
-      <span class="text-lg ml-5"><a class="no-underline" href="<%= category_path(@category.id) %>">Cancel</a></span>
-    </div>
-  </section>
+  <input type="hidden" name="cat_id" id="cat_id" value="<%= @category.id %>" />
+  <%= render 'category_form', category: @category %>
 <% end %>

@@ -9,7 +9,7 @@ module Dokno
     end
 
     def new
-      @parent_category_id = params[:parent_category_id].to_i
+      @parent_category_id = params[:parent_category_id]
       @category = Dokno::Category.new
     end
 
@@ -20,16 +20,14 @@ module Dokno
 
     def edit
       return redirect_to category_path if @category.blank?
+      @parent_category_id = @category.category_id
     end
 
     def update
       return redirect_to category_path if @category.blank?
 
-      # Never allow setting of parent to self
-      # return redirect_to category_path if @category.id == params[:category_id].to_i
-
-      category.update!(category_params)
-      redirect_to category_path category
+      @category.update!(category_params)
+      redirect_to category_path @category
     end
 
     private
@@ -39,7 +37,7 @@ module Dokno
     end
 
     def fetch_category
-      @category = Dokno::Category.find_by(id: params[:category_id].to_i) if params[:category_id].present?
+      @category = Dokno::Category.find_by(id: params[:cat_id].to_i) if params[:cat_id].present?
     end
   end
 end

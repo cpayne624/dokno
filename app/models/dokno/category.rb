@@ -24,7 +24,7 @@ module Dokno
       crumbs.join(' > ')
     end
 
-    # (ActiveRecord::Relation) Returns all Articles in the context Category instance, including child Categories
+    # (ActiveRecord::Relation) Returns all Articles in the context Category, including all child Categories
     def articles_in_branch
       Dokno::Article
         .select('dokno_articles.id, dokno_articles.slug, dokno_articles.title, dokno_articles.summary, dokno_articles.markdown')

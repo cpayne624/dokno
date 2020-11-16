@@ -9,12 +9,8 @@ module Dokno
     end
 
     def new
-      @category_ids = [] << params[:category_id].to_i
+      @category_ids = [] << params[:category_id]
       @article = Dokno::Article.new
-    end
-
-    def edit
-      @category_ids = @article&.categories.pluck(:id)
     end
 
     def create
@@ -23,7 +19,14 @@ module Dokno
       redirect_to article_path article
     end
 
+    def edit
+      return redirect_to root_path if @article.blank?
+      @category_ids = @article&.categories.pluck(:id)
+    end
+
     def update
+      return redirect_to root_path if @article.blank?
+
       @article.update!(article_params)
       @article.categories = Dokno::Category.where(id: params[:category_id])
       redirect_to article_path @article

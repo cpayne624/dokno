@@ -59,7 +59,7 @@ just above the closing `</body>`:
 ## Testing
 From `/spec/dummy`:
 ```bash
-$ rspec
+$ bundle exec rspec
 ```
 
 ## Contributing
