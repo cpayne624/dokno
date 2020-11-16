@@ -1,5 +1,5 @@
 # Dokno
-Dokno (prounounced dough-no) is a lightweight Rails Engine for storing and managing your app's <b>DO</b>main <b>KNO</b>wledge.
+Dokno (dough-no) is a lightweight Rails Engine for storing and managing your app's <b>DO</b>main <b>KNO</b>wledge.
 
 Dokno is also a play on words, i.e., "I need to look that up 'cause I do' kno'." :eyes:
 

@@ -1,3 +1,9 @@
+<!-- Dokno Slide-out Panel                                                                            -->
+<!-- This file is injected into the host layout when included via `render 'dokno/article_panel'`      -->
+<!-- in the host app's app/views/layouts/application.html.erb to provide support for slide-out        -->
+<!-- article panels with `dokno_article_modal({link-text}, slug: {article-slug})`                     -->
+
+<!-- Slide-out panel styles -->
 <style>
   div#dokno-panel-container {
     right: -600px;
@@ -69,6 +75,7 @@
   }
 </style>
 
+<!-- Slide-out panel markup -->
 <div id="dokno-panel-container">
   <a id="dokno-panel-close" href="javascript:;" onclick="doknoClosePanel();" title="Close panel">&rarr;</a>
   <div id="dokno-panel-title"></div>
@@ -78,6 +85,7 @@
   <div id="dokno-panel-categories"></div>
 </div>
 
+<!-- Slide-out panel behavior -->
 <script>
   function doknoOpenPanel(slug) {
     // Can't use fetch API since unsupported in IE
