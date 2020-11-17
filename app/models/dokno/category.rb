@@ -1,7 +1,17 @@
 module Dokno
   class Category < ApplicationRecord
-    belongs_to :parent, class_name: 'Dokno::Category', primary_key: 'id', foreign_key: 'category_id', optional: true, inverse_of: :children
-    has_many :children, class_name: 'Dokno::Category', primary_key: 'id', foreign_key: 'category_id', dependent: :nullify, inverse_of: :parent
+    belongs_to :parent,
+      class_name: 'Dokno::Category',
+      primary_key: 'id',
+      foreign_key: 'category_id',
+      optional: true,
+      inverse_of: :children
+    has_many :children,
+      class_name: 'Dokno::Category',
+      primary_key: 'id',
+      foreign_key: 'category_id',
+      dependent: :nullify,
+      inverse_of: :parent
 
     has_and_belongs_to_many :articles
 
@@ -27,7 +37,13 @@ module Dokno
     # (ActiveRecord::Relation) Returns all Articles in the context Category, including all child Categories
     def articles_in_branch
       Dokno::Article
-        .select('dokno_articles.id, dokno_articles.slug, dokno_articles.title, dokno_articles.summary, dokno_articles.markdown')
+        .select('
+          dokno_articles.id,
+          dokno_articles.slug,
+          dokno_articles.title,
+          dokno_articles.summary,
+          dokno_articles.markdown
+        ')
         .joins(:categories)
         .where(dokno_categories: { id: self.class.branch(id).pluck(:id) })
         .order(:title).all.uniq
@@ -51,12 +67,13 @@ module Dokno
 
     # (String) Returns HTML markup for Category SELECT field OPTION lists
     def self.select_option_markup(selected_category_ids: nil, exclude_category_id: nil)
-      selected_category_ids = selected_category_ids.map(&:to_i)
+      selected_category_ids = selected_category_ids&.map(&:to_i)
       breadcrumbs = all
         .reject { |category| category.id == exclude_category_id.to_i }
         .map { |category| { id: category.id, name: category.breadcrumb } }
       breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
-        %(<option value="#{category_hash[:id]}" #{'selected="selected"' if selected_category_ids&.include?(category_hash[:id].to_i)}>#{category_hash[:name]}</option>)
+        select = selected_category_ids&.include?(category_hash[:id].to_i)
+        %(<option value="#{category_hash[:id]}" #{'selected="selected"' if select}>#{category_hash[:name]}</option>)
       end.join
     end
 

@@ -20,22 +20,30 @@
     <div class="mb-5">
       <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
       <input placeholder="Article unique identifier" type="text" name="slug" id="slug" value="<%= article.slug %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/5" />
+      <div class="text-gray-500 mt-2">Unique identifier for this article (required) (2-12 alphanumeric chars)</div>
     </div>
 
     <div class="mb-5">
       <div class="text-lg font-semibold"><label for="title">Title</label></div>
       <input placeholder="Article title" type="text" name="title" id="title" value="<%= article.title %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/2" />
+      <div class="text-gray-500 mt-2">Descriptive article title (required) (5-255 alphanumeric chars)</div>
     </div>
 
     <div class="mb-5">
       <div class="text-lg font-semibold"><label for="summary">Summary</label></div>
       <input placeholder="Brief article summary" type="text" name="summary" id="summary" value="<%= article.summary %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" />
+      <div class="text-gray-500 mt-2">Brief summary of the described topic (text only)</div>
     </div>
 
     <div class="mb-5">
-      <div class="text-lg font-semibold"><label for="markdown">Content</label></div>
-      <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
-      <div class="text-gray-500">You can use basic HTML and Markdown</div>
+      <div class="text-lg font-semibold">
+        <label for="markdown">Content</label>
+        <a id="markdown_write_link" href="javascript:;" onclick="writeArticleToggle();" class="float-right hidden">Write</a>
+        <a id="markdown_preview_link" href="javascript:;" onclick="previewArticleToggle();" class="float-right">Preview</a>
+      </div>
+      <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
+      <div id="markdown_preview" class="dokno-article-content-markup hidden text-lg overflow-hidden overflow-y-auto rounded p-10 mt-2 shadow-inner"></div>
+      <div class="text-gray-500 mt-2">Detailed documentation of the described topic (Markdown OK)</div>
     </div>
 
     <div>

@@ -44,6 +44,11 @@
     color: #ebf8ff;
   }
 
+  div#dokno-panel-title > span,
+  div#dokno-panel-footer > svg {
+    cursor: pointer;
+  }
+
   div#dokno-panel-summary {
     line-height: 1.5;
     padding: 2.5rem;
@@ -57,32 +62,34 @@
     background-color: #f7fafc;
   }
 
-  div#dokno-panel-markdown p {
+  div#dokno-panel-markdown p,
+  div#dokno-panel-footer p {
     margin: 0 15px 15px 0;
   }
 
-  div#dokno-panel-slug {
-    float: right;
-    margin-top: 2.5rem;
-    margin-right: 2.5rem;
-    cursor: pointer;
-  }
-
-  div#dokno-panel-categories {
+  div#dokno-panel-footer {
+    text-align: center;
+    position: relative;
     padding: 2.5rem;
     color: #999;
     background-color: #edf2f7;
+  }
+
+  div#dokno-panel-footer > svg {
+    position: absolute;
+    top: -12px;
+    left: 274px;
   }
 </style>
 
 <!-- Slide-out panel markup -->
 <div id="dokno-panel-container">
-  <a id="dokno-panel-close" href="javascript:;" onclick="doknoClosePanel();" title="Close panel">&rarr;</a>
+  <a id="dokno-panel-close" href="javascript:;" title="Close panel" onclick="doknoClosePanel();">&rarr;</a>
+
   <div id="dokno-panel-title"></div>
   <div id="dokno-panel-summary"></div>
   <div id="dokno-panel-markdown"></div>
-  <div id="dokno-panel-slug" onclick="window.open('/dokno/article/' + dokno__id);"></div>
-  <div id="dokno-panel-categories"></div>
+  <div id="dokno-panel-footer"></div>
 </div>
 
 <!-- Slide-out panel behavior -->
@@ -104,9 +111,17 @@
         document.getElementById('dokno-panel-title').innerHTML = data.title;
         document.getElementById('dokno-panel-summary').innerHTML = data.summary;
         document.getElementById('dokno-panel-markdown').innerHTML = data.markdown;
-        document.getElementById('dokno-panel-slug').innerHTML = data.slug;
-        document.getElementById('dokno-panel-categories').innerHTML = data.categories;
+        document.getElementById('dokno-panel-footer').innerHTML = data.footer;
 
+        var
+          title_span = document.querySelector('div#dokno-panel-title > span'),
+          icon_svg   = document.querySelector('div#dokno-panel-footer > svg');
+
+        title_span.setAttribute('title', 'Open full article page');
+        title_span.onclick = function() { window.open('/dokno/articles/' + dokno__id); }
+        icon_svg.onclick   = function() { window.open('/dokno'); }
+
+        dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');
       }
     };

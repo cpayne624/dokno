@@ -1,10 +1,10 @@
 <section class="p-10 bg-gray-200">
   <div class="float-right mt-3">
     <% if @category.present? %>
-      <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-5 py-1 px-4 text-lg font-bold" onclick="location.href='<%= edit_category_path(@category.id) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT CATEGORY</button>
+      <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-5 py-1 px-4 text-lg font-bold" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT CATEGORY</button>
     <% end %>
-    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_category_path(@category&.id) %>';"><i data-feather="plus" class="inline"></i> ADD CATEGORY</button>
-    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_article_path(@category&.id) %>';"><i data-feather="plus" class="inline"></i> ADD ARTICLE</button>
+    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_category_path %>/?parent_category_id=<%= @category&.id %>';"><i data-feather="plus" class="inline"></i> ADD CATEGORY</button>
+    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_article_path %>/?category_id=<%= @category&.id %>';"><i data-feather="plus" class="inline"></i> ADD ARTICLE</button>
   </div>
 
   <h1 class="text-4xl font-semibold">Article Category</h1>

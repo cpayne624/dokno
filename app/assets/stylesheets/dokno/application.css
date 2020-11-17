@@ -34,41 +34,41 @@ div#dokno-content-container a:active {
   text-decoration: none !important;
 }
 
-section#dokno-article-content-section p,
-section#dokno-article-content-section h1,
-section#dokno-article-content-section h2,
-section#dokno-article-content-section h3,
-section#dokno-article-content-section h4,
-section#dokno-article-content-section h5,
-section#dokno-article-content-section h6 {
+.dokno-article-content-markup p,
+.dokno-article-content-markup h1,
+.dokno-article-content-markup h2,
+.dokno-article-content-markup h3,
+.dokno-article-content-markup h4,
+.dokno-article-content-markup h5,
+.dokno-article-content-markup h6 {
   margin-bottom: 1rem;
 }
 
-section#dokno-article-content-section h1,
-section#dokno-article-content-section h2,
-section#dokno-article-content-section h3,
-section#dokno-article-content-section h4,
-section#dokno-article-content-section h5,
-section#dokno-article-content-section h6 {
+.dokno-article-content-markup h1,
+.dokno-article-content-markup h2,
+.dokno-article-content-markup h3,
+.dokno-article-content-markup h4,
+.dokno-article-content-markup h5,
+.dokno-article-content-markup h6 {
   font-weight: 600;
 }
 
-section#dokno-article-content-section h1 {
+.dokno-article-content-markup h1 {
   font-size: 2.25rem;
 }
 
-section#dokno-article-content-section h2 {
+.dokno-article-content-markup h2 {
   font-size: 1.875rem;
 }
 
-section#dokno-article-content-section h3 {
+.dokno-article-content-markup h3 {
   font-size: 1.5rem;
 }
 
-section#dokno-article-content-section h4 {
+.dokno-article-content-markup h4 {
   font-size: 1.25rem;
 }
 
-section#dokno-article-content-section h5 {
+.dokno-article-content-markup h5 {
   font-size: 1.125rem;
 }

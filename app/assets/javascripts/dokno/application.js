@@ -11,4 +11,5 @@
 // about supported directives.
 //
 //= require feather.min
-//= require_tree .
+//= require dokno
+//= require init
