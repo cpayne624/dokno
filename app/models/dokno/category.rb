@@ -51,6 +51,7 @@ module Dokno
 
     # (String) Returns HTML markup for Category SELECT field OPTION lists
     def self.select_option_markup(selected_category_ids: nil, exclude_category_id: nil)
+      selected_category_ids = selected_category_ids.map(&:to_i)
       breadcrumbs = all
         .reject { |category| category.id == exclude_category_id.to_i }
         .map { |category| { id: category.id, name: category.breadcrumb } }

@@ -1,0 +1,7 @@
+<%= form_with(model: @article, local: true) do |form| %>
+  <% if @article.errors.any? %>
+    <%= render 'partials/form_errors', errors: @article.errors %>
+  <% end %>
+
+  <%= render 'article_form', article: @article %>
+<% end %>

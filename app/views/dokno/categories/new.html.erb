@@ -1,0 +1,7 @@
+<%= form_with(url: categories_path) do %>
+  <% if @category.errors.any? %>
+    <%= render 'partials/form_errors', errors: @category.errors %>
+  <% end %>
+  
+  <%= render 'category_form', category: @category %>
+<% end %>

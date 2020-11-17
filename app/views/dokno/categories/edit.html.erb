@@ -1,0 +1,7 @@
+<%= form_with(model: @category, local: true) do |form| %>
+  <% if @category.errors.any? %>
+    <%= render 'partials/form_errors', errors: @category.errors %>
+  <% end %>
+
+  <%= render 'category_form', category: @category %>
+<% end %>

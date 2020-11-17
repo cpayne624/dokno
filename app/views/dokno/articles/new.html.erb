@@ -1,0 +1,7 @@
+<%= form_with(url: articles_path) do %>
+  <% if @article.errors.any? %>
+    <%= render 'partials/form_errors', errors: @article.errors %>
+  <% end %>
+  
+  <%= render 'article_form', article: @article %>
+<% end %>

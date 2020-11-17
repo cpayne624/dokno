@@ -11,7 +11,7 @@
 
   <% if Dokno::Category.exists? %>
     <div class="mt-10">
-      <select name="category_id" id="category_id" size="1" class="rounded text-xl shadow p-2 w-full max-w-full" onchange="location.href='<%= category_path %>/' + this.value;">
+      <select name="category_id" id="category_id" size="1" class="rounded text-xl shadow p-2 w-full max-w-full" onchange="location.href='<%= categories_path %>/' + this.value;">
         <option>Select a category</option>
         <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
       </select>
@@ -49,7 +49,9 @@
         </div>
         <div class="w-full">
           <div><a href="<%= article_path article.id %>"><%= article.title %></a></div>
-          <div class="text-gray-500"><%= article.category_name_list %></div>
+          <% if @category.present? %>
+            <div class="text-gray-500"><%= article.category_name_list %></div>
+          <% end %>
           <% if article.summary.present? %>
             <div class="mt-2"><%= article.summary %></div>
           <% end %>
