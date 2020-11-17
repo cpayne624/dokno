@@ -54,12 +54,13 @@ module Dokno
     end
 
     def self.parse_markdown(content)
-      markdown_with_links = content.to_s.gsub(URI.regexp, '<a target="_blank" href="\0">\0</a>')
-      ActionController::Base.helpers.sanitize(
-        MARKDOWN_PARSER.render(markdown_with_links),
-        tags: Dokno.config.tag_whitelist,
-        attributes: Dokno.config.attr_whitelist
-      )
+      markdown_with_links = content #.to_s.gsub(URI.regexp, '<a target="_blank" href="\0">\0</a>')
+      # ActionController::Base.helpers.sanitize(
+      #   MARKDOWN_PARSER.render(markdown_with_links),
+      #   tags: Dokno.config.tag_whitelist,
+      #   attributes: Dokno.config.attr_whitelist
+      # )
+      MARKDOWN_PARSER.render(markdown_with_links).html_safe
     end
 
     private

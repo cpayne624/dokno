@@ -34,13 +34,7 @@ div#dokno-content-container a:active {
   text-decoration: none !important;
 }
 
-.dokno-article-content-markup p,
-.dokno-article-content-markup h1,
-.dokno-article-content-markup h2,
-.dokno-article-content-markup h3,
-.dokno-article-content-markup h4,
-.dokno-article-content-markup h5,
-.dokno-article-content-markup h6 {
+.dokno-article-content-markup p {
   margin-bottom: 1rem;
 }
 
@@ -50,6 +44,7 @@ div#dokno-content-container a:active {
 .dokno-article-content-markup h4,
 .dokno-article-content-markup h5,
 .dokno-article-content-markup h6 {
+  margin-bottom: 1rem;
   font-weight: 600;
 }
 

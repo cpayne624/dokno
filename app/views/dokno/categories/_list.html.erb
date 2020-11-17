@@ -10,7 +10,7 @@
   <h1 class="text-4xl font-semibold">Article Category</h1>
 
   <% if Dokno::Category.exists? %>
-    <div class="mt-10">
+    <div class="mt-5">
       <select name="category_id" id="category_id" size="1" class="rounded text-xl shadow p-2 w-full max-w-full" onchange="location.href='<%= categories_path %>/' + this.value;">
         <option>Select a category</option>
         <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>

@@ -1,8 +1,16 @@
 <div id="error_explanation" class="bg-white p-10">
   <i data-feather="alert-octagon" class="float-right"></i>
-  <h2><%= pluralize(errors.count, "error") %> prohibited this from being saved:</h2>
+  <h2 class="font-semibold">
+    There
+    <% if errors.count == 1 %>
+      is a problem
+    <% else %>
+      are <%= pluralize(errors.count, "problem") %>
+    <% end %>
+    that must be resolved before saving:
+  </h2>
 
-  <ul>
+  <ul class="mt-5 list-disc list-inside bg-gray-100 p-5 rounded">
     <% errors.full_messages.each do |message| %>
       <li><%= message %></li>
     <% end %>

@@ -1,13 +1,13 @@
 <section class="p-10 bg-gray-200">
   <h1 class="text-4xl font-semibold"><%= article.persisted? ? 'Edit' : 'New' %> Article</h1>
 
-  <div class="mt-10">
+  <div class="mt-5">
     <div class="text-lg font-semibold"><label for="category_id">Categories</label></div>
     <select name="category_id[]" id="category_id" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow p-2 w-1/2 max-w-full mt-2">
       <option></option>
       <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
     </select>
-    <div class="text-gray-500 mt-2">
+    <div class="text-gray-500 mt-2 w-1/2">
       If applicable, select one or more categories to which this article will belong (optional).
       Note: articles will be automatically included in parent categories.
       CTRL/CMD to select multiple.

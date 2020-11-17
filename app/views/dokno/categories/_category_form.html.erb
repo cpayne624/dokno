@@ -3,7 +3,7 @@
   <h2 class="text-2xl font-semibold"><%= category.breadcrumb %></h2>
 
   <% if Dokno::Category.exists? %>
-    <div class="mt-10">
+    <div class="mt-5">
       <div class="text-lg"><label for="category_id">Parent Category</label></div>
       <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 w-1/2 max-w-full mt-2">
         <option></option>
