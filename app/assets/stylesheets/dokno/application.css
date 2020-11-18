@@ -34,8 +34,12 @@ div#dokno-content-container a:active {
   text-decoration: none !important;
 }
 
-.dokno-article-content-markup p {
-  margin-bottom: 1rem;
+.dokno-article-content-markup p,
+.dokno-article-content-markup ul,
+.dokno-article-content-markup ol,
+.dokno-article-content-markup hr,
+.dokno-article-content-markup table {
+  margin-bottom: 1.25rem;
 }
 
 .dokno-article-content-markup h1,
@@ -44,7 +48,7 @@ div#dokno-content-container a:active {
 .dokno-article-content-markup h4,
 .dokno-article-content-markup h5,
 .dokno-article-content-markup h6 {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
 }
 
@@ -66,4 +70,38 @@ div#dokno-content-container a:active {
 
 .dokno-article-content-markup h5 {
   font-size: 1.125rem;
+}
+
+.dokno-article-content-markup blockquote {
+  border-left: 4px solid #edf2f7;
+  padding-left: 1.25rem;
+}
+
+.dokno-article-content-markup ul,
+.dokno-article-content-markup ol {
+  list-style-position: inside;
+}
+
+.dokno-article-content-markup ul {
+  list-style-type: disc;
+}
+
+.dokno-article-content-markup ol {
+  list-style-type: decimal;
+}
+
+.dokno-article-content-markup table {
+  table-layout: auto;
+}
+
+.dokno-article-content-markup table th,
+.dokno-article-content-markup table td {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.dokno-article-content-markup table td {
+  border-width: 1px;
 }

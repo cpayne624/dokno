@@ -1,11 +1,15 @@
 <section class="p-10 bg-gray-200">
-  <h1 class="text-4xl font-semibold"><%= category.persisted? ? 'Edit' : 'New' %> Category</h1>
-  <h2 class="text-2xl font-semibold"><%= category.breadcrumb %></h2>
+  <h1 class="text-4xl font-semibold">
+    <%= category.persisted? ? 'Edit' : 'New' %> Category
+    <% if category.name.present? %>
+      &mdash; <%= category.name %>
+    <% end %>
+  </h1>
 
   <% if Dokno::Category.exists? %>
     <div class="mt-5">
       <div class="text-lg"><label for="category_id">Parent Category</label></div>
-      <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 w-1/2 max-w-full mt-2">
+      <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 w-full max-w-full mt-2">
         <option></option>
         <%= Dokno::Category.select_option_markup(selected_category_ids: [@parent_category_id], exclude_category_id: category.id).html_safe %>
       </select>
