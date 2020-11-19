@@ -34,7 +34,7 @@
 
     // Can't use fetch API since unsupported in IE
     const request = new XMLHttpRequest();
-    request.open('GET', '/dokno/article_panel/' + slug, true);
+    request.open('GET', '<%= Dokno::Engine.routes.url_helpers.root_path %>article_panel/' + slug, true);
     request.onload = function() {
       if (request.readyState == 4 && request.status == 200) {
         try {
@@ -55,8 +55,8 @@
           icon_svg   = document.querySelector('div#dokno-panel-footer > svg');
 
         title_span.setAttribute('title', 'Open full article page');
-        title_span.onclick = function() { window.open('/dokno/articles/' + dokno__id); }
-        icon_svg.onclick   = function() { window.open('/dokno'); }
+        title_span.onclick = function() { window.open('<%= Dokno::Engine.routes.url_helpers.root_path %>articles/' + dokno__id); }
+        icon_svg.onclick   = function() { window.open('<%= Dokno::Engine.routes.url_helpers.root_path %>'); }
 
         dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');

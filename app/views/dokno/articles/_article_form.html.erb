@@ -1,61 +1,65 @@
 <%= render 'dokno/article_formatting' %>
 
-<section class="p-10 bg-gray-200">
-  <h1 class="text-4xl font-semibold">
-    <%= article.persisted? ? 'Edit' : 'New' %> Article
-    <% if article.title.present? %>
-      &mdash; <%= article.title %>
-    <% end %>
-  </h1>
+<section class="mb-10">
 
-  <div class="mt-5">
-    <div class="text-lg font-semibold"><label for="category_id">Categories</label></div>
-    <select name="category_id[]" id="category_id" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl border p-2 w-full max-w-full mt-2">
-      <option></option>
-      <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
-    </select>
-    <div class="text-gray-500 mt-2">
-      If applicable, select one or more categories to which this article will belong (optional).
-      Note: articles will be automatically included in parent categories.
-      CTRL/CMD to select multiple.
-    </div>
+  <div class="text-2xl mb-5"><%= article.persisted? ? 'Edit' : 'New' %> Article</div>
+  <h1 class="text-4xl mb-5 leading-tight font-light"><%= article.title %></h1>
+  <hr class="mb-5" />
+
+  <div class="mb-5">
+    <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
+    <input placeholder="Article unique identifier" type="text" name="slug" id="slug" value="<%= article.slug %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/3" />
+    <div class="text-gray-500 mt-2">Unique identifier for this article (required) (2-12 alphanumeric chars)</div>
   </div>
-</section>
 
-<section class="p-10 bg-gray-100">
-  <div class="p-10 bg-white rounded-lg shadow">
+  <% if Dokno::Category.exists? %>
     <div class="mb-5">
-      <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
-      <input placeholder="Article unique identifier" type="text" name="slug" id="slug" value="<%= article.slug %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/5" />
-      <div class="text-gray-500 mt-2">Unique identifier for this article (required) (2-12 alphanumeric chars)</div>
-    </div>
-
-    <div class="mb-5">
-      <div class="text-lg font-semibold"><label for="title">Title</label></div>
-      <input placeholder="Article title" type="text" name="title" id="title" value="<%= article.title %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/2" />
-      <div class="text-gray-500 mt-2">Descriptive article title (required) (5-255 alphanumeric chars)</div>
-    </div>
-
-    <div class="mb-5">
-      <div class="text-lg font-semibold"><label for="summary">Summary</label></div>
-      <input placeholder="Brief article summary" type="text" name="summary" id="summary" value="<%= article.summary %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" />
-      <div class="text-gray-500 mt-2">Brief summary of the described topic (text only)</div>
-    </div>
-
-    <div class="mb-5">
-      <div class="text-lg font-semibold">
-        <label for="markdown">Content</label>
-        <a id="markdown_write_link" href="javascript:;" onclick="writeArticleToggle();" class="float-right hidden">Write</a>
-        <a id="markdown_preview_link" href="javascript:;" onclick="previewArticleToggle();" class="float-right">Preview</a>
+      <div class="text-lg font-semibold"><label for="category_id"><%= 'Category'.pluralize article.categories.count %></label></div>
+      <select name="category_id[]" id="category_id" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full mt-2 w-full max-w-full">
+        <option></option>
+        <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
+      </select>
+      <div class="text-gray-500 mt-2">
+        If applicable, select one or more categories to which this article will belong (optional).
+        Note: articles will be automatically included in parent categories.
+        CTRL/CMD to select multiple.
       </div>
-      <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
-      <div id="markdown_preview" class="dokno-article-content-markup hidden text-lg overflow-hidden overflow-y-auto rounded p-10 mt-2 shadow-inner"></div>
-      <div class="text-gray-500 mt-2">Detailed documentation of the described topic (Markdown OK)</div>
     </div>
+  <% end %>
 
-    <div>
-      <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 text-lg font-bold"><i data-feather="save" class="inline"></i> SAVE ARTICLE</button>
-      <span class="text-lg ml-5"><a class="no-underline" href="<%= root_path %>">Cancel</a></span>
-    </div>
+  <hr class="mb-5" />
+
+  <div class="mb-5">
+    <div class="text-lg font-semibold"><label for="title">Title</label></div>
+    <input placeholder="Article title" type="text" name="title" id="title" value="<%= article.title %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/2" />
+    <div class="text-gray-500 mt-2">Descriptive article title (required) (5-255 alphanumeric chars)</div>
   </div>
+
+  <div class="mb-5">
+    <div class="text-lg font-semibold"><label for="summary">Summary</label></div>
+    <input placeholder="Brief article summary" type="text" name="summary" id="summary" value="<%= article.summary %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-full" />
+    <div class="text-gray-500 mt-2">Brief summary of the described topic (text only)</div>
+  </div>
+
+  <div class="mb-5">
+    <div class="text-lg font-semibold">
+      <label for="markdown">Content</label>
+      <a id="markdown_write_link" href="javascript:;" onclick="writeArticleToggle();" class="float-right hidden">Write</a>
+      <a id="markdown_preview_link" href="javascript:;" onclick="previewArticleToggle();" class="float-right">Preview</a>
+    </div>
+    <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
+    <div id="markdown_preview" class="dokno-article-content-markup hidden text-lg overflow-hidden overflow-y-auto rounded p-10 mt-2 shadow-inner"></div>
+    <div class="text-gray-500 mt-2">Detailed documentation of the described topic (Markdown OK)</div>
+  </div>
+
+  <div class="mt-10">
+    <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-2 text-sm font-semibold"><i data-feather="save" class="inline h-4"></i> SAVE ARTICLE</button>
+    <span class="text-lg ml-5"><a class="no-underline" href="<%= root_path %>">Cancel</a></span>
+  </div>
+
 </section>
+
+<% if @article.persisted? %>
+  <hr />
+  <%= render 'article_buttons' %>
+<% end %>

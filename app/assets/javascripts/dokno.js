@@ -1,3 +1,7 @@
+function copyToClipboard(text) {
+  window.prompt('Copy to clipboard: CTRL+C, Enter', text);
+}
+
 function elem(selector) {
   return document.querySelector(selector);
 }
@@ -32,7 +36,7 @@ function previewArticleToggle() {
     elem('div#dokno-content-container div#markdown_preview').classList.remove('hidden');
     elem('div#dokno-content-container a#markdown_write_link').classList.remove('hidden');
   }
-  postRequest('/dokno/article_preview', { markdown: markdown }, callback);
+  postRequest(dokno__base_path + 'article_preview', { markdown: markdown }, callback);
 }
 
 function writeArticleToggle() {

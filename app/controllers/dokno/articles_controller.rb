@@ -2,7 +2,7 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class ArticlesController < ApplicationController
-    before_action :fetch_article, only: [:show, :edit, :update, :panel]
+    before_action :fetch_article, only: [:show, :edit, :panel]
 
     def show
       return redirect_to root_path if @article.blank?
@@ -32,6 +32,7 @@ module Dokno
     end
 
     def update
+      @article = Dokno::Article.find_by(id: params[:id].to_i)
       return redirect_to root_path if @article.blank?
 
       if @article.update(article_params)
@@ -61,8 +62,12 @@ module Dokno
     end
 
     def fetch_article
+      slug = (params[:slug].presence || params[:id]).to_s.strip
+      @article = Dokno::Article.find_by(slug: slug)
+      return if @article.present?
+
       @article = Dokno::Article.find_by(id: params[:id].to_i)
-      @article = Dokno::Article.find_by(slug: params[:slug].strip) if @article.blank? && params[:slug].present?
+      return redirect_to article_path(@article.slug) if @article.present?
     end
   end
 end

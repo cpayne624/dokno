@@ -1,5 +1,5 @@
 Dokno::Engine.routes.draw do
-  resources :categories
+  resources :categories, except: [:show]
   resources :articles
 
   get 'article_panel/(:slug)', to: 'articles#panel',   as: :panel

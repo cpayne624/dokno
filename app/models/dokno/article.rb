@@ -2,7 +2,7 @@ require 'redcarpet'
 
 module Dokno
   class Article < ApplicationRecord
-    include Rails.application.routes.url_helpers
+    include Dokno::Engine.routes.url_helpers
 
     has_and_belongs_to_many :categories
 
@@ -48,19 +48,21 @@ module Dokno
       }
     end
 
+    def permalink(base_url)
+      "#{base_url}#{articles_path}/#{slug}"
+    end
+
     # (ActiveRecord::Relation) Returns all uncategorized Articles
     def self.uncategorized
       Dokno::Article.left_joins(:categories).where(dokno_categories: {id: nil}).order(:title).all
     end
 
     def self.parse_markdown(content)
-      markdown_with_links = content #.to_s.gsub(URI.regexp, '<a target="_blank" href="\0">\0</a>')
-      # ActionController::Base.helpers.sanitize(
-      #   MARKDOWN_PARSER.render(markdown_with_links),
-      #   tags: Dokno.config.tag_whitelist,
-      #   attributes: Dokno.config.attr_whitelist
-      # )
-      MARKDOWN_PARSER.render(markdown_with_links).html_safe
+      ActionController::Base.helpers.sanitize(
+        MARKDOWN_PARSER.render(content),
+        tags: Dokno.config.tag_whitelist,
+        attributes: Dokno.config.attr_whitelist
+      )
     end
 
     private

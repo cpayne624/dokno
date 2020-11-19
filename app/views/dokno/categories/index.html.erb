@@ -1,1 +1,43 @@
-<%= render 'list' %>
+<%= form_with(url: root_path, method: :get) do %>
+  <div class="flex items-center mb-10">
+    <div class="w-1/2 pr-5">
+      <% if Dokno::Category.exists? %>
+        <select name="id" id="id" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="location.href='<%= root_path %>?id=' + this.value + '&search_term=' + elem('#search_term').value;">
+          <option value="">Select a category</option>
+          <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
+        </select>
+      <% end %>
+    </div>
+    <div class="w-1/2 pl-5">
+      <input placeholder="Search text, titles, summaries, and slugs" type="text" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
+    </div>
+  </div>
+<% end %>
+
+<% if @articles.blank? %>
+  <section class="border-t border-gray-300 py-10 text-xl">
+    <% if Dokno::Category.exists? %>
+      <% if @search_term.present? %>
+        No articles found <% if @category.present? %>in this category<% end %> matching the given search criteria
+      <% elsif @category.present? %>
+        No articles found in this category
+      <% else %>
+        No uncategorized articles
+      <% end %>
+    <% else %>
+      <a href="<%= new_category_path(@category&.id) %>">Add your first category</a>
+    <% end %>
+  </section>
+<% else %>
+  <% @articles.each_with_index do |article, i| %>
+    <section class="border-t border-gray-300 py-10 text-xl flex items-center">
+      <div class="w-1/3">
+        <a href="<%= article_path article.slug %>"><%= article.title %></a>
+      </div>
+      <div class="w-2/3">
+        <%= article.summary.presence || 'No summary provided' %>
+        <div class="text-gray-500"><%= article.category_name_list %></div>
+      </div>
+    </section>
+  <% end %>
+<% end %>

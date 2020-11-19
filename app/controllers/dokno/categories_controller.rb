@@ -2,15 +2,12 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class CategoriesController < ApplicationController
-    before_action :fetch_category, only: [:show, :edit, :update]
+    before_action :fetch_category, only: [:index, :edit, :update]
 
     def index
-      @articles = Dokno::Article.uncategorized
-    end
-
-    def show
-      return redirect_to root_path if @category.blank?
-      @articles = @category.articles_in_branch
+      search if params[:search_term].present?
+      @articles = @category&.articles_in_branch if @articles.nil?
+      @articles = Dokno::Article.uncategorized if @articles.nil?
     end
 
     def new
@@ -53,6 +50,25 @@ module Dokno
 
     def fetch_category
       @category = Dokno::Category.find_by(id: params[:id].to_i)
+    end
+
+    def search
+      @search_term = params[:search_term].to_s.strip
+      @articles = Dokno::Article
+        .where(
+          'LOWER(title) LIKE :search_term OR '\
+          'LOWER(summary) LIKE :search_term OR '\
+          'LOWER(markdown) LIKE :search_term OR '\
+          'LOWER(slug) LIKE :search_term',
+          search_term: "%#{@search_term.downcase}%"
+        )
+        .order('updated_at DESC')
+
+      fetch_category
+      return if @category.blank?
+
+      category_ids = Category.branch(@category.id).pluck(:id)
+      @articles = @articles.joins(:categories).where(dokno_categories: {id: category_ids}).uniq
     end
   end
 end

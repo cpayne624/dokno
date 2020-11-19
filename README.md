@@ -40,9 +40,9 @@ Run Dokno migrations:
 $ rake db:migrate
 ```
 
-Mount Dokno in your application's routes.rb:
+Mount Dokno in your application's routes.rb at the desired path:
 ```ruby
-mount Dokno::Engine, at: "/dokno"
+mount Dokno::Engine, at: "/help"
 ```
 
 Add the Dokno initializer:

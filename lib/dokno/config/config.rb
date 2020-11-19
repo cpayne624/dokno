@@ -23,11 +23,11 @@ module Dokno
     attr_accessor :attr_whitelist
 
     # Defaults
-    TAG_WHITELIST  = %w[h1 h2 h3 h4 h5 h6 div p b strong u i em br hr table thead tbody tfoot tr th td a]
-    ATTR_WHITELIST = %w[href target]
+    TAG_WHITELIST  = %w[code img h1 h2 h3 h4 h5 h6 a em u i b strong ol ul li table thead tbody tfoot tr th td blockquote hr br p]
+    ATTR_WHITELIST = %w[src alt title href target]
 
     def initialize
-      self.app_name       = Rails.application.class.module_parent.name.underscore.humanize.capitalize
+      self.app_name       = Rails.application.class.module_parent.name.underscore.humanize.upcase
       self.tag_whitelist  = TAG_WHITELIST
       self.attr_whitelist = ATTR_WHITELIST
     end
