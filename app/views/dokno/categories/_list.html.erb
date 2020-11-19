@@ -1,62 +1,43 @@
-<section class="p-10 bg-gray-200">
-  <div class="float-right mt-3">
-    <% if @category.present? %>
-      <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-5 py-1 px-4 text-lg font-bold" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT CATEGORY</button>
-    <% end %>
-    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_category_path %>/?parent_category_id=<%= @category&.id %>';"><i data-feather="plus" class="inline"></i> ADD CATEGORY</button>
-    <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-5 py-1 px-3 text-lg font-bold" onclick="location.href='<%= new_article_path %>/?category_id=<%= @category&.id %>';"><i data-feather="plus" class="inline"></i> ADD ARTICLE</button>
-  </div>
+<% if Dokno::Category.exists? %>
+  <section class="mb-10">
+    <select name="category_id" id="category_id" size="1" class="rounded text-xl border p-2 w-full max-w-full" onchange="location.href='<%= categories_path %>/' + this.value;">
+      <option>Select a category</option>
+      <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
+    </select>
+  </section>
+<% end %>
 
-  <h1 class="text-4xl font-semibold">Article Category</h1>
-
-  <% if Dokno::Category.exists? %>
-    <div class="mt-5">
-      <select name="category_id" id="category_id" size="1" class="rounded text-xl shadow p-2 w-full max-w-full" onchange="location.href='<%= categories_path %>/' + this.value;">
-        <option>Select a category</option>
-        <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
-      </select>
-    </div>
-  <% end %>
-</section>
-
-<section class="p-10 bg-gray-100">
-  <% if @category.present? %>
-    <div class="mb-8">
-      <% if @category.breadcrumb != @category.name %>
-        <div class="text-gray-500"><%= @category.breadcrumb %></div>
-      <% end %>
-      <h2 class="text-3xl font-semibold"><%= @category.name %></h2>
-    </div>
-  <% end %>
-
-  <% if @articles.blank? %>
-    <div class="p-10 bg-white rounded-lg shadow">
-      <% if Dokno::Category.exists? %>
-        <% if @category.present? %>
-          No articles found in this category
-        <% else %>
-          No uncategorized articles
-        <% end %>
+<% if @articles.blank? %>
+  <section class="border-t border-gray-300 py-10 text-xl">
+    <% if Dokno::Category.exists? %>
+      <% if @category.present? %>
+        No articles found in this category
       <% else %>
-        <a href="<%= new_category_path(@category&.id) %>">Add your first category</a>
+        No uncategorized articles
       <% end %>
-    </div>
-  <% else %>
-    <% @articles.each_with_index do |article, i| %>
-      <div class="flex p-10 bg-white rounded-lg shadow text-lg <%= 'mt-10' if i > 0 %>">
-        <div class="w-16">
-          <i data-feather="file-text" class="inline text-2xl"></i>
-        </div>
-        <div class="w-full">
-          <div><a href="<%= article_path article.id %>"><%= article.title %></a></div>
-          <% if @category.present? %>
-            <div class="text-gray-500"><%= article.category_name_list %></div>
-          <% end %>
-          <% if article.summary.present? %>
-            <div class="mt-2"><%= article.summary %></div>
-          <% end %>
-        </div>
-      </div>
+    <% else %>
+      <a href="<%= new_category_path(@category&.id) %>">Add your first category</a>
     <% end %>
+  </section>
+<% else %>
+  <% @articles.each_with_index do |article, i| %>
+    <section class="border-t border-gray-300 py-10 text-xl flex items-center">
+      <div class="w-1/3">
+        <a href="<%= article_path article.id %>"><%= article.title %></a>
+      </div>
+      <div class="w-2/3">
+        <%= article.summary.presence || 'No summary provided' %>
+      </div>
+    </section>
   <% end %>
+<% end %>
+
+<hr />
+
+<section class="mt-10">
+  <% if @category.present? %>
+    <button class="bg-gray-700 text-gray-100 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm" onclick="location.href='<%= edit_category_path(@category) %>';">EDIT CATEGORY</button>
+  <% end %>
+  <button class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm" onclick="location.href='<%= new_category_path %>/?parent_category_id=<%= @category&.id %>';">ADD CATEGORY</button>
+  <button class="bg-blue-700 text-gray-300 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm" onclick="location.href='<%= new_article_path %>/?category_id=<%= @category&.id %>';">ADD ARTICLE</button>
 </section>

@@ -1,37 +1,50 @@
 <%= render 'dokno/article_formatting' %>
 
-<section id="dokno-article-header-section" class="p-10 bg-gray-200">
-  <div class="float-right mt-2">
-    <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-3 py-1 px-4 font-bold" onclick="location.href='<%= edit_article_path(@article.id) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
-    <button class="bg-yellow-700 text-yellow-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="clock" class="inline h-5"></i> DEPRECATE</button>
-    <button class="bg-red-700 text-red-100 hover:text-white rounded ml-3 py-1 px-4 font-bold"><i data-feather="x-octagon" class="inline h-5"></i> DELETE</button>
-  </div>
+<section>
+  <div class="flex">
+    <div class="w-2/5 pr-10">
+      <h1 class="text-5xl mb-10 leading-tight font-light"><%= @article.title %></h1>
 
-  <h1 class="text-4xl font-semibold mb-8"><%= @article.title %></h1>
-  <div class="text-2xl"><%= @article.summary %></div>
-</section>
+      <div>
+        <div class="mb-5">
+          <i data-feather="edit-2" class="absolute -ml-8"></i>
+          Last updated: <%= @article.updated_at %>
+        </div>
+        <div>
+          <i data-feather="crosshair" class="absolute -ml-8"></i>
+          Slug: <%= @article.slug %>
+        </div>
 
-<section id="dokno-article-content-section" class="dokno-article-content-markup p-10 bg-gray-100 text-lg">
-  <% if @article.markdown.present? %>
-    <%= @article.markdown_parsed %>
-  <% else %>
-    No article content
-  <% end %>
-
-  <div class="mt-10 text-xs text-gray-700">
-    <% if @article.categories.exists? %>
-      <div class="mb-10">
-        <div><%= 'Category'.pluralize @article.categories.count %></div>
-        <% @article.categories.map { |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
-          <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
+        <% if @article.categories.exists? %>
+          <div class="mt-10">
+            <div class="font-normal"><%= 'Category'.pluralize @article.categories.count %></div>
+            <% @article.categories.map { |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
+              <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
+            <% end %>
+          </div>
         <% end %>
       </div>
-    <% end %>
-
-    <div class="float-right">
-      <i data-feather="edit-2" class="inline h-4"></i>
-      Last updated: <%= @article.updated_at %>
     </div>
-    <i data-feather="layers" class="inline h-4"></i> Slug: <%= @article.slug %>
+    <div class="w-3/5">
+      <% if @article.summary.present? %>
+        <div class="text-3xl mb-10 text-gray-700 font-light"><%= @article.summary %></div>
+      <% end %>
+
+      <div class="dokno-article-content-markup text-gray-700 font-light mb-10 bg-gray-100 p-10 rounded">
+        <% if @article.markdown.present? %>
+          <%= @article.markdown_parsed %>
+        <% else %>
+          No article content
+        <% end %>
+      </div>
+    </div>
   </div>
+</section>
+
+<hr />
+
+<section class="mt-10">
+  <button class="bg-gray-700 text-gray-100 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm" onclick="location.href='<%= edit_article_path(@article.id) %>';">EDIT ARTICLE</button>
+  <button class="bg-yellow-700 text-yellow-100 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm">DEPRECATE ARTICLE</button>
+  <button class="bg-red-700 text-red-100 hover:text-white rounded mr-3 py-1 px-3 font-semibold text-sm">DELETE ARTICLE</button>
 </section>

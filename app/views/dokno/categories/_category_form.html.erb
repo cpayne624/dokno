@@ -9,7 +9,7 @@
   <% if Dokno::Category.exists? %>
     <div class="mt-5">
       <div class="text-lg"><label for="category_id">Parent Category</label></div>
-      <select name="category_id" id="category_id" class="rounded text-xl shadow p-2 w-full max-w-full mt-2">
+      <select name="category_id" id="category_id" class="rounded text-xl border p-2 w-full max-w-full mt-2">
         <option></option>
         <%= Dokno::Category.select_option_markup(selected_category_ids: [@parent_category_id], exclude_category_id: category.id).html_safe %>
       </select>

@@ -31,7 +31,7 @@ module Dokno
         parent_category_id = parent_category.category_id
       end
 
-      crumbs.join(' > ')
+      crumbs.join(' / ')
     end
 
     # (ActiveRecord::Relation) Returns all Articles in the context Category, including all child Categories

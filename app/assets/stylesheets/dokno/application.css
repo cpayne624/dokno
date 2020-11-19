@@ -19,8 +19,8 @@ svg.feather {
 }
 
 div#dokno-content-container a {
-  text-decoration: underline;
-  font-weight: 600;
+  /* text-decoration: underline; */
+  font-weight: 400;
   color: #2c5282;
 }
 
