@@ -15,7 +15,7 @@ module Dokno
 
     def edit
       return redirect_to root_path if @article.blank?
-      @category_ids = @article&.categories.pluck(:id)
+      @category_ids = @article.categories.pluck(:id)
     end
 
     def create
@@ -28,7 +28,6 @@ module Dokno
         @category_ids = params[:category_id]
         render :new
       end
-
     end
 
     def update

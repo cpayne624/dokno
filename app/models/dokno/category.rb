@@ -18,7 +18,7 @@ module Dokno
     validates :name, presence: true, uniqueness: true
     validate :circular_parent_check
 
-    # (String) Returns a breadcrumb for display for a Category instance
+    # The display breadcrumb for the Category
     def breadcrumb
       crumbs = [name]
       parent_category_id = category_id
@@ -34,7 +34,7 @@ module Dokno
       crumbs.join(' / ')
     end
 
-    # (ActiveRecord::Relation) Returns all Articles in the context Category, including all child Categories
+    # All Articles in the Category, including all child Categories
     def articles_in_branch
       Dokno::Article
         .select('
@@ -45,12 +45,12 @@ module Dokno
           dokno_articles.markdown
         ')
         .joins(:categories)
-        .where(dokno_categories: { id: self.class.branch(id).pluck(:id) })
+        .where(dokno_categories: { id: self.class.branch(parent_category_id: id).pluck(:id) })
         .order(:title).all.uniq
     end
 
-    # (Array) Returns the given Category and all child related Categories. Useful for filtering associated articles.
-    def self.branch(parent_category_id, at_top=true)
+    # The given Category and all child Categories. Useful for filtering associated articles.
+    def self.branch(parent_category_id:, at_top: true)
       return if parent_category_id.blank?
 
       categories = []
@@ -58,14 +58,14 @@ module Dokno
       child_categories = parent_category.children.to_a
 
       child_categories.each do |child_category|
-        categories << child_category << branch(child_category.id, false)
+        categories << child_category << branch(parent_category_id: child_category.id, at_top: false)
       end
 
       categories.prepend parent_category if at_top
       categories.flatten
     end
 
-    # (String) Returns HTML markup for Category SELECT field OPTION lists
+    # HTML markup for Category SELECT field OPTION lists
     def self.select_option_markup(selected_category_ids: nil, exclude_category_id: nil)
       selected_category_ids = selected_category_ids&.map(&:to_i)
       breadcrumbs = all
@@ -83,7 +83,7 @@ module Dokno
     def circular_parent_check
       return unless persisted? && id.to_i == category_id.to_i
 
-      errors.add(:category_id, "can't set parent category to self")
+      errors.add(:category_id, "can't set parent to self")
     end
   end
 end

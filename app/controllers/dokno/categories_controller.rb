@@ -67,7 +67,8 @@ module Dokno
       fetch_category
       return if @category.blank?
 
-      category_ids = Category.branch(@category.id).pluck(:id)
+      # Search within the specified category and all children categories within it
+      category_ids = Category.branch(parent_category_id: @category.id).pluck(:id)
       @articles = @articles.joins(:categories).where(dokno_categories: {id: category_ids}).uniq
     end
   end

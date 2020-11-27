@@ -16,4 +16,10 @@
 
  body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  margin: 2.5rem;
+ }
+
+ div#dummy-page p,
+ div#dummy-page li {
+   line-height: 1.5rem;
  }

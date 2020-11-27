@@ -52,7 +52,7 @@ module Dokno
       "#{base_url}#{articles_path}/#{slug}"
     end
 
-    # (ActiveRecord::Relation) Returns all uncategorized Articles
+    # All uncategorized Articles
     def self.uncategorized
       Dokno::Article.left_joins(:categories).where(dokno_categories: {id: nil}).order(:title).all
     end
@@ -60,7 +60,7 @@ module Dokno
     def self.parse_markdown(content)
       ActionController::Base.helpers.sanitize(
         MARKDOWN_PARSER.render(content),
-        tags: Dokno.config.tag_whitelist,
+        tags:       Dokno.config.tag_whitelist,
         attributes: Dokno.config.attr_whitelist
       )
     end

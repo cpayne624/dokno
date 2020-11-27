@@ -50,7 +50,7 @@ module Dokno
     end
 
     def config_error_prefix
-      "Dokno configuration error (check the config/initializers/dokno.rb file):"
+      "Dokno configuration error (check config/initializers/dokno.rb):"
     end
   end
 end
