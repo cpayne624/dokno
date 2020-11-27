@@ -1,4 +1,6 @@
 # Dokno
+![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg)
+
 Dokno (dough-no) is a lightweight Rails Engine for storing and managing your app's <b>DO</b>main <b>KNO</b>wledge.
 
 Dokno is also a play on words, i.e., "I need to look that up 'cause I do' kno'." :eyes:
