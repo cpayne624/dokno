@@ -14,6 +14,8 @@
  *= require_self
  */
 
+/* Additional knowledgebase site styles that are not in tailwind */
+
 svg.feather {
   vertical-align: sub;
 }

@@ -24,7 +24,7 @@ describe Dokno::Category do
       categories.first.category_id = categories.first.id
 
       expect(categories.first.validate).to be false
-      expect(categories.first.errors[:category_id]).to include 'can\'t set parent category to self'
+      expect(categories.first.errors[:category_id]).to include 'can\'t set parent to self'
 
       categories.first.category_id = categories.last.id
       expect(categories.first.validate).to be true
