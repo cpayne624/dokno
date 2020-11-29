@@ -14,8 +14,6 @@
 
 <!-- Slide-out panel markup -->
 <div id="dokno-panel-container">
-  <a id="dokno-panel-close" href="javascript:;" title="Close panel" onclick="doknoClosePanel();">&rarr;</a>
-
   <div id="dokno-panel-title"></div>
   <div id="dokno-panel-summary"></div>
   <div id="dokno-panel-markdown" class="dokno-article-content-markup"></div>
@@ -27,7 +25,6 @@
   function doknoOpenPanel(slug) {
     if (slug == dokno__slug) {
       doknoClosePanel();
-      dokno__slug = null;
       return true;
     }
     dokno__slug = slug;
@@ -60,6 +57,8 @@
 
         dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');
+
+        document.addEventListener('keydown', dokno__keydown_listener, false);
       }
     };
 
@@ -67,9 +66,16 @@
   }
 
   function doknoClosePanel() {
+    dokno__slug = null;
     dokno__panel.classList.remove('open');
+    document.removeEventListener('keydown', dokno__keydown_listener, false);
   }
 
   const dokno__panel = document.getElementById('dokno-panel-container');
+  const dokno__keydown_listener = function(e) {
+    if (e.key === 'Escape') {
+      doknoClosePanel();
+    }
+  }
   var dokno__id, dokno__slug;
 </script>

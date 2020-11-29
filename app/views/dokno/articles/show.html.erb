@@ -2,11 +2,26 @@
 
 <section>
   <div class="flex">
-    <div class="w-2/5 pr-10 break-all">
-      <h1 class="text-4xl mb-10 leading-tight font-light"><%= @article.title %></h1>
+    <div class="w-2/5 pr-10">
+      <div id="article-deprecated-alert" class="<%= 'hidden' if @article.active %> bg-yellow-300 p-5 mb-5 rounded text-lg border-t-4 border-yellow-500 shadow-md">
+        <i data-feather="alert-circle" class="inline-block h-5"></i> This article is no longer active
+      </div>
+
+      <h1 class="text-4xl mb-5 leading-tight font-light"><%= @article.title %></h1>
 
       <div>
-        <div class="flex">
+        <% if can_edit? %>
+          <div class="mb-10">
+            <button title="Edit article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-1 px-3 font-bold" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
+
+            <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-yellow-100 hover:text-white rounded mr-3 py-1 px-3 font-bold <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> SUNSET</button>
+            <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-green-100 hover:text-white rounded mr-3 py-1 px-3 font-bold <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+
+            <button title="Permanently delete article" class="bg-red-700 text-red-100 hover:text-white rounded py-1 px-3 font-bold" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="x-circle" class="inline h-5"></i> DELETE</button>
+          </div>
+        <% end %>
+
+        <div class="flex mt-10">
           <div class="w-8"><i data-feather="clock" class="inline-block h-5"></i></div>
           <div class="w-full">
             Last updated:<br />
@@ -37,7 +52,7 @@
             <div class="w-full">
               <%= 'Category'.pluralize @article.categories.count %>:<br />
               <% @article.categories.map { |category| { id: category.id, breadcrumb: category.breadcrumb } }.sort_by { |category_hash| category_hash[:breadcrumb] }.each do |category| %>
-                <div><a href="<%= category_path category[:id] %>"><%= category[:breadcrumb] %></a></div>
+                <div><a href="<%= root_path %>?id=<%= category[:id] %>"><%= category[:breadcrumb] %></a></div>
               <% end %>
             </div>
           </div>
@@ -56,10 +71,6 @@
         <% else %>
           No article content
         <% end %>
-      </div>
-
-      <div class="mt-10">
-        <%= render 'article_buttons', article: @article %>
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@ module Dokno
     def index
       search if params[:search_term].present?
       @articles = @category&.articles_in_branch if @articles.nil?
-      @articles = Dokno::Article.uncategorized if @articles.nil?
+      @articles = Dokno::Article.uncategorized  if @articles.nil?
     end
 
     def new
@@ -17,7 +17,7 @@ module Dokno
     end
 
     def edit
-      return redirect_to category_path if @category.blank?
+      return redirect_to root_path if @category.blank?
       @parent_category_id = @category.category_id
     end
 
@@ -25,7 +25,7 @@ module Dokno
       @category = Dokno::Category.new(category_params)
 
       if @category.save
-        redirect_to category_path @category
+        redirect_to "#{root_path}?id=#{@category.id}"
       else
         @parent_category_id = params[:category_id]
         render :new
@@ -33,10 +33,10 @@ module Dokno
     end
 
     def update
-      return redirect_to category_path if @category.blank?
+      return redirect_to root_path if @category.blank?
 
       if @category.update(category_params)
-        redirect_to category_path @category
+        redirect_to "#{root_path}?id=#{@category.id}"
       else
         @parent_category_id = params[:category_id]
         render :edit
@@ -63,13 +63,13 @@ module Dokno
           'LOWER(slug) LIKE :search_term',
           search_term: "%#{@search_term.downcase}%"
         )
-        .order('updated_at DESC')
+        .order(active: :desc, updated_at: :desc)
 
       fetch_category
       return if @category.blank?
 
       # Search within the specified category and all children categories within it
-      category_ids = Category.branch(parent_category_id: @category.id).pluck(:id)
+      category_ids = Dokno::Category.branch(parent_category_id: @category.id).pluck(:id)
       @articles = @articles.joins(:categories).where(dokno_categories: {id: category_ids}).uniq
     end
   end

@@ -45,8 +45,22 @@ module Dokno
         <p>#{Dokno.config.app_name} Knowledgebase article slug : #{slug}</p>
       )
 
+      title_markup = %Q(
+        <span>#{title}</span>
+      )
+
+      unless active
+        title_markup = title_markup.prepend(
+          %Q(
+            <div id="article-deprecated-alert">
+              This article is no longer active
+            </div>
+          )
+        )
+      end
+
       {
-        title:    "<span>#{title}</span>",
+        title:    title_markup,
         id:       id,
         slug:     slug,
         summary:  summary,
@@ -61,7 +75,7 @@ module Dokno
 
     # All uncategorized Articles
     def self.uncategorized
-      Dokno::Article.left_joins(:categories).where(dokno_categories: {id: nil}).order(:title).all
+      Dokno::Article.left_joins(:categories).where(active: true, dokno_categories: {id: nil}).order(:title).all
     end
 
     def self.parse_markdown(content)
@@ -90,7 +104,7 @@ module Dokno
 
       meta = []
       meta_changes.each_pair do |field, values|
-        meta << "#{field.capitalize} changed from #{values.first} to #{values.last}"
+        meta << "#{field.capitalize} changed from '#{values.first}' to '#{values.last}'"
       end
 
       content = { before: '', after: '' }

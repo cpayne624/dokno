@@ -1,23 +1,41 @@
-<% logs = @article.present? ? @article.logs : Dokno::Log.includes(:article).limit(1) %>
+<% if article.present? %>
+  <% logs = article&.logs %>
+<% else %>
+  <% logs = Dokno::Log.includes(:article).where(dokno_articles: { active: true }).limit(3) %>
+
+  <% if category&.persisted? %>
+    <% category_ids = Dokno::Category.branch(parent_category_id: category.id).pluck(:id) %>
+    <% logs = logs.joins(article: :categories).where(dokno_categories: { id: category_ids }) %>
+  <% end %>
+<% end %>
 
 <% if logs.present? %>
   <div class="p-10 text-gray-200 bg-gray-900">
-    <div class="text-xl font-semibold mb-10">
+    <div class="text-xl font-semibold mb-8 uppercase text-center">
       <i data-feather="clock" class="inline mr-2"></i>
-      <%= @article.present? ? 'Article Change Log' : 'Last Update' %>
+
+      <% if article.present? %>
+        Change log for this article
+      <% else %>
+        Latest updates
+        <% if category&.name.present? %>
+          within the <%= category.name %> category<% if category_ids.length > 1 %>, including <%= (category_ids.length - 1) %> <%= 'subcategory'.pluralize(category_ids.length - 1) %><% end %>
+        <% end %>
+      <% end %>
     </div>
 
     <div id="change-log" class="bg-gray-800 p-10 rounded">
       <ul>
         <% logs.each do |log| %>
           <li class="mb-8 flex">
-            <% if @article.blank? %>
-              <div class="w-8"><i data-feather="file-text" class="inline h-5"></i></div>
+            <% if article.blank? %>
+              <div class="w-10"><i data-feather="file-text" class="inline h-5"></i></div>
             <% end %>
 
             <div class="w-full text-gray-500">
-              <% if @article.blank? %>
-                <div class="font-semibold mb-5 text-white text-xl"><a href="<%= article_path log.article.slug %>" title="View Article"><%= log.article.title %></a></div>
+              <% if article.blank? %>
+                <div class="text-white text-xl"><a href="<%= article_path log.article.slug %>" title="View Article"><%= log.article.title %></a></div>
+                <div class="mb-5"><%= log.article.category_name_list %></div>
               <% end %>
 
               <div class="text-gray-500 bg-gray-700 p-5 pr-10 rounded cursor-pointer flex items-center" onclick="toggleVisibility('article-diff-<%= log.id %>');" title="Show / Hide Diff">
@@ -33,11 +51,11 @@
                 </div>
 
                 <div class="w-1/5 text-right toggle-visibility-indicator-container article-diff-<%= log.id %>">
-                  <i data-feather="chevron-left" class="inline toggle-visibility-indicator article-diff-<%= log.id %>"></i>
+                  <% if log.diff_left != log.diff_right %><i data-feather="chevron-left" class="inline toggle-visibility-indicator article-diff-<%= log.id %>"></i><% end %>
                 </div>
               </div>
 
-              <% if log.diff_left.present? || log.diff_right.present? %>
+              <% if log.diff_left != log.diff_right %>
                 <div id="article-diff-<%= log.id %>" class="flex hidden">
                   <div class="w-1/2 p-5">Before:<br /><%= log.diff_left.html_safe %></div>
                   <div class="w-1/2 p-5">After:<br /><%= log.diff_right.html_safe %></div>
