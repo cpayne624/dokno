@@ -12,6 +12,10 @@ Gem::Specification.new do |spec|
   spec.description = "Dokno allows you to easily mount a complete, yet simple, self-contained knowledgebase / wiki / help system to "\
                      "your Rails app where you or your users can author articles relevant to your app."
   spec.license     = "MIT"
+  spec.metadata = {
+    "bug_tracker_uri" => "https://github.com/cpayne624/dokno/issues",
+    "changelog_uri"   => "https://github.com/cpayne624/dokno/blob/master/CHANGELOG.md"
+  }
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
