@@ -2,6 +2,7 @@
 .bundle/
 log/*.log
 pkg/
+coverage
 spec/dummy/db/*.sqlite3
 spec/dummy/db/*.sqlite3-journal
 spec/dummy/db/*.sqlite3-*

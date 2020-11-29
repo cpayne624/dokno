@@ -22,9 +22,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "diffy", "~> 3.4"     # Change log diffing
   spec.add_dependency "redcarpet", "~> 3.5" # Markdown to HTML processor
 
-  spec.add_development_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
-  spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
-  spec.add_development_dependency "rspec", "~> 3.10"
-  spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "database_cleaner-active_record", "~> 1.8"
+  spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
+  spec.add_development_dependency "pry-byebug", "~> 3.9"
+  spec.add_development_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
+  spec.add_development_dependency "rspec-rails", "~> 4.0", ">= 4.0.1"
+  spec.add_development_dependency "simplecov", "~> 0.19.1"
 end
