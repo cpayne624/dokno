@@ -24,7 +24,6 @@ as well as a view helper for providing inline, in-context access to articles to 
 ![Editing An Article](./README/article_edit.png)
 
 ### In-Context Flyout Article
-![Host App Page](./README/host_app_page.png)
 ![Host App Page](./README/host_app_flyout.png)
 
 ## Dependencies
