@@ -22,14 +22,31 @@ module Dokno
     # (Enumerable) Determines which HTML attributes are allowed in Article markdown
     attr_accessor :attr_whitelist
 
+    # (String) Host application's user object
+    attr_accessor :app_user_object
+
+    # (Symbol) Host application's user object method that should be used to authorize users to edit Dokno data
+    #   Should return boolean.
+    attr_accessor :app_user_auth_method
+
+    # (Symbol) Host application's user object method that should return the authenticated user's name or other
+    #   identifier that will be included in change log events. Should return a string.
+    attr_accessor :app_user_name_method
+
     # Defaults
-    TAG_WHITELIST  = %w[code img h1 h2 h3 h4 h5 h6 a em u i b strong ol ul li table thead tbody tfoot tr th td blockquote hr br p]
-    ATTR_WHITELIST = %w[src alt title href target]
+    TAG_WHITELIST        = %w[code img h1 h2 h3 h4 h5 h6 a em u i b strong ol ul li table thead tbody tfoot tr th td blockquote hr br p]
+    ATTR_WHITELIST       = %w[src alt title href target]
+    APP_USER_OBJECT      = 'current_user'
+    APP_USER_AUTH_METHOD = 'admin?'
+    APP_USER_NAME_METHOD = 'name'
 
     def initialize
-      self.app_name       = Rails.application.class.module_parent.name.underscore.humanize.upcase
-      self.tag_whitelist  = TAG_WHITELIST
-      self.attr_whitelist = ATTR_WHITELIST
+      self.app_name             = Rails.application.class.module_parent.name.underscore.humanize.upcase
+      self.tag_whitelist        = TAG_WHITELIST
+      self.attr_whitelist       = ATTR_WHITELIST
+      self.app_user_object      = APP_USER_OBJECT
+      self.app_user_auth_method = APP_USER_AUTH_METHOD
+      self.app_user_name_method = APP_USER_NAME_METHOD
     end
 
     def validate

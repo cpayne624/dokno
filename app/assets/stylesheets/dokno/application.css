@@ -35,3 +35,30 @@ div#dokno-content-container a:active {
 .no-underline {
   text-decoration: none !important;
 }
+
+div.diff del {
+  color: rgb(245, 158, 11);
+  text-decoration: none;
+}
+
+div.diff ins {
+  color: rgb(254, 243, 199);
+  text-decoration: none;
+}
+
+div.diff ins strong {
+  background-color: rgb(254, 243, 199);
+  color: rgb(26,32,44);
+}
+
+div.diff del strong {
+  background-color: rgb(245, 158, 11);
+  color: rgb(26,32,44);
+  text-decoration: line-through;
+}
+
+div#change-log {
+  max-height: 2000px;
+  overflow: hidden;
+  overflow-y: auto;
+}

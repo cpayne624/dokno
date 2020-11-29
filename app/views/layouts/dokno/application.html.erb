@@ -22,18 +22,20 @@
         </a>
       </div>
       <div class="w-2/3 text-right">
-        <% if action_name != 'new' %>
-          <button class="bg-blue-700 text-gray-300 hover:text-white rounded py-1 px-2 font-semibold text-sm" onclick="location.href='<%= new_article_path %>/?category_id=<%= @category&.id %>';"><i data-feather="file-plus" class="inline h-4"></i> ADD ARTICLE</button>
-          <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= new_category_path %>/?parent_category_id=<%= @category&.id %>';"><i data-feather="folder-plus" class="inline h-4"></i> ADD CATEGORY</button>
-        <% end %>
-
-        <% if @article&.persisted? && action_name != 'edit' %>
-          <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT ARTICLE</button>
-        <% else %>
-          <% if @category&.persisted? && action_name != 'edit' %>
-            <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT CATEGORY</button>
+        <% if can_edit? %>
+          <% if action_name != 'new' %>
+            <button class="bg-blue-700 text-gray-300 hover:text-white rounded py-1 px-2 font-semibold text-sm" onclick="location.href='<%= new_article_path %>/?category_id=<%= @category&.id %>';"><i data-feather="plus-circle" class="inline h-4"></i> ADD ARTICLE</button>
+            <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= new_category_path %>/?parent_category_id=<%= @category&.id %>';"><i data-feather="folder-plus" class="inline h-4"></i> ADD CATEGORY</button>
           <% end %>
 
+          <% if @article&.persisted? && action_name != 'edit' %>
+            <button class="bg-gray-700 text-gray-300 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT ARTICLE</button>
+          <% elsif @category&.persisted? && action_name != 'edit' %>
+            <button class="bg-gray-700 text-gray-100 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT CATEGORY</button>
+          <% end %>
+        <% end %>
+
+        <% if action_name != 'edit' %>
           <button class="bg-yellow-700 text-gray-300 hover:text-white rounded ml-2 py-1 px-2 font-semibold text-sm" onclick="window.open('/');"><i data-feather="log-out" class="inline h-4"></i> GO TO <%= Dokno.config.app_name.upcase %></button>
         <% end %>
       </div>
@@ -65,9 +67,19 @@
     <%= yield %>
   </div>
 
-  <footer id="dokno-footer-container" class="p-10 text-gray-200 bg-gray-900">
-    <div>Dokno.config:</div>
-    <%= Dokno.config.inspect %>
+  <footer id="dokno-footer-container" class="font-light">
+    <% if action_name != 'edit' && action_name != 'new' %>
+      <%= render 'partials/logs' %>
+    <% end %>
+
+    <% if user.present? %>
+      <div class="p-10 text-gray-100 bg-gray-800 text-center">
+        <div><%= Dokno.config.app_name %> Authenticated User: <span class="font-semibold"><%= username %></span></div>
+        <% if can_edit? %>
+          <div>Can edit knowledgebase? <span class="font-semibold">Yes</span></div>
+        <% end %>
+      </div>
+    <% end %>
   </footer>
 
   <%= javascript_include_tag 'init' %>

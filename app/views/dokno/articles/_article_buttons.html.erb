@@ -1,4 +1,6 @@
 <section class="mt-10">
-  <button class="bg-yellow-700 text-yellow-100 hover:text-white rounded mr-3 py-1 px-2 text-sm font-semibold"><i data-feather="sunset" class="inline h-4"></i> SUNSET ARTICLE</button>
-  <button class="bg-red-700 text-red-100 hover:text-white rounded mr-3 py-1 px-2 text-sm font-semibold"><i data-feather="x-circle" class="inline h-4"></i> DELETE ARTICLE</button>
+  <button id="article-deactivate-button" class="bg-yellow-700 text-yellow-100 hover:text-white rounded mr-3 py-1 px-2 text-sm font-semibold <% if !article.active %>hidden<% end %>" onclick="deactiveArticle('<%= article.slug %>');"><i data-feather="sunset" class="inline h-4"></i> SUNSET ARTICLE</button>
+  <button id="article-activate-button" class="bg-green-700 text-green-100 hover:text-white rounded mr-3 py-1 px-2 text-sm font-semibold <% if article.active %>hidden<% end %>" onclick="activeArticle('<%= article.slug %>');"><i data-feather="sunrise" class="inline h-4"></i> RE-ACTIVATE ARTICLE</button>
+
+  <button class="bg-red-700 text-red-100 hover:text-white rounded mr-3 py-1 px-2 text-sm font-semibold" onclick="deleteArticle('<%= article.id %>');"><i data-feather="x-circle" class="inline h-4"></i> DELETE ARTICLE</button>
 </section>
