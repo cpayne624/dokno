@@ -15,9 +15,8 @@ function sendRequest(url, data, callback, method) {
     if (request.readyState == 4 && request.status == 200) {
       try {
         var data = JSON.parse(request.responseText);
-      } catch(err) {
-        console.log(err.message + " in " + request.responseText);
-        return;
+      } catch(_e) {
+        var data = request.responseText;
       }
 
       callback(data);
@@ -30,7 +29,9 @@ function sendRequest(url, data, callback, method) {
 function deactiveArticle(slug) {
   const callback = function(_data) {
     elem('button#article-deactivate-button').classList.add('hidden');
+    elem('div#article-deprecated-alert').classList.remove('hidden');
     elem('button#article-activate-button').classList.remove('hidden');
+    reloadLogs();
   }
   sendRequest(dokno__base_path + 'article_status', { slug: slug, active: false }, callback, 'POST');
 }
@@ -38,7 +39,9 @@ function deactiveArticle(slug) {
 function activeArticle(slug) {
   const callback = function(_data) {
     elem('button#article-activate-button').classList.add('hidden');
+    elem('div#article-deprecated-alert').classList.add('hidden');
     elem('button#article-deactivate-button').classList.remove('hidden');
+    reloadLogs();
   }
   sendRequest(dokno__base_path + 'article_status', { slug: slug, active: true }, callback, 'POST');
 }
@@ -79,6 +82,10 @@ function toggleVisibility(selector_id) {
   var $icon = elem('svg.' + selector_id);
   var icon_class, new_icon;
 
+  if (!$elem) {
+    return true;
+  }
+
   if ($elem.classList.contains('hidden')) {
     $elem.classList.remove('hidden');
     icon_class = 'chevron-down';
@@ -96,4 +103,16 @@ function toggleVisibility(selector_id) {
   $icon.remove();
   elem('div.toggle-visibility-indicator-container.' + selector_id).appendChild(new_icon);
   initIcons();
+}
+
+function reloadLogs() {
+  var $log_container = elem('div#dokno-article-log-container');
+  var category_id = $log_container.getAttribute('data-category-id');
+  var article_id = $log_container.getAttribute('data-article-id');
+
+  const callback = function(markup) {
+    elem('div#dokno-article-log-container').innerHTML = markup;
+    initIcons();
+  }
+  sendRequest(dokno__base_path + 'article_log', { category_id: category_id, article_id: article_id }, callback, 'POST');
 }

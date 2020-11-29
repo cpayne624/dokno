@@ -39,6 +39,7 @@ module Dokno
       Dokno::Article
         .select('
           dokno_articles.id,
+          dokno_articles.active,
           dokno_articles.slug,
           dokno_articles.title,
           dokno_articles.summary,
@@ -46,7 +47,8 @@ module Dokno
         ')
         .joins(:categories)
         .where(dokno_categories: { id: self.class.branch(parent_category_id: id).pluck(:id) })
-        .order(:title).all.uniq
+        .order('active DESC, title')
+        .all.uniq
     end
 
     # The given Category and all child Categories. Useful for filtering associated articles.

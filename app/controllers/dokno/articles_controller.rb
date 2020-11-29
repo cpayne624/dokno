@@ -60,7 +60,7 @@ module Dokno
     # Ajax-fetched preview of article content from article form
     def preview
       content = Dokno::Article.parse_markdown params['markdown']
-      render json: { parsed_content: content }, layout: false
+      render json: { parsed_content: content.presence || 'Nothing to preview' }, layout: false
     end
 
     # Ajax-invoked article status changing
@@ -68,6 +68,15 @@ module Dokno
       set_editor_username
       @article.update!(active: params[:active])
       render json: {}, layout: false
+    end
+
+    # Ajax-fetched article change log
+    def article_log
+      render partial: '/partials/logs',
+        locals: {
+          category: Dokno::Category.find_by(id: params[:category_id].to_i),
+          article:  Dokno::Article.find_by(id: params[:article_id].to_i)
+        }, layout: false
     end
 
     private

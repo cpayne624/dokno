@@ -2,13 +2,20 @@
   <h1>A page in your app</h1>
   <p>
     This might be something in your app that needs clarification<br />
-    or background, with a link to an article explaining it all.
+    or background, with a <%= dokno_article_modal('link to an article explaining it all', slug: Dokno::Article.take&.slug) %>.
   </p>
 
   <h2>Inline Article View Helper</h2>
   <p>
     &lt;%= dokno_article_modal({link-text}, slug: {unique-article-slug}) %&gt;
   </p>
+
+  <h2>Defined Articles</h2>
+  <ul>
+    <% Dokno::Article.select(:slug, :title).order(:title).each do |article| %>
+      <li><%= dokno_article_modal(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
+    <% end %>
+  </ul>
 
   <h2>Link With Missing Slug</h2>
   <p>
@@ -20,16 +27,9 @@
     <%= dokno_article_modal('Link to bogus slug', slug: 'doesnotexist') %>
   </p>
 
-  <h2>Defined Articles</h2>
-  <ul>
-    <% Dokno::Article.select(:slug, :title).order(:title).each do |article| %>
-      <li><%= dokno_article_modal(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
-    <% end %>
-  </ul>
-
   <hr />
 
   <p>
-    <a target="_blank" href="<%= dokno_path %>">Dokno Knowledgebase</a>
+    <a target="_blank" href="<%= dokno_path %>">Open the Knowledgebase site</a>
   </p>
 </div>

@@ -27,7 +27,7 @@
   <% end %>
 
   <div class="mt-10">
-    <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-2 text-sm font-semibold"><i data-feather="save" class="inline h-4"></i> SAVE CATEGORY</button>
-    <span class="text-lg ml-5"><a class="no-underline" href="<%= root_path %>">Cancel</a></span>
+    <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 font-bold"><i data-feather="save" class="inline h-5"></i> SAVE CATEGORY</button>
+    <span class="text-lg ml-5"><a class="no-underline" href="<%= category.persisted? ? "#{root_path}?id=#{category.id}" : root_path %>">Cancel</a></span>
   </div>
 </section>
