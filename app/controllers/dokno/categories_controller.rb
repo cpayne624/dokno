@@ -2,6 +2,7 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class CategoriesController < ApplicationController
+    before_action :authorize, except: [:index]
     before_action :fetch_category, only: [:index, :edit, :update]
 
     def index

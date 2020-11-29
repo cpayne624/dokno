@@ -10,7 +10,10 @@
           <div class="w-8"><i data-feather="clock" class="inline-block h-5"></i></div>
           <div class="w-full">
             Last updated:<br />
-            <%= @article.updated_at %>
+            <%= time_ago_in_words @article.updated_at %> ago
+            <% if (editor_username = @article.logs.first&.username).present? %>
+              by <%= editor_username %>
+            <% end %>
           </div>
         </div>
         <div class="mt-5 flex">
@@ -56,7 +59,7 @@
       </div>
 
       <div class="mt-10">
-        <%= render 'article_buttons' %>
+        <%= render 'article_buttons', article: @article %>
       </div>
     </div>
   </div>

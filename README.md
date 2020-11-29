@@ -28,8 +28,10 @@ as well as a view helper for providing inline, in-context access to articles to 
 ![Host App Page](./README/host_app_flyout.png)
 
 ## Dependencies
-Dokno is purposefully lightweight and fast, with only one dependency, the excellent
-[redcarpet gem](https://github.com/vmg/redcarpet) for Markdown processing, which itself has no further dependencies.
+Dokno is purposefully lightweight and fast, with only two dependencies, the excellent
+[redcarpet](https://github.com/vmg/redcarpet) (Markdown processing) &
+[diffy](https://github.com/samg/diffy) (change log diffing) gems,
+each of which have no further dependencies.
 
 It is expected that Dokno is mounted to a Rails app using a database via ActiveRecord.
 
@@ -116,6 +118,8 @@ $ bundle exec rspec
 ```
 
 ## Credits
+- [redcarpet](https://github.com/vmg/redcarpet)
+- [diffy](https://github.com/samg/diffy)
 - [Feather Icons](https://github.com/feathericons/feather)
 
 ## License

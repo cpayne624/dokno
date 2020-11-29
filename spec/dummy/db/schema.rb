@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_12_155224) do
+ActiveRecord::Schema.define(version: 2020_11_28_172631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_155224) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "summary"
+    t.boolean "active", default: true
     t.index ["slug"], name: "index_dokno_articles_on_slug", unique: true
   end
 
@@ -42,7 +43,20 @@ ActiveRecord::Schema.define(version: 2020_11_12_155224) do
     t.index ["name"], name: "index_dokno_categories_on_name", unique: true
   end
 
+  create_table "dokno_logs", force: :cascade do |t|
+    t.bigint "article_id"
+    t.string "username"
+    t.text "meta"
+    t.text "diff_left"
+    t.text "diff_right"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_dokno_logs_on_article_id"
+    t.index ["username"], name: "index_dokno_logs_on_username"
+  end
+
   add_foreign_key "dokno_articles_categories", "dokno_articles", column: "article_id"
   add_foreign_key "dokno_articles_categories", "dokno_categories", column: "category_id"
   add_foreign_key "dokno_categories", "dokno_categories", column: "category_id"
+  add_foreign_key "dokno_logs", "dokno_articles", column: "article_id"
 end

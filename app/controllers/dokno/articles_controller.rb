@@ -2,7 +2,8 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class ArticlesController < ApplicationController
-    before_action :fetch_article, only: [:show, :edit, :panel]
+    before_action :authorize, except: [:show, :panel]
+    before_action :fetch_article, only: [:show, :edit, :panel, :status]
 
     def show
       return redirect_to root_path if @article.blank?
@@ -20,6 +21,7 @@ module Dokno
 
     def create
       @article = Dokno::Article.new(article_params)
+      set_editor_username
 
       if @article.save
         @article.categories = Dokno::Category.where(id: params[:category_id]) if params[:category_id].present?
@@ -34,6 +36,8 @@ module Dokno
       @article = Dokno::Article.find_by(id: params[:id].to_i)
       return redirect_to root_path if @article.blank?
 
+      set_editor_username
+
       if @article.update(article_params)
         @article.categories = Dokno::Category.where(id: params[:category_id])
         redirect_to article_path @article
@@ -41,6 +45,11 @@ module Dokno
         @category_ids = params[:category_id]
         render :edit
       end
+    end
+
+    def destroy
+      Dokno::Article.find(params[:id].to_i).destroy!
+      render json: {}, layout: false
     end
 
     # Ajax-fetched slide-in article panel for the host app
@@ -52,6 +61,13 @@ module Dokno
     def preview
       content = Dokno::Article.parse_markdown params['markdown']
       render json: { parsed_content: content }, layout: false
+    end
+
+    # Ajax-invoked article status changing
+    def status
+      set_editor_username
+      @article.update!(active: params[:active])
+      render json: {}, layout: false
     end
 
     private
@@ -67,6 +83,10 @@ module Dokno
 
       @article = Dokno::Article.find_by(id: params[:id].to_i)
       return redirect_to article_path(@article.slug) if @article.present?
+    end
+
+    def set_editor_username
+      @article.editor_username = username
     end
   end
 end

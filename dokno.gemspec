@@ -13,7 +13,8 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  spec.add_dependency "redcarpet", "~> 3.5" # Markdown -> HTML processor
+  spec.add_dependency "diffy", "~> 3.4"     # Change log diffing
+  spec.add_dependency "redcarpet", "~> 3.5" # Markdown to HTML processor
 
   spec.add_development_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
   spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
