@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dokno (0.1.0.1)
+    dokno (0.1.1)
       diffy (~> 3.4)
       redcarpet (~> 3.5)
 

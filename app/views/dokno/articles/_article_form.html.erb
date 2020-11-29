@@ -2,7 +2,7 @@
 
 <section class="mb-10">
 
-  <div class="text-2xl mb-5"><%= article.persisted? ? 'Edit' : 'New' %> Article</div>
+  <div class="text-2xl mb-5 text-gray-500"><%= article.persisted? ? 'Edit' : 'New' %> Article</div>
   <h1 class="text-4xl mb-5 leading-tight font-light"><%= article.title %></h1>
   <hr class="mb-5" />
 
@@ -20,9 +20,9 @@
         <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
       </select>
       <div class="text-gray-500 mt-2">
-        If applicable, select one or more categories to which this article will belong (optional).
-        Note: articles will be automatically included in parent categories.
-        CTRL/CMD to select multiple.
+        If applicable, select one or more categories to which this article will belong (optional). CTRL/CMD to select multiple.
+        Articles will be automatically included in parent categories. Uncategorized articles
+        are displayed on the landing page.
       </div>
     </div>
   <% end %>
@@ -53,7 +53,7 @@
   </div>
 
   <div class="mt-10">
-    <button type="submit" class="bg-gray-600 text-gray-200 hover:bg-gray-800 hover:text-white rounded py-1 px-3 font-bold"><i data-feather="save" class="inline h-5"></i> SAVE ARTICLE</button>
+    <button type="submit" class="bg-gray-700 text-gray-300 hover:bg-gray-900 hover:text-white rounded py-2 px-3 font-bold"><i data-feather="check" class="inline h-5"></i> SAVE ARTICLE</button>
     <span class="text-lg ml-5"><a class="no-underline" href="<%= article.persisted? ? article_path(article.slug) : root_path %>">Cancel</a></span>
   </div>
 

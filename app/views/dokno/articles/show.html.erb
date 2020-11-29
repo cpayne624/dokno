@@ -12,12 +12,12 @@
       <div>
         <% if can_edit? %>
           <div class="mb-10">
-            <button title="Edit article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-1 px-3 font-bold" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
+            <button title="Edit article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
 
-            <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-yellow-100 hover:text-white rounded mr-3 py-1 px-3 font-bold <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> SUNSET</button>
-            <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-green-100 hover:text-white rounded mr-3 py-1 px-3 font-bold <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+            <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+            <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
 
-            <button title="Permanently delete article" class="bg-red-700 text-red-100 hover:text-white rounded py-1 px-3 font-bold" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="x-circle" class="inline h-5"></i> DELETE</button>
+            <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> DELETE</button>
           </div>
         <% end %>
 
