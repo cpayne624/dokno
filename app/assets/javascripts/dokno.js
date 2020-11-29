@@ -94,6 +94,10 @@ function toggleVisibility(selector_id) {
     icon_class = 'chevron-left';
   }
 
+  if (!$icon) {
+    return true;
+  }
+
   new_icon = document.createElement('i');
   new_icon.setAttribute('data-feather', icon_class);
   new_icon.classList.add('inline');

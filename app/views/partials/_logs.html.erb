@@ -11,60 +11,65 @@
 
 <% if logs.present? %>
   <div class="p-10 text-gray-200 bg-gray-900">
-    <div class="text-xl font-semibold mb-8 uppercase text-center">
-      <i data-feather="clock" class="inline mr-2"></i>
-
-      <% if article.present? %>
-        Change log for this article
-      <% else %>
-        Latest updates
-        <% if category&.name.present? %>
-          within the <%= category.name %> category<% if category_ids.length > 1 %>, including <%= (category_ids.length - 1) %> <%= 'subcategory'.pluralize(category_ids.length - 1) %><% end %>
+    <div class="w-full max-w-screen-xl m-auto">
+      <div class="text-xl text-gray-600 cursor-pointer" onclick="toggleVisibility('change-log');">
+        <% if article.present? %>
+          Change log for this article
+        <% else %>
+          Latest updates
+          <% if category&.name.present? %>
+            within the<br />
+            <span class="text-white">
+              <%= category.name %> category<% if category_ids.length > 1 %>, including <%= (category_ids.length - 1) %> <%= 'subcategory'.pluralize(category_ids.length - 1) %><% end %>
+            </span>
+          <% else %>
+            to the knowledgebase
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
 
-    <div id="change-log" class="bg-gray-800 p-10 rounded">
-      <ul>
-        <% logs.each do |log| %>
-          <li class="mb-8 flex">
-            <% if article.blank? %>
-              <div class="w-10"><i data-feather="file-text" class="inline h-5"></i></div>
-            <% end %>
+        <div class="inline toggle-visibility-indicator-container change-log">
+          <i data-feather="chevron-left" class="inline toggle-visibility-indicator change-log"></i>
+        </div>
+      </div>
 
-            <div class="w-full text-gray-500">
-              <% if article.blank? %>
-                <div class="text-white text-xl"><a href="<%= article_path log.article.slug %>" title="View Article"><%= log.article.title %></a></div>
-                <div class="mb-5"><%= log.article.category_name_list %></div>
-              <% end %>
+      <div id="change-log" class="bg-gray-800 px-10 mt-8 rounded hidden text-gray-500">
+        <ul>
+          <% logs.each do |log| %>
+            <li class="my-10">
+              <div>
+                <% if article.blank? %>
+                  <div class="text-white text-xl"><a href="<%= article_path log.article.slug %>" title="View Article"><%= log.article.title %></a></div>
+                  <div class="mb-5"><%= log.article.category_name_list %></div>
+                <% end %>
 
-              <div class="text-gray-500 bg-gray-700 p-5 pr-10 rounded cursor-pointer flex items-center" onclick="toggleVisibility('article-diff-<%= log.id %>');" title="Show / Hide Diff">
-                <div class="w-4/5">
-                  <%= time_ago_in_words log.created_at %> ago
-                  <% if log.username.present? %>
-                    by <%= log.username %>
-                  <% end %>
+                <div class="text-gray-500 bg-gray-700 p-5 pr-10 rounded <%= 'cursor-pointer' if log.diff_left != log.diff_right %> flex items-center" onclick="toggleVisibility('article-diff-<%= log.id %>');" title="Show / Hide Diff">
+                  <div class="w-4/5">
+                    <%= time_ago_in_words log.created_at %> ago
+                    <% if log.username.present? %>
+                      by <%= log.username %>
+                    <% end %>
 
-                  <% if log.meta.present? %>
-                    <br /><span class="text-gray-300"><%= log.meta %></span>
-                  <% end %>
+                    <% if log.meta.present? %>
+                      <br /><span class="text-gray-300"><%= log.meta %></span>
+                    <% end %>
+                  </div>
+
+                  <div class="w-1/5 text-right toggle-visibility-indicator-container article-diff-<%= log.id %>">
+                    <% if log.diff_left != log.diff_right %><i data-feather="chevron-left" class="inline toggle-visibility-indicator article-diff-<%= log.id %>"></i><% end %>
+                  </div>
                 </div>
 
-                <div class="w-1/5 text-right toggle-visibility-indicator-container article-diff-<%= log.id %>">
-                  <% if log.diff_left != log.diff_right %><i data-feather="chevron-left" class="inline toggle-visibility-indicator article-diff-<%= log.id %>"></i><% end %>
-                </div>
+                <% if log.diff_left != log.diff_right %>
+                  <div id="article-diff-<%= log.id %>" class="flex hidden">
+                    <div class="w-1/2 p-5">Before:<br /><%= log.diff_left.html_safe %></div>
+                    <div class="w-1/2 p-5">After:<br /><%= log.diff_right.html_safe %></div>
+                  </div>
+                <% end %>
               </div>
-
-              <% if log.diff_left != log.diff_right %>
-                <div id="article-diff-<%= log.id %>" class="flex hidden">
-                  <div class="w-1/2 p-5">Before:<br /><%= log.diff_left.html_safe %></div>
-                  <div class="w-1/2 p-5">After:<br /><%= log.diff_right.html_safe %></div>
-                </div>
-              <% end %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 <% end %>
