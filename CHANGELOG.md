@@ -6,11 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ## 0.1.1
 ### Added
 - Changelog
-- RSpec
-- GitHub CI automated testing workflow
+- Full spec coverage
+- GitHub CI test workflow
 
 ### Changed
-- Updated README.md
+- README.md
 
 ### Removed
 - Scaffold cruft

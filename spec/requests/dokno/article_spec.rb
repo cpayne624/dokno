@@ -6,7 +6,7 @@ module Dokno
       it 'returns an article show page' do
         get dokno.article_path(article)
 
-        # Testing that access the article via ID redirects to the article permalink via its slug
+        # Testing that accessing the article via ID redirects to the article permalink via its slug
         expect(response).to redirect_to(dokno.article_path(article.slug))
 
         follow_redirect!
