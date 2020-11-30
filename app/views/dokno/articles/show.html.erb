@@ -11,15 +11,16 @@
 
       <div>
         <div class="mb-10 no-print">
-          <button title="Print article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="window.print();"><i data-feather="printer" class="inline h-5"></i> PRINT THIS</button>
+          <button title="Email article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="location.href='mailto:?subject=<%= CGI.escape(@article.title) %>&body=<%= CGI.escape(article_url(@article.slug)) %>';"><i data-feather="send" class="inline h-5"></i> EMAIL</button>
+          <button title="Print article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="window.print();"><i data-feather="printer" class="inline h-5"></i> PRINT</button>
 
           <% if can_edit? %>
-            <button title="Edit article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT THIS</button>
+            <button title="Edit article" class="bg-gray-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
 
             <div class="mt-3">
-              <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE THIS</button>
-              <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE THIS</button>
-              <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> DELETE THIS</button>
+              <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+              <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+              <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> DELETE</button>
             </div>
           <% end %>
         </div>
@@ -34,6 +35,25 @@
             <% end %>
           </div>
         </div>
+
+        <div class="mt-5 flex">
+          <div class="no-print w-8"><i data-feather="user-check" class="inline-block h-5"></i></div>
+          <div class="w-full">
+            Contributors:<br />
+            <%= @article.contributors.presence || '-' %>
+          </div>
+        </div>
+
+        <% if @article.reading_time.present? %>
+          <div class="mt-5 flex">
+            <div class="no-print w-8"><i data-feather="watch" class="inline-block h-5"></i></div>
+            <div class="w-full">
+              Reading time:<br />
+              <%= @article.reading_time %>
+            </div>
+          </div>
+        <% end %>
+
         <div class="mt-5 flex">
           <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5"></i></div>
           <div class="w-full">
