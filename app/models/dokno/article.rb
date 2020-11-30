@@ -43,6 +43,7 @@ module Dokno
         <p>#{categories.present? ? category_name_list : 'Uncategorized'}</p>
         <p>Last updated: #{time_ago_in_words(updated_at)} ago</p>
         <p>#{Dokno.config.app_name} Knowledgebase article slug : #{slug}</p>
+        <p><a href="#{root_path}" target="_blank" title="Open the full #{CGI.escape Dokno.config.app_name} knowledgebase site">Knowledgebase site</a></p>
       )
 
       title_markup = %Q(

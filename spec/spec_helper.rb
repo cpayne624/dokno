@@ -15,10 +15,16 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'simplecov'
+require 'pry'
 
-SimpleCov.start :rails
+ENV["RAILS_ENV"] = 'test'
+
+SimpleCov.start :rails do
+  add_filter 'lib/'
+end
 
 require 'rails_helper'
+require 'database_cleaner/active_record'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -50,6 +56,24 @@ RSpec.configure do |config|
   # inherited by the metadata hash of host groups and examples, rather than
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.include Rails.application.routes.url_helpers
+
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
