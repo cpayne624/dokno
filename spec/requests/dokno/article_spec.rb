@@ -33,6 +33,15 @@ module Dokno
           expect(response.body).to include "name=\"#{field_id}\""
         end
       end
+
+      it 'presents the article template' do
+        template_file = File.read(File.join(Rails.root, 'config', 'dokno_template.md'))
+
+        get dokno.new_article_path
+
+        expect(template_file.present?).to be true
+        expect(response.body).to include template_file.split('.').first
+      end
     end
 
     describe '#edit' do

@@ -10,7 +10,8 @@ module Dokno
     end
 
     def new
-      @article = Dokno::Article.new
+      @article      = Dokno::Article.new
+      @template     = Dokno::Article.template
       @category_ids = [] << params[:category_id]
     end
 

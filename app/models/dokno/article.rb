@@ -87,6 +87,13 @@ module Dokno
       )
     end
 
+    def self.template
+      template_file = File.join(Rails.root, 'config', 'dokno_template.md')
+      return unless File.exist?(template_file)
+
+      File.read(template_file).to_s
+    end
+
     private
 
     # Ensure there isn't another Article with the same slug

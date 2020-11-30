@@ -55,7 +55,7 @@ Mount Dokno in your application's `routes.rb` at the desired path:
 mount Dokno::Engine, at: "/help"
 ```
 
-To add `config/initializers/dokno.rb`, run:
+To initialize Dokno configuration, run:
 ```bash
 $ rails g dokno:install
 ```
