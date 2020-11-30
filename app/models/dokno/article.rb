@@ -20,6 +20,14 @@ module Dokno
 
     MARKDOWN_PARSER = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
 
+    def reading_time
+      minutes_decimal = (("#{summary} #{markdown}".squish.scan(/[\w-]+/).size) / 200.0)
+      approx_minutes  = minutes_decimal.ceil
+      return '' unless approx_minutes > 1
+
+      "~ #{approx_minutes} minutes"
+    end
+
     def markdown
       super || ''
     end
@@ -39,11 +47,11 @@ module Dokno
     # Hash returned for the ajax-fetched slide-in article panel for the host app
     def host_panel_hash
       footer = %Q(
-        #{Dokno::ICON}
+        <p><a href="#{article_path(slug)}" target="_blank" title="Open in the knowledgebase">Print / email / edit / delete</a></p>
         <p>#{categories.present? ? category_name_list : 'Uncategorized'}</p>
+        <p>Knowledgebase slug : #{slug}</p>
         <p>Last updated: #{time_ago_in_words(updated_at)} ago</p>
-        <p>#{Dokno.config.app_name} Knowledgebase article slug : #{slug}</p>
-        <p><a href="#{root_path}" target="_blank" title="Open the full #{CGI.escape Dokno.config.app_name} knowledgebase site">Knowledgebase site</a></p>
+        <p>Contributors: #{contributors}</p>
       )
 
       title_markup = %Q(
@@ -72,6 +80,16 @@ module Dokno
 
     def permalink(base_url)
       "#{base_url}#{articles_path}/#{slug}"
+    end
+
+    def contributors
+      logs
+        .where('meta LIKE ? OR meta LIKE ?', '%Markdown%', '%Summary%')
+        .pluck(:username)
+        .reject(&:blank?)
+        .uniq
+        .sort
+        .to_sentence
     end
 
     # All uncategorized Articles
@@ -105,19 +123,19 @@ module Dokno
 
     def log_changes
       return if changes.blank?
-      return unless persisted?
 
       meta_changes    = changes.with_indifferent_access.slice(:slug, :title, :active)
       content_changes = changes.with_indifferent_access.slice(:summary, :markdown)
 
       meta = []
       meta_changes.each_pair do |field, values|
-        meta << "#{field.capitalize} changed from '#{values.first}' to '#{values.last}'"
+        action = persisted? ? "changed from '#{values.first}' to" : "entered as"
+        meta << "#{field.capitalize} #{action} '#{values.last}'"
       end
 
       content = { before: '', after: '' }
       content_changes.each_pair do |field, values|
-        meta << "#{field.capitalize} was changed"
+        meta << "#{field.capitalize} was #{persisted? ? 'changed' : 'entered'}"
         content[:before] += values.first.to_s + ' '
         content[:after]  += values.last.to_s + ' '
       end

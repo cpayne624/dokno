@@ -70,14 +70,6 @@ module Dokno
         # Includes uncategorized article
         expect(response.body).to include article.title
         expect(response.body).to include article.summary
-
-        article.categories << category
-
-        get dokno.root_path
-
-        # No longer includes the now categorized article
-        expect(response.body).not_to include article.title
-        expect(response.body).not_to include article.summary
       end
 
       it 'returns a category index page' do

@@ -97,14 +97,30 @@ module Dokno
             markdown: valid_article.markdown + 'new'
           )
 
-          expect(valid_article.logs.count).to eq 1
-          expect(valid_article.logs.first.meta).to eq "Slug changed from 'slug' to 'slugnew', "\
+          expect(valid_article.logs.count).to eq 2
+          expect(valid_article.logs.last.meta).to eq "Slug changed from 'slug' to 'slugnew', "\
             "Title changed from 'Test Title' to 'Test Titlenew', Active changed from 'true' to "\
             "'false', Summary was changed, and Markdown was changed"
-          expect(valid_article.logs.first.diff_left).to include "<li class=\"del\"><del>"\
+          expect(valid_article.logs.last.diff_left).to include "<li class=\"del\"><del>"\
             "#{original_attrs['summary']} #{original_attrs['markdown']}</del></li>"
-          expect(valid_article.logs.first.diff_right).to include "<li class=\"ins\"><ins>"\
+          expect(valid_article.logs.last.diff_right).to include "<li class=\"ins\"><ins>"\
             "#{original_attrs['summary']}<strong>new</strong> #{original_attrs['markdown']}<strong>new</strong></ins></li>"
+        end
+      end
+
+      describe '#reading_time' do
+        it 'calculates and returns the approximate reading time for an article' do
+          expect(article.reading_time).to be_blank
+
+          # Only returns reading time if > ~1 minute
+          article.summary = 'word ' * 10
+          expect(article.reading_time).to be_blank
+
+          article.summary = 'word ' * 1_000
+          expect(article.reading_time).to eq '~ 5 minutes'
+
+          article.markdown = 'word ' * 1_000
+          expect(article.reading_time).to eq '~ 10 minutes'
         end
       end
     end

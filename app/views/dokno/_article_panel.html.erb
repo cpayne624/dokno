@@ -47,13 +47,10 @@
         document.getElementById('dokno-panel-markdown').innerHTML = data.markdown;
         document.getElementById('dokno-panel-footer').innerHTML = data.footer;
 
-        var
-          title_span = document.querySelector('div#dokno-panel-title > span'),
-          icon_svg   = document.querySelector('div#dokno-panel-footer > svg');
+        var title_span = document.querySelector('div#dokno-panel-title > span');
 
         title_span.setAttribute('title', 'Open full article page');
         title_span.onclick = function() { window.open('<%= Dokno::Engine.routes.url_helpers.root_path %>articles/' + dokno__id); }
-        icon_svg.onclick   = function() { window.open('<%= Dokno::Engine.routes.url_helpers.root_path %>'); }
 
         dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');

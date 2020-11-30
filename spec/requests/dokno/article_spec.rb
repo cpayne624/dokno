@@ -184,11 +184,6 @@ module Dokno
 
     describe '#article_log' do
       it 'returns article change log markup' do
-        post dokno.article_log_path, xhr: true
-
-        expect(response.code).to eq '200'
-        expect(response.body.blank?).to be true
-
         old_title   = article.title
         old_summary = article.summary
         article.update!(title: article.title + 'new', summary: article.summary + 'new')
