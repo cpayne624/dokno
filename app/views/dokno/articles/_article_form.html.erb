@@ -47,9 +47,9 @@
       <a id="markdown_write_link" href="javascript:;" onclick="writeArticleToggle();" class="float-right hidden"><i data-feather="pen-tool" class="inline"></i> Write</a>
       <a id="markdown_preview_link" href="javascript:;" onclick="previewArticleToggle();" class="float-right"><i data-feather="eye" class="inline"></i> Preview</a>
     </div>
-    <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.markdown %></textarea>
+    <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.persisted? ? article.markdown : (article.markdown.presence || @template) %></textarea>
     <div id="markdown_preview" class="dokno-article-content-markup hidden text-lg overflow-hidden overflow-y-auto rounded p-8 mt-2 shadow-inner"></div>
-    <div class="text-gray-500 mt-2">Detailed documentation of the described topic (Markdown OK)</div>
+    <div class="text-gray-500 mt-2">Detailed documentation of the described topic (basic HTML &amp; markdown OK)</div>
   </div>
 
   <div class="mt-10">
