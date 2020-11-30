@@ -10,7 +10,7 @@ to your Rails app where you or your users can author articles relevant to your a
 Dokno supports article categorization and naive article searching for discovery,
 as well as a view helper for providing inline, in-context access to articles to your users.
 
-    <%= dokno_article_modal({link-text}, slug: {unique-article-slug}) %>
+    <%= dokno_article_link({link-text}, slug: {unique-article-slug}) %>
 
 ## Screenshots
 
@@ -75,11 +75,11 @@ to link your users to the knowledgebase site.
     <a target="_blank" href="<%= dokno_path %>">Dokno Knowledgebase</a>
 
 ### In-Context Article Links
-Each article has a unique 'slug' or token that is used to access articles inline from your app. Use the `dokno_article_modal`
+Each article has a unique 'slug' or token that is used to access articles inline from your app. Use the `dokno_article_link`
 view helper to add links in your app to relevant articles. Clicking an in-context link fetches the target article
 asynchronously and displays it to the user via a flyout panel overlay in your app.
 
-    <%= dokno_article_modal({link-text}, slug: {unique-article-slug}) %>
+    <%= dokno_article_link({link-text}, slug: {unique-article-slug}) %>
 
 ### Accessing Dokno Data Directly
 You typically won't ever need to interact with Dokno data directly. However, Dokno data is stored within your database
@@ -111,7 +111,7 @@ Dokno::Category.take.children
 Contributions are welcome. Prior to submitting a PR, make sure that all existing specs pass and any new functionality added
 is covered by passing specs.
 
-To run tests, from the root directory run:
+To run tests, from the root directory:
 ```bash
 $ bundle exec rspec
 ```

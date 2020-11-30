@@ -2,7 +2,7 @@
   <h1>A page in your app</h1>
   <p>
     This might be something in your app that needs clarification or further<br />
-    background, with an <%= dokno_article_modal('in-context link like this one', slug: Dokno::Article.take&.slug) %>
+    background, with an <%= dokno_article_link('in-context link like this one', slug: Dokno::Article.take&.slug) %>
     that explains it all.<br />
     Clicking that link opens a flyout within your app (to the right) containing<br />
     the article referenced by its unique slug or token.
@@ -13,24 +13,24 @@
     You can add these in-context article links within your app via this Rails helper:
   </p>
   <p>
-    &lt;%= dokno_article_modal({link-text}, slug: {unique-article-slug}) %&gt;
+    &lt;%= dokno_article_link({link-text}, slug: {unique-article-slug}) %&gt;
   </p>
 
   <h2>Defined Articles</h2>
   <ul>
     <% Dokno::Article.select(:slug, :title).order(:title).each do |article| %>
-      <li><%= dokno_article_modal(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
+      <li><%= dokno_article_link(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
     <% end %>
   </ul>
 
   <h2>Link With Missing Slug</h2>
   <p>
-    <%= dokno_article_modal('Link to bogus slug', slug: '') %>
+    <%= dokno_article_link('Link to bogus slug', slug: '') %>
   </p>
 
   <h2>Link With Invalid Slug</h2>
   <p>
-    <%= dokno_article_modal('Link to bogus slug', slug: 'doesnotexist') %>
+    <%= dokno_article_link('Link to bogus slug', slug: 'doesnotexist') %>
   </p>
 
   <hr />
