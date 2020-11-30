@@ -1,38 +1,50 @@
 # Dokno
 ![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg)
 
-Dokno (dough-no) is a lightweight Rails Engine for storing and managing your app's <b>Do</b>main <b>Kno</b>wledge.
-Dokno is also a play on words, such as, "I need to look that up because I do' kno'." ¯\_(ツ)_/¯
+Dokno (such as, "I do' kno' the answer") is a lightweight Rails Engine for storing and managing your app's <b>do</b>main <b>kno</b>wledge.
 
-Dokno allows you to easily mount a complete, yet simple, self-contained knowledgebase site
-to your Rails app where you or your users can author articles relevant to your app.
-
-Dokno supports article categorization and naive article searching for discovery,
-as well as a view helper for providing inline, in-context access to articles to your users.
-
-    <%= dokno_article_link({link-text}, slug: {unique-article-slug}) %>
+It's useful for storing and categorizing information about your app for posterity, such as term definitions, system logic and implementation details, background for past system design decisions, or anything else related to your app that would be beneficial for you and your users to know, now and in the future.
 
 ## Screenshots
 
 ### Knowledgebase Landing Page
+
+Users are presented with this landing page when first visiting the site.
+
+Browsing, searching, and adding new articles or categories are available from any page.
+
 ![Landing Page](./README/landing_page.png)
 
 ### Knowledgebase Article
+
+Each article is accessible via its unique `slug`, either through its permalink, as shown here, or by an [in-context link](#in-context-flyout-article) within your app.
+
 ![Article](./README/article.png)
 
 ### Editing An Article
+
+Each article can be assigned to 0+ categories, and categories can be "infinitely" nested.
+
+Articles can include basic HTML and markdown, and you can configure a starting template for all new articles in `/config/dokno_template.md`.
+
+By default, any visitor to the knowledgebase site can modify data.
+
+See `/config/initializers/dokno.rb` to link Dokno to the model in your app that stores your users. Doing so will allow you to restrict Dokno data modification to certain users, and to include indentifying information in Dokno change logs.
+
 ![Editing An Article](./README/article_edit.png)
 
 ### In-Context Flyout Article
+
+You can put useful information in front of your users by adding links to articles in context within your app.
+
 ![Host App Page](./README/host_app_flyout.png)
 
 ## Dependencies
-Dokno is purposefully lightweight and fast, with only two dependencies, the excellent
-[redcarpet](https://github.com/vmg/redcarpet) (Markdown processing) &
-[diffy](https://github.com/samg/diffy) (change log diffing) gems,
-each of which have no further dependencies.
+Dokno is purposefully lightweight and fast.
 
-It is expected that Dokno is mounted to a Rails app using a database via ActiveRecord.
+It has two gem dependencies, the [redcarpet](https://github.com/vmg/redcarpet) gem for markdown processing, and the [diffy](https://github.com/samg/diffy) gem for change log diffing, each of which are excellent and have no further dependencies.
+
+It is expected that Dokno is mounted to a Rails app using ActiveRecord.
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -40,52 +52,49 @@ Add this line to your application's Gemfile:
 gem 'dokno'
 ```
 
-And then run:
+From your app's root folder, run:
 ```bash
 $ bundle
 ```
 
-Run Dokno migrations:
+Run Dokno migrations to add the Dokno article and category tables to your db:
 ```bash
 $ rake db:migrate
 ```
 
-Mount Dokno in your application's `routes.rb` at the desired path:
+Mount Dokno in your `/config/routes.rb` at the desired path:
 ```ruby
 mount Dokno::Engine, at: "/help"
 ```
 
-To initialize Dokno configuration, run:
+Initialize Dokno configuration:
 ```bash
 $ rails g dokno:install
 ```
 
-Include the Dokno in-context flyout article panel markup, CSS, and JS to the bottom of your application's
-`app/views/layouts/application.html.erb`, just above the closing `</body>`:
+To enable [in-context articles](#in-context-flyout-article) in your app, add the supporting partial to the bottom of your application's `app/views/layouts/application.html.erb`, just above the closing `</body>` tag:
 ```erb
 <%= render 'dokno/article_panel' %>
 ```
 
 ## Usage
 
-### Knowledgebase Site
-The Dokno knowledgebase is mounted to the path you specify in your `routes.rb` above. You can use the `dokno_path` route helper
-to link your users to the knowledgebase site.
+### Accessing the Knowledgebase Site
+The Dokno knowledgebase is mounted to the path you specified in your `/config/routes.rb` above. You can use the `dokno_path` route helper to link your users to the knowledgebase site.
 
-    <a target="_blank" href="<%= dokno_path %>">Dokno Knowledgebase</a>
+    <a target="_blank" href="<%= dokno_path %>">Knowledgebase</a>
 
-### In-Context Article Links
-Each article has a unique 'slug' or token that is used to access articles inline from your app. Use the `dokno_article_link`
-view helper to add links in your app to relevant articles. Clicking an in-context link fetches the target article
-asynchronously and displays it to the user via a flyout panel overlay in your app.
+### Adding In-Context Article Links
+Each article has a unique `slug` or token that is used to access it from within your app. Use the `dokno_article_link` helper to add article links.
+
+Clicking a link fetches the article asynchronously and [reveals it to the user](#in-context-flyout-article) via flyout panel overlay within your app.
 
     <%= dokno_article_link({link-text}, slug: {unique-article-slug}) %>
 
 ### Accessing Dokno Data Directly
-You typically won't ever need to interact with Dokno data directly. However, Dokno data is stored within your database
-and is accessible via ActiveRecord as any other model. Dokno data is `Dokno::` namespaced.
+You typically won't need to interact with Dokno data directly, but it is stored within your database and is accessible via ActiveRecord as is any other model.
 
-You may access Dokno article and category data directly via:
+Dokno data is `Dokno::` namespaced and can be accessed directly via:
 
 ```ruby
 Dokno::Category.take
@@ -107,19 +116,29 @@ Dokno::Category.take.children
 => #<ActiveRecord::Relation [#<Dokno::Category id: 3, name: "Child Category Name", ... >, ...]
 ```
 
-## Contributing
-Contributions are welcome. Prior to submitting a PR, make sure that all existing specs pass and any new functionality added
-is covered by passing specs.
+## Pull Requests
+Contributions are welcome.
 
-To run tests, from the root directory:
+### Proposed Solution
+Before starting on a PR, check [open issues](https://github.com/cpayne624/dokno/issues) and [pull requests](https://github.com/cpayne624/dokno/pulls) to make sure your enhancement idea or bug report isn't already being worked.
+
+If not, [open an issue](https://github.com/cpayne624/dokno/issues) to first discuss the proposed solution before beginning work.
+
+### Test Coverage
+Before submitting your PR, make sure that all existing specs still pass, and that any _new_ functionality you've added is covered by additional specs.
+
+To run the test suite:
 ```bash
 $ bundle exec rspec
 ```
 
-## Credits
-- [redcarpet](https://github.com/vmg/redcarpet)
+## Shout Outs
 - [diffy](https://github.com/samg/diffy)
+  - Text diffing Ruby gem
 - [Feather Icons](https://github.com/feathericons/feather)
+  - Icon library
+- [redcarpet](https://github.com/vmg/redcarpet)
+  - Markdown parsing Ruby gem
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
