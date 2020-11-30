@@ -111,7 +111,7 @@ Dokno::Category.take.children
 Contributions are welcome. Prior to submitting a PR, make sure that all existing specs pass and any new functionality added
 is covered by passing specs.
 
-To run tests, `cd` into `/spec/dummy` and run:
+To run tests, from the root directory run:
 ```bash
 $ bundle exec rspec
 ```

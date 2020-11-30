@@ -1,14 +1,14 @@
 <%= form_with(url: root_path, method: :get) do %>
   <div class="flex items-center mb-10">
-    <div class="w-1/2 pr-5">
-      <% if Dokno::Category.exists? %>
+    <% if Dokno::Category.exists? %>
+      <div class="w-1/2 pr-5">
         <select name="id" id="id" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="location.href='<%= root_path %>?id=' + this.value + '&search_term=' + elem('#search_term').value;">
           <option value="">Select a category</option>
           <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
         </select>
-      <% end %>
-    </div>
-    <div class="w-1/2 pl-5">
+      </div>
+    <% end %>
+    <div class="w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
       <input placeholder="Search article text, titles, summaries, and slugs" type="text" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
     </div>
   </div>

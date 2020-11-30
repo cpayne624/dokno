@@ -95,7 +95,7 @@ module Dokno
     end
 
     def set_editor_username
-      @article.editor_username = username
+      @article&.editor_username = username
     end
   end
 end

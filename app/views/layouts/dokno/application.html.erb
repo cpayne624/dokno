@@ -75,19 +75,21 @@
       </div>
     <% end %>
 
-    <% if user.present? %>
-      <div class="p-10 text-gray-400 bg-blue-900">
-        <div class="w-full max-w-screen-xl m-auto flex">
-          <div class="w-1/2">
+
+    <div class="p-10 text-gray-400 bg-blue-900">
+      <div class="w-full max-w-screen-xl m-auto flex">
+        <div class="w-1/2">
+          <% if user.present? %>
             <%= Dokno.config.app_name %> Authenticated User : <span class="text-white"><%= username %></span>
             (<%= can_edit? ? 'Editor' : 'Read Only' %>)
-          </div>
-          <div class="w-1/2 text-right">
-            <a href="/" target="_blank" title="Go to the app"><%= Dokno.config.app_name %></a>
-          </div>
+          <% end %>
+        </div>
+        <div class="w-1/2 text-right">
+          <a href="/" target="_blank" title="Go to the app"><%= Dokno.config.app_name %></a>
         </div>
       </div>
-    <% end %>
+    </div>
+
   </footer>
 
   <%= javascript_include_tag 'init' %>
