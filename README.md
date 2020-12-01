@@ -1,5 +1,5 @@
 # Dokno
-![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg)
+![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg) [![Gem Version](https://badge.fury.io/rb/dokno.svg)](https://badge.fury.io/rb/dokno)
 
 Dokno (such as, "I do' kno' the answer") is a lightweight Rails Engine for storing and managing your app's <b>do</b>main <b>kno</b>wledge.
 

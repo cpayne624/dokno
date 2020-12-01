@@ -4,6 +4,10 @@ module Dokno
   class Engine < ::Rails::Engine
     isolate_namespace Dokno
 
+    initializer 'Dokno precompile', group: :all do |app|
+      app.config.assets.precompile << "dokno_manifest.js"
+    end
+
     config.generators do |g|
       g.test_framework :rspec
     end
