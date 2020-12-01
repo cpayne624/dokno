@@ -50,8 +50,8 @@ module Dokno
         <p><a href="#{article_path(slug)}" target="_blank" title="Open in the knowledgebase">Print / email / edit / delete</a></p>
         <p>#{categories.present? ? category_name_list : 'Uncategorized'}</p>
         <p>Knowledgebase slug : #{slug}</p>
-        <p>Last updated: #{time_ago_in_words(updated_at)} ago</p>
-        <p>Contributors: #{contributors}</p>
+        <p>Last updated : #{time_ago_in_words(updated_at)} ago</p>
+        <p>Contributors : #{contributors}</p>
       )
 
       title_markup = %Q(
@@ -79,7 +79,7 @@ module Dokno
     end
 
     def permalink(base_url)
-      "#{base_url}#{articles_path}/#{slug}"
+      "#{base_url}#{article_path(slug)}"
     end
 
     def contributors
@@ -94,7 +94,11 @@ module Dokno
 
     # All uncategorized Articles
     def self.uncategorized
-      Dokno::Article.left_joins(:categories).where(active: true, dokno_categories: {id: nil}).order(:title).all
+      Dokno::Article
+        .left_joins(:categories)
+        .where(active: true, dokno_categories: { id: nil })
+        .order(:title)
+        .all
     end
 
     def self.parse_markdown(content)

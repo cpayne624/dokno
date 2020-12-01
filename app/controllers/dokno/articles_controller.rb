@@ -6,7 +6,7 @@ module Dokno
     before_action :fetch_article, only: [:show, :edit, :panel, :status]
 
     def show
-      return redirect_to root_path if @article.blank?
+      redirect_to root_path if @article.blank?
     end
 
     def new
@@ -26,7 +26,7 @@ module Dokno
 
       if @article.save
         @article.categories = Dokno::Category.where(id: params[:category_id]) if params[:category_id].present?
-        redirect_to article_path @article
+        redirect_to article_path @article.slug
       else
         @category_ids = params[:category_id]
         render :new
@@ -41,7 +41,7 @@ module Dokno
 
       if @article.update(article_params)
         @article.categories = Dokno::Category.where(id: params[:category_id])
-        redirect_to article_path @article
+        redirect_to article_path @article.slug
       else
         @category_ids = params[:category_id]
         render :edit

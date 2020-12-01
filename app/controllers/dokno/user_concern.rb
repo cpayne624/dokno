@@ -7,6 +7,7 @@ module Dokno
     end
 
     def user
+      # Attempt to eval the currently signed in 'user' object from the host app
       proc {
         $safe = 1
         eval Dokno::Config::APP_USER_OBJECT
