@@ -1,5 +1,16 @@
 <style>
+  .dokno-no-scroll {
+    overflow: hidden !important;
+  }
+
+  .dokno-hidden {
+    display: none !important;
+  }
+
   div#dokno-panel-container {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+    font-size: 1rem;
+    line-height: 1.5rem;
     right: -600px;
     z-index: 9999;
     position: fixed;
@@ -21,18 +32,19 @@
 
   div#dokno-panel-title {
     padding: 2.5rem;
-    font-size: 2rem;
+    font-size: 2.25rem;
+    line-height: 2.75rem;
     font-weight: 300;
     background-color: rgb(42,67,101);
     color: #ebf8ff;
-    line-height: 2.5rem;
   }
 
   div#dokno-panel-title div#article-deprecated-alert {
     box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+    font-size: 1rem;
+    line-height: 1.5rem;
     padding: 1rem;
-    margin-bottom: 1.25rem;
-    font-size: 1.125rem;
+    margin-bottom: 1rem;
     border-top-width: 4px;
     border-radius: .25rem;
     border-top-style: solid;
@@ -47,9 +59,9 @@
   }
 
   div#dokno-panel-summary {
+    font-size: 1.5rem;
     line-height: 2.25rem;
     padding: 2.5rem;
-    font-size: 1.5rem;
     font-weight: 300;
   }
 
@@ -65,16 +77,11 @@
     color: #999;
     background-color: #edf2f7;
     font-weight: 300;
-  }
-
-  div#dokno-panel-footer > svg {
-    position: absolute;
-    top: -12px;
-    left: 274px;
-    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   div#dokno-panel-footer p {
-    margin: 0 15px 15px 0;
+    margin: .5rem 0;
   }
 </style>

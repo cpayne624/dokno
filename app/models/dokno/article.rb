@@ -51,8 +51,9 @@ module Dokno
         <p>#{categories.present? ? category_name_list : 'Uncategorized'}</p>
         <p>Knowledgebase slug : #{slug}</p>
         <p>Last updated : #{time_ago_in_words(updated_at)} ago</p>
-        <p>Contributors : #{contributors}</p>
       )
+
+      footer += "<p>Contributors : #{contributors}</p>" if contributors.present?
 
       title_markup = %Q(
         <span>#{title}</span>
@@ -72,7 +73,7 @@ module Dokno
         title:    title_markup,
         id:       id,
         slug:     slug,
-        summary:  summary,
+        summary:  summary.presence || 'No summary',
         markdown: markdown_parsed,
         footer:   footer
       }

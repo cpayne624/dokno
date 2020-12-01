@@ -3,6 +3,10 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.1.3
+### Changed
+- Host article CSS
+
 ## 0.1.2
 ### Changed
 - Asset pipeline configuration
