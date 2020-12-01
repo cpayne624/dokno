@@ -15,8 +15,10 @@ module Dokno
 
     has_and_belongs_to_many :articles
 
-    validates :name, presence: true, uniqueness: true
+    validates :name, :code, presence: true, uniqueness: true
     validate :circular_parent_check
+
+    before_validation :set_code
 
     # The display breadcrumb for the Category
     def breadcrumb
@@ -31,24 +33,26 @@ module Dokno
         parent_category_id = parent_category.category_id
       end
 
-      crumbs.join(' / ')
+      crumbs.join(' > ')
     end
 
     # All Articles in the Category, including all child Categories
-    def articles_in_branch
-      Dokno::Article
-        .select('
-          dokno_articles.id,
-          dokno_articles.active,
-          dokno_articles.slug,
-          dokno_articles.title,
-          dokno_articles.summary,
-          dokno_articles.markdown
-        ')
+    def articles_in_branch(order: :updated)
+      records = Article
+        .includes(:categories_dokno_articles, :categories)
         .joins(:categories)
         .where(dokno_categories: { id: self.class.branch(parent_category_id: id).pluck(:id) })
-        .order('active DESC, title')
-        .all.uniq
+
+      records = records.updated_order if order == :updated
+      records = records.newest_order  if order == :newest
+      records = records.view_order    if order == :views
+      records = records.alpha_order   if order == :alpha
+
+      records
+    end
+
+    def branch
+      self.class.branch(parent_category_id: id)
     end
 
     # The given Category and all child Categories. Useful for filtering associated articles.
@@ -72,10 +76,10 @@ module Dokno
       selected_category_ids = selected_category_ids&.map(&:to_i)
       breadcrumbs = all
         .reject { |category| category.id == exclude_category_id.to_i }
-        .map { |category| { id: category.id, name: category.breadcrumb } }
+        .map { |category| { id: category.id, code: category.code, name: category.breadcrumb } }
       breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
         select = selected_category_ids&.include?(category_hash[:id].to_i)
-        %(<option value="#{category_hash[:id]}" #{'selected="selected"' if select}>#{category_hash[:name]}</option>)
+        %(<option value="#{category_hash[:code]}" #{'selected="selected"' if select}>#{category_hash[:name]}</option>)
       end.join
     end
 
@@ -86,6 +90,12 @@ module Dokno
       return unless persisted? && id.to_i == category_id.to_i
 
       errors.add(:category_id, "can't set parent to self")
+    end
+
+    def set_code
+      return unless name.present?
+
+      self.code = name.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
     end
   end
 end

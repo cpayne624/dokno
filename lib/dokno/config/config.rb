@@ -5,7 +5,7 @@ module Dokno
   end
 
   def self.config
-    @config ||= Dokno::Config.new
+    @config ||= Config.new
   end
 
   def self.config=(val)

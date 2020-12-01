@@ -39,15 +39,17 @@ jobs:
     - name: Install Postgres client
       run: sudo apt-get -yqq install libpq-dev
 
-    - name: Build App
+    - name: Setup DB
       env:
         RAILS_ENV: test
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
+      working-directory: ./spec/dummy
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bin/rails db:setup
+        bin/rails db:create
+        bin/rails db:migrate
 
     - name: Run Tests
       env:
@@ -55,4 +57,6 @@ jobs:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
       run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
         bundle exec rspec

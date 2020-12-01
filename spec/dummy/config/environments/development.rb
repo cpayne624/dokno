@@ -63,4 +63,16 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.hosts = nil
+
+  # Basic settings to enable Bullet to detect N+1 queries.
+  config.after_initialize do
+    Bullet.enable                      = true
+    Bullet.add_footer                  = true
+    Bullet.rails_logger                = true
+    Bullet.console                     = false
+    Bullet.alert                       = false
+    Bullet.bullet_logger               = false
+    Bullet.raise                       = false
+    Bullet.unused_eager_loading_enable = false
+  end
 end

@@ -82,7 +82,7 @@ module Dokno
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
         expect(response.body).to include category.id.to_s
         expect(response.body).to include category.name
-        expect(response.body).to include "<option value=\"#{category.id}\" selected=\"selected\">#{category.name}</option>"
+        expect(response.body).to include "<option value=\"#{category.code}\" selected=\"selected\">#{category.name}</option>"
 
         # Does not include the categorized article
         expect(response.body).not_to include article.title
@@ -134,7 +134,7 @@ module Dokno
         end
 
         expect(response.body).to include category.name
-        expect(response.body).to include "<option value=\"#{parent_category.id}\" selected=\"selected\">#{parent_category.name}</option>"
+        expect(response.body).to include "<option value=\"#{parent_category.code}\" selected=\"selected\">#{parent_category.name}</option>"
       end
     end
 

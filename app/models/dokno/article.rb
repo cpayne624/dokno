@@ -3,18 +3,25 @@ require 'redcarpet'
 
 module Dokno
   class Article < ApplicationRecord
-    include Dokno::Engine.routes.url_helpers
+    include Engine.routes.url_helpers
     include ActionView::Helpers::DateHelper
 
     has_and_belongs_to_many :categories
     has_many :logs, dependent: :destroy
+    has_many :article_slugs, dependent: :destroy
 
     validates :slug, :title, presence: true
-    validates :slug, length: { in: 2..12 }
+    validates :slug, length: { in: 2..20 }
     validates :title, length: { in: 5..255 }
     validate :unique_slug_check
 
     before_save :log_changes
+    before_save :track_slug
+
+    scope :alpha_order,   -> { order(active: :desc, title: :asc) }
+    scope :view_order,    -> { order(active: :desc, views: :desc, title: :asc) }
+    scope :newest_order,  -> { order(active: :desc, created_at: :desc, title: :asc) }
+    scope :updated_order, -> { order(active: :desc, updated_at: :desc, title: :asc) }
 
     attr_accessor :editor_username
 
@@ -36,12 +43,23 @@ module Dokno
       self.class.parse_markdown markdown
     end
 
-    def category_name_list
+    # Breadcrumbs for all associated categories; limits to sub-categories if in the context of a category
+    def category_name_list(context_category_id: nil, order: nil, search_term: nil)
       return '' if categories.blank?
 
-      names = categories.pluck(:name)
-      list = 'Category'.pluralize(names.length)
-      list + ': ' + names.to_sentence
+      names = Category
+        .joins(articles_dokno_categories: :article)
+        .where(dokno_articles_categories: { article_id: id })
+        .all
+        .map do |category|
+          "<a class='underline' href='#{article_index_path(category.code)}?search_term=#{CGI.escape(search_term.to_s)}&order=#{CGI.escape(order.to_s)}'>#{category.name}</a>" if context_category_id != category.id
+        end.compact
+
+      return '' if names.blank?
+
+      list = (context_category_id.present? ? 'In other category' : 'Category').pluralize(names.length)
+      list += ': ' + names.to_sentence
+      list.html_safe
     end
 
     # Hash returned for the ajax-fetched slide-in article panel for the host app
@@ -56,7 +74,7 @@ module Dokno
       footer += "<p>Contributors : #{contributors}</p>" if contributors.present?
 
       title_markup = %Q(
-        <span>#{title}</span>
+        <span title="Open full article page" onclick="window.open('#{article_path(slug)}');">#{title}</span>
       )
 
       unless active
@@ -73,7 +91,7 @@ module Dokno
         title:    title_markup,
         id:       id,
         slug:     slug,
-        summary:  summary.presence || 'No summary',
+        summary:  summary.presence || (markdown_parsed.present? ? '' : 'No content'),
         markdown: markdown_parsed,
         footer:   footer
       }
@@ -94,12 +112,18 @@ module Dokno
     end
 
     # All uncategorized Articles
-    def self.uncategorized
-      Dokno::Article
+    def self.uncategorized(order: :updated)
+      records = Article
+        .includes(:categories_dokno_articles, :categories)
         .left_joins(:categories)
         .where(active: true, dokno_categories: { id: nil })
-        .order(:title)
-        .all
+
+      records = records.updated_order if order == :updated
+      records = records.newest_order  if order == :newest
+      records = records.view_order    if order == :views
+      records = records.alpha_order   if order == :alpha
+
+      records
     end
 
     def self.parse_markdown(content)
@@ -117,13 +141,50 @@ module Dokno
       File.read(template_file).to_s
     end
 
+    def self.search(term:, category_id: nil, order: :updated)
+      records = where(
+        'LOWER(title) LIKE :search_term OR '\
+        'LOWER(summary) LIKE :search_term OR '\
+        'LOWER(markdown) LIKE :search_term OR '\
+        'LOWER(slug) LIKE :search_term',
+        search_term: "%#{term.downcase}%"
+      )
+      .includes(:categories_dokno_articles)
+      .includes(:categories)
+
+      records = records.updated_order if order == :updated
+      records = records.newest_order  if order == :newest
+      records = records.view_order    if order == :views
+      records = records.alpha_order   if order == :alpha
+
+      return records unless category_id.present?
+
+      # Scope to the context category and its children
+      records
+        .joins(:categories)
+        .where(
+          dokno_categories: {
+            id: Category.branch(parent_category_id: category_id).pluck(:id)
+          }
+        )
+    end
+
     private
 
     # Ensure there isn't another Article with the same slug
     def unique_slug_check
-      return unless self.class.where(slug: slug&.strip).where.not(id: id).exists?
+      slug_used = self.class.where(slug: slug&.strip).where.not(id: id).exists?
+      slug_used ||= ArticleSlug.where(slug: slug&.strip).exists?
+      return unless slug_used
 
-      errors.add(:slug, "must be unique, #{slug} already exists")
+      errors.add(:slug, "must be unique, #{slug} has already been used")
+    end
+
+    def track_slug
+      return unless slug_changed?
+
+      old_slug = changes['slug'].first
+      ArticleSlug.where(slug: old_slug&.strip, article_id: id).first_or_create
     end
 
     def log_changes
@@ -148,7 +209,7 @@ module Dokno
       return unless meta.present?
 
       diff = Diffy::SplitDiff.new(content[:before].squish, content[:after].squish, format: :html)
-      logs << Dokno::Log.new(username: editor_username, meta: meta.to_sentence, diff_left: diff.left, diff_right: diff.right)
+      logs << Log.new(username: editor_username, meta: meta.to_sentence, diff_left: diff.left, diff_right: diff.right)
     end
   end
 end
