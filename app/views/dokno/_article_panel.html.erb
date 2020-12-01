@@ -44,8 +44,14 @@
         dokno__id = data.id;
         document.getElementById('dokno-panel-title').innerHTML = data.title;
         document.getElementById('dokno-panel-summary').innerHTML = data.summary;
-        document.getElementById('dokno-panel-markdown').innerHTML = data.markdown;
         document.getElementById('dokno-panel-footer').innerHTML = data.footer;
+        document.getElementById('dokno-panel-markdown').innerHTML = data.markdown;
+
+        if (data.markdown != '') {
+          document.getElementById('dokno-panel-markdown').classList.remove('dokno-hidden');
+        } else {
+          document.getElementById('dokno-panel-markdown').classList.add('dokno-hidden');
+        }
 
         var title_span = document.querySelector('div#dokno-panel-title > span');
 
@@ -54,6 +60,7 @@
 
         dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');
+        document.body.classList.add('dokno-no-scroll');
 
         document.addEventListener('keydown', dokno__keydown_listener, false);
       }
@@ -65,6 +72,7 @@
   function doknoClosePanel() {
     dokno__slug = null;
     dokno__panel.classList.remove('open');
+    document.body.classList.remove('dokno-no-scroll');
     document.removeEventListener('keydown', dokno__keydown_listener, false);
   }
 

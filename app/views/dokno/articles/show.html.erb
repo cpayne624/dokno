@@ -36,13 +36,15 @@
           </div>
         </div>
 
-        <div class="mt-5 flex">
-          <div class="no-print w-8"><i data-feather="user-check" class="inline-block h-5"></i></div>
-          <div class="w-full">
-            Contributors:<br />
-            <%= @article.contributors.presence || '-' %>
+        <% if @article.contributors.present? %>
+          <div class="mt-5 flex">
+            <div class="no-print w-8"><i data-feather="user-check" class="inline-block h-5"></i></div>
+            <div class="w-full">
+              Contributors:<br />
+              <%= @article.contributors %>
+            </div>
           </div>
-        </div>
+        <% end %>
 
         <% if @article.reading_time.present? %>
           <div class="mt-5 flex">
@@ -84,17 +86,13 @@
       </div>
     </div>
     <div id="dokno-article-content" class="w-3/5">
-      <% if @article.summary.present? %>
-        <div class="text-3xl mb-10 text-gray-700 font-light"><%= @article.summary %></div>
-      <% end %>
+      <div class="text-2xl mb-10 text-gray-700 font-light"><%= @article.summary.presence || 'No summary' %></div>
 
-      <div id="dokno-article-content-markup" class="dokno-article-content-markup text-gray-800 font-light mb-10 bg-gray-100 p-10 rounded">
-        <% if @article.markdown.present? %>
+      <% if @article.markdown.present? %>
+        <div id="dokno-article-content-markup" class="dokno-article-content-markup text-gray-800 font-light mb-10 bg-gray-100 p-10 rounded">
           <%= @article.markdown_parsed %>
-        <% else %>
-          No article content
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
