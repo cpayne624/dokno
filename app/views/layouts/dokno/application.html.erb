@@ -68,7 +68,7 @@
   </main>
 
   <footer id="dokno-footer-container">
-    <% if action_name != 'edit' && action_name != 'new' %>
+    <% unless %w[new create edit update].include? action_name %>
       <div id="dokno-article-log-container" data-category-id="<%= @category&.id %>" data-article-id="<%= @article&.id %>">
         <%= render 'partials/logs', category: @category, article: @article %>
       </div>

@@ -20,7 +20,7 @@
           <% if category&.name.present? %>
             within the<br />
             <span class="text-white">
-              <%= category.name %> category<% if category_ids.length > 1 %>, including <%= (category_ids.length - 1) %> <%= 'subcategory'.pluralize(category_ids.length - 1) %><% end %>
+              <%= category.name %> category<% if category_ids.present? && category_ids.length > 1 %>, including <%= (category_ids.length - 1) %> <%= 'subcategory'.pluralize(category_ids.length - 1) %><% end %>
             </span>
           <% else %>
             to the knowledgebase

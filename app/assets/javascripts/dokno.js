@@ -54,7 +54,6 @@ function deleteArticle(id) {
   const callback = function(_data) {
     location.href = dokno__base_path;
   }
-  console.log(id);
   sendRequest(dokno__base_path + 'articles/' + id, {}, callback, 'DELETE');
 }
 
