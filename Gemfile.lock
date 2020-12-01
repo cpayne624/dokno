@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dokno (0.1.2)
+    dokno (0.1.4)
       diffy (~> 3.4)
       redcarpet (~> 3.5)
 
@@ -183,4 +183,4 @@ DEPENDENCIES
   simplecov (~> 0.19.1)
 
 BUNDLED WITH
-   2.1.4
+   2.2.0.rc.2
