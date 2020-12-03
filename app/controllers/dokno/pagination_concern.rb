@@ -2,7 +2,7 @@ module Dokno
   module PaginationConcern
     extend ActiveSupport::Concern
 
-    def paginate(records, max_per_page: 5)
+    def paginate(records, max_per_page: 10)
       @page           = params[:page].to_i
       @total_records  = records.size
       @total_pages    = (@total_records.to_f / max_per_page).ceil

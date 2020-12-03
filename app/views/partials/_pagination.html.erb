@@ -22,7 +22,7 @@
 
 <span class="text-gray-400">
   <%= @total_records %>
-  <%= 'uncategorized' if @category.blank? %>
+  <%= 'uncategorized' if @category.blank? && @search_term.blank? %>
   <%= 'article'.pluralize(@total_records) %>
 
   <% if @search_term.present? %>
@@ -30,6 +30,6 @@
   <% end %>
 
   <% if @category.present? %>
-    in <%= "#{(children_count = @category.branch.count)} #{'category'.pluralize(children_count)}" %>
+    in <%= "#{(children_count = @category.branch.count) == 1 ? 'this' : children_count} #{'category'.pluralize(children_count)}" %>
   <% end %>
 </span>

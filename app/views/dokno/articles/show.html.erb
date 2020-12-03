@@ -59,29 +59,31 @@
         <% end %>
 
         <div class="mt-5 flex">
-          <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5"></i></div>
-          <div class="w-full">
-            Unique slug:<br />
-            <a title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= j @article.slug %>');"><%= @article.slug %></a>
-          </div>
-        </div>
-
-        <div class="mt-5 flex">
           <div class="no-print w-8"><i data-feather="link" class="inline-block h-5"></i></div>
           <div class="w-full">
             Permalink:<br />
-            <a title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><%= @article.permalink(request.base_url) %></a>
-
-            <% if can_edit? && (old_slugs = @article.article_slugs).present? %>
-              <div class="text-gray-500 mt-5">
-                Editor note:<br />
-                This article is still accessible via previous
-                <%= 'slug'.pluralize(old_slugs.count) %>
-                <%= old_slugs.map(&:slug).reject { |slug| slug == @article.slug }.to_sentence %>
-              </div>
-            <% end %>
+            <a class="inline-block mt-1 -ml-2 px-2 py-1 bg-blue-100 rounded" title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><%= @article.permalink(request.base_url) %></a>
           </div>
         </div>
+
+        <% if can_edit? %>
+          <div class="mt-5 flex">
+            <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5"></i></div>
+            <div class="w-full">
+              Unique slug:<br />
+              <a class="inline-block mt-1 -ml-2 px-2 py-1 bg-blue-100 rounded" title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= j @article.slug %>');"><%= @article.slug %></a>
+
+              <% if (old_slugs = @article.article_slugs).present? %>
+                <div class="text-gray-500 mt-5">
+                  Editor note:<br />
+                  This article is still accessible via previous
+                  <%= 'slug'.pluralize(old_slugs.count) %>
+                  <%= old_slugs.map(&:slug).reject { |slug| slug == @article.slug }.to_sentence %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <% if @article.categories.exists? %>
           <div class="mt-5 flex">

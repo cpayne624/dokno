@@ -62,7 +62,7 @@ module Dokno
         get dokno.root_path
 
         expect(response.code).to eq '200'
-        expect(response.body).to include "name=\"id\" id=\"id\""
+        expect(response.body).to include "name=\"category\" id=\"category\""
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
         expect(response.body).to include category.id.to_s
         expect(response.body).to include category.name
@@ -78,7 +78,7 @@ module Dokno
         get "#{dokno.root_path}?id=#{category.id}"
 
         expect(response.code).to eq '200'
-        expect(response.body).to include "name=\"id\" id=\"id\""
+        expect(response.body).to include "name=\"category\" id=\"category\""
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
         expect(response.body).to include category.id.to_s
         expect(response.body).to include category.name
@@ -107,7 +107,7 @@ module Dokno
         expect(response.body).to include "<form action=\"#{dokno.categories_path}\""
         expect(response.body).to include "<button type=\"submit\""
 
-        %w[name category_id].each do |field_id|
+        %w[name parent_category_code].each do |field_id|
           expect(response.body).to include "<label for=\"#{field_id}\">"
           expect(response.body).to include "id=\"#{field_id}\""
           expect(response.body).to include "name=\"#{field_id}\""
@@ -127,7 +127,7 @@ module Dokno
         expect(response.body).to include "<form action=\"#{dokno.category_path(category)}\""
         expect(response.body).to include "<button type=\"submit\""
 
-        %w[name category_id].each do |field_id|
+        %w[name parent_category_code].each do |field_id|
           expect(response.body).to include "<label for=\"#{field_id}\">"
           expect(response.body).to include "id=\"#{field_id}\""
           expect(response.body).to include "name=\"#{field_id}\""
@@ -143,7 +143,7 @@ module Dokno
         parent_category = Category.create!(name: 'Test Parent Category')
 
         expect do
-          post dokno.categories_path, params: { name: 'Created Category', category_id: parent_category.id }
+          post dokno.categories_path, params: { name: 'Created Category', parent_category_code: parent_category.code }
         end.to change(Category, :count).by(1)
 
         new_category = Category.find_by(name: 'Created Category')
@@ -166,7 +166,7 @@ module Dokno
         parent_category = Category.create!(name: 'Test Parent Category')
 
         expect do
-          patch dokno.category_path(category), params: { name: category.name + 'new', category_id: parent_category.id }
+          patch dokno.category_path(category), params: { name: category.name + 'new', parent_category_code: parent_category.code }
         end.to change(Category, :count).by(0)
 
         updated_category = Category.find_by(name: category.name + 'new')

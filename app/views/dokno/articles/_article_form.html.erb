@@ -15,9 +15,9 @@
   <% if Dokno::Category.exists? %>
     <div class="mb-5">
       <div class="text-lg font-semibold"><label for="category_id"><%= 'Category'.pluralize article.categories.count %></label></div>
-      <select name="category_id[]" id="category_id" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full mt-2 w-full max-w-full">
+      <select name="category_code[]" id="category_code" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full mt-2 w-full max-w-full">
         <option></option>
-        <%= Dokno::Category.select_option_markup(selected_category_ids: @category_ids).html_safe %>
+        <%= Dokno::Category.select_option_markup(selected_category_codes: @category_codes).html_safe %>
       </select>
       <div class="text-gray-500 mt-2">
         If applicable, select one or more categories to which this article will belong (optional). CTRL/CMD to select multiple.
@@ -49,7 +49,7 @@
     </div>
     <textarea placeholder="Full article content" name="markdown" id="markdown" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full" rows="10"><%= article.persisted? ? article.markdown : (article.markdown.presence || @template) %></textarea>
     <div id="markdown_preview" class="dokno-article-content-markup hidden text-lg overflow-hidden overflow-y-auto rounded p-10 mt-2 bg-gray-100 shadow-inner"></div>
-    <div class="text-gray-500 mt-2">Detailed documentation of the described topic (basic HTML &amp; markdown OK)</div>
+    <div class="text-gray-500 mt-2">Detailed documentation of the described topic. Basic HTML &amp; <a target="_blank" href="https://commonmark.org/help/" title="Markdown formatting examples">markdown</a> OK.</div>
   </div>
 
   <div class="mt-10">

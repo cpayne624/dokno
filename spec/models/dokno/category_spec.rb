@@ -84,7 +84,7 @@ module Dokno
             expect(select_option_markup).to include category.name
           end
 
-          select_option_markup = Category.select_option_markup(selected_category_ids: [selected_category.id])
+          select_option_markup = Category.select_option_markup(selected_category_codes: [selected_category.code])
           expect(select_option_markup).to include "<option value=\"#{selected_category.code}\" selected=\"selected\">#{selected_category.name}</option>"
           expect(select_option_markup).to include "\"#{excluded_category.code}\""
 

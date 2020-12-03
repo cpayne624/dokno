@@ -12,14 +12,14 @@ module Dokno
     end
 
     def new
-      @article      = Article.new
-      @template     = Article.template
-      @category_ids = [] << params[:category_id]
+      @article        = Article.new
+      @template       = Article.template
+      @category_codes = [] << params[:category_code]
     end
 
     def edit
       return redirect_to root_path if @article.blank?
-      @category_ids = @article.categories.pluck(:id)
+      @category_codes = @article.categories.pluck(:code)
     end
 
     def create
@@ -27,10 +27,10 @@ module Dokno
       set_editor_username
 
       if @article.save
-        @article.categories = Category.where(id: params[:category_id]) if params[:category_id].present?
+        @article.categories = Category.where(code: params[:category_code]) if params[:category_code].present?
         redirect_to article_path @article.slug
       else
-        @category_ids = params[:category_id]
+        @category_codes = params[:category_code]
         render :new
       end
     end
@@ -42,10 +42,10 @@ module Dokno
       set_editor_username
 
       if @article.update(article_params)
-        @article.categories = Category.where(id: params[:category_id])
+        @article.categories = Category.where(code: params[:category_code])
         redirect_to article_path @article.slug
       else
-        @category_ids = params[:category_id]
+        @category_codes = params[:category_code]
         render :edit
       end
     end
