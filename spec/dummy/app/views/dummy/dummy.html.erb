@@ -23,11 +23,12 @@
     <% end %>
   </ul>
 
-  <h2>Link With Stale Slug</h2>
-  <p>
-    <% stale_slug = Dokno::ArticleSlug.take.slug %>
-    <%= dokno_article_link("Link to stale slug #{stale_slug}", slug: Dokno::ArticleSlug.take.slug) %>
-  </p>
+  <% if (stale_slug = Dokno::ArticleSlug.take&.slug).present? %>
+    <h2>Link With Stale Slug</h2>
+    <p>
+      <%= dokno_article_link("Link to stale slug #{stale_slug}", slug: stale_slug) %>
+    </p>
+  <% end %>
 
   <h2>Link With Missing Slug</h2>
   <p>

@@ -23,21 +23,21 @@ module Dokno
 
     def new
       @category = Category.new
-      @parent_category_id = params[:parent_category_id]
+      @parent_category_code = params[:parent_category_code]
     end
 
     def edit
       return redirect_to root_path if @category.blank?
-      @parent_category_id = @category.category_id
+      @parent_category_code = @category.parent&.code
     end
 
     def create
-      @category = Category.new(category_params)
+      @category = Category.new(name: params[:name], parent: Category.find_by(code: params[:parent_category_code]))
 
       if @category.save
-        redirect_to "#{root_path}?id=#{@category.id}"
+        redirect_to article_index_path(@category.code)
       else
-        @parent_category_id = params[:category_id]
+        @parent_category_code = params[:parent_category_code]
         render :new
       end
     end
@@ -45,19 +45,15 @@ module Dokno
     def update
       return redirect_to root_path if @category.blank?
 
-      if @category.update(category_params)
-        redirect_to "#{root_path}?id=#{@category.id}"
+      if @category.update(name: params[:name], parent: Category.find_by(code: params[:parent_category_code]))
+        redirect_to article_index_path(@category.code)
       else
-        @parent_category_id = params[:category_id]
+        @parent_category_code = params[:parent_category_code]
         render :edit
       end
     end
 
     private
-
-    def category_params
-      params.permit(:name, :category_id)
-    end
 
     def fetch_category
       @category = Category.find_by(code: params[:cat_code].to_s.strip)

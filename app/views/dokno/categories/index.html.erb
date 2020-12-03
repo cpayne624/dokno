@@ -2,9 +2,9 @@
 <div class="flex items-center mb-10">
   <% if Dokno::Category.exists? %>
     <div class="w-1/2 pr-5">
-      <select name="id" id="id" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="location.href='<%= article_index_path %>' + this.value + '?search_term=' + elem('#search_term').value + '&order=<%= @order %>';">
+      <select name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="location.href='<%= article_index_path %>' + this.value + '?search_term=' + elem('#search_term').value + '&order=<%= @order %>';">
         <option value="">Select a category</option>
-        <%= Dokno::Category.select_option_markup(selected_category_ids: [@category&.id.to_i]).html_safe %>
+        <%= Dokno::Category.select_option_markup(selected_category_codes: [@category&.code]).html_safe %>
       </select>
     </div>
   <% end %>

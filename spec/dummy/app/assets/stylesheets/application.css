@@ -16,7 +16,6 @@
 
 /* Intentionally ugly base typography to test flyout CSS strength */
  body {
-  font-family: verdana, arial, helvetica, sans-serif;
   font-size: 23px;
   margin: 2.5rem;
  }

@@ -72,14 +72,13 @@ module Dokno
     end
 
     # HTML markup for Category SELECT field OPTION lists
-    def self.select_option_markup(selected_category_ids: nil, exclude_category_id: nil)
-      selected_category_ids = selected_category_ids&.map(&:to_i)
+    def self.select_option_markup(selected_category_codes: nil, exclude_category_id: nil)
       breadcrumbs = all
         .reject { |category| category.id == exclude_category_id.to_i }
-        .map { |category| { id: category.id, code: category.code, name: category.breadcrumb } }
+        .map { |category| { code: category.code, name: category.breadcrumb } }
       breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
-        select = selected_category_ids&.include?(category_hash[:id].to_i)
-        %(<option value="#{category_hash[:code]}" #{'selected="selected"' if select}>#{category_hash[:name]}</option>)
+        selected = selected_category_codes&.include?(category_hash[:code])
+        %(<option value="#{category_hash[:code]}" #{'selected="selected"' if selected}>#{category_hash[:name]}</option>)
       end.join
     end
 

@@ -64,6 +64,7 @@ module Dokno
           valid_article.categories << category
           hash = valid_article.host_panel_hash
 
+          # Fully populated article
           expect(hash[:id]).to eq valid_article.id
           expect(hash[:slug]).to eq valid_article.slug
           expect(hash[:title]).to include valid_article.title
@@ -71,12 +72,19 @@ module Dokno
           expect(hash[:markdown]).to include valid_article.markdown
           expect(hash[:footer]).to include valid_article.slug
           expect(hash[:footer]).to include category.name
-
           expect(hash[:title]).not_to include 'This article is no longer active'
 
+          # Article without summary, but with markdown
+          valid_article.summary = ''
+          expect(valid_article.host_panel_hash[:summary]).to be_empty
+
+          # Article missing summary and markdown
+          valid_article.markdown = ''
+          expect(valid_article.host_panel_hash[:summary]).to eq 'No content'
+
+          # Deactivated article
           valid_article.active = false
-          hash = valid_article.host_panel_hash
-          expect(hash[:title]).to include 'This article is no longer active'
+          expect(valid_article.host_panel_hash[:title]).to include 'This article is no longer active'
         end
       end
 

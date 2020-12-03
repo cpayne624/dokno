@@ -74,7 +74,7 @@ module Dokno
         }
 
         expect do
-          post dokno.articles_path, params: { category_id: categories.map(&:id) }.merge(attrs)
+          post dokno.articles_path, params: { category_code: categories.map(&:code) }.merge(attrs)
         end.to change(Article, :count).by(1)
 
         new_article = Article.find_by(slug: 'testslug')
@@ -110,7 +110,7 @@ module Dokno
         }
 
         expect do
-          patch dokno.article_path(article), params: { category_id: categories.map(&:id) }.merge(attrs)
+          patch dokno.article_path(article), params: { category_code: categories.map(&:code) }.merge(attrs)
         end.to change(Article, :count).by(0)
 
         updated_article = Article.find_by(slug: article.slug + 'new')
