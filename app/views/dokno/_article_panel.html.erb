@@ -1,7 +1,6 @@
-<!-- Dokno Slide-out Panel                                                                       -->
-<!-- This file is injected into the host layout when included via `render 'dokno/article_panel'` -->
-<!-- in the host app's app/views/layouts/application.html.erb to provide support for slide-out   -->
-<!-- article panels with `dokno_article_link({link-text}, slug: {unique-article-slug})`         -->
+<!-- DOKNO SLIDE-OUT PANEL                                                                             -->
+<!-- This file is injected into the host layout when included via render ` 'dokno/article_panel' `.    -->
+<!-- It provides the necessary markup, CSS, and JS to support in-context flyout article panels.        -->
 
 <!-- Reset styles -->
 <%= render 'dokno/reset_formatting' %>
@@ -14,6 +13,13 @@
 
 <!-- Slide-out panel markup -->
 <div id="dokno-panel-container">
+  <div id="dokno-panel-close" class="dokno-hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#eee" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="15" y1="9" x2="9" y2="15"></line>
+      <line x1="9" y1="9" x2="15" y2="15"></line>
+    </svg>
+  </div>
   <div id="dokno-panel-title"></div>
   <div id="dokno-panel-summary"></div>
   <div id="dokno-panel-markdown" class="dokno-article-content-markup"></div>
@@ -29,39 +35,37 @@
     }
     dokno__slug = slug;
 
-    // Can't use fetch API since unsupported in IE
+    // Can't use fetch API; IE
     const request = new XMLHttpRequest();
+
     request.open('GET', '<%= Dokno::Engine.routes.url_helpers.root_path %>article_panel/' + slug, true);
     request.onload = function() {
       if (request.readyState == 4 && request.status == 200) {
         try {
           var data = JSON.parse(request.responseText);
         } catch(err) {
-          console.log(err.message + " in " + request.responseText);
+          console.log("Dokno: " + err.message + " in " + request.responseText);
           return;
         }
 
-        dokno__id = data.id;
-        document.getElementById('dokno-panel-title').innerHTML = data.title;
-        document.getElementById('dokno-panel-summary').innerHTML = data.summary;
-        document.getElementById('dokno-panel-footer').innerHTML = data.footer;
-        document.getElementById('dokno-panel-markdown').innerHTML = data.markdown;
+        // Populate panel
+        dokno__id                       = data.id;
+        dokno__panel_title.innerHTML    = data.title;
+        dokno__panel_summary.innerHTML  = data.summary;
+        dokno__panel_footer.innerHTML   = data.footer;
+        dokno__panel_markdown.innerHTML = data.markdown;
 
-        if (data.markdown != '') {
-          document.getElementById('dokno-panel-markdown').classList.remove('dokno-hidden');
-        } else {
-          document.getElementById('dokno-panel-markdown').classList.add('dokno-hidden');
-        }
+        doknoRevealAppropriatePanelSections(data);
 
-        var title_span = document.querySelector('div#dokno-panel-title > span');
-
-        title_span.setAttribute('title', 'Open full article page');
-        title_span.onclick = function() { window.open('<%= Dokno::Engine.routes.url_helpers.root_path %>articles/' + dokno__id); }
-
+        // Reveal panel
         dokno__panel.scrollTop = 0;
         dokno__panel.classList.add('open');
         document.body.classList.add('dokno-no-scroll');
 
+        // Reveal fixed close icon
+        setTimeout(function() { dokno__close.classList.remove('dokno-hidden'); }, 200);
+
+        // Close on escape
         document.addEventListener('keydown', dokno__keydown_listener, false);
       }
     };
@@ -70,17 +74,39 @@
   }
 
   function doknoClosePanel() {
-    dokno__slug = null;
+    dokno__close.classList.add('dokno-hidden');
     dokno__panel.classList.remove('open');
     document.body.classList.remove('dokno-no-scroll');
     document.removeEventListener('keydown', dokno__keydown_listener, false);
+
+    dokno__slug = null;
   }
 
-  const dokno__panel = document.getElementById('dokno-panel-container');
-  const dokno__keydown_listener = function(e) {
-    if (e.key === 'Escape') {
-      doknoClosePanel();
+  function doknoRevealAppropriatePanelSections(data) {
+    const markdown_classes = dokno__panel_markdown.classList;
+    const summary_classes  = dokno__panel_summary.classList;
+
+    if (data.markdown != '') {
+      markdown_classes.remove('dokno-hidden');
+      if (data.summary == '') { summary_classes.add('dokno-hidden'); } else { summary_classes.remove('dokno-hidden'); }
+    } else {
+      markdown_classes.add('dokno-hidden');
+      summary_classes.remove('dokno-hidden');
     }
   }
+
+  const dokno__panel          = document.getElementById('dokno-panel-container');
+  const dokno__close          = document.querySelector('div#dokno-panel-close');
+  const dokno__panel_title    = document.getElementById('dokno-panel-title');
+  const dokno__panel_summary  = document.getElementById('dokno-panel-summary');
+  const dokno__panel_footer   = document.getElementById('dokno-panel-footer');
+  const dokno__panel_markdown = document.getElementById('dokno-panel-markdown');
+
+  const dokno__keydown_listener = function(e) {
+    if (e.key === 'Escape') { doknoClosePanel(); }
+  }
+
+  dokno__close.onclick = function() { doknoClosePanel(); }
+
   var dokno__id, dokno__slug;
 </script>

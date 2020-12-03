@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_172631) do
+ActiveRecord::Schema.define(version: 2020_12_02_234536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "dokno_article_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.bigint "article_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_dokno_article_slugs_on_article_id"
+    t.index ["slug"], name: "index_dokno_article_slugs_on_slug", unique: true
+  end
 
   create_table "dokno_articles", force: :cascade do |t|
     t.string "slug"
@@ -23,6 +32,8 @@ ActiveRecord::Schema.define(version: 2020_11_28_172631) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "summary"
     t.boolean "active", default: true
+    t.bigint "views", default: 0
+    t.datetime "last_viewed_at"
     t.index ["slug"], name: "index_dokno_articles_on_slug", unique: true
   end
 
@@ -39,7 +50,9 @@ ActiveRecord::Schema.define(version: 2020_11_28_172631) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "category_id"
+    t.string "code", null: false
     t.index ["category_id"], name: "index_dokno_categories_on_category_id"
+    t.index ["code"], name: "index_dokno_categories_on_code", unique: true
     t.index ["name"], name: "index_dokno_categories_on_name", unique: true
   end
 
@@ -55,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_11_28_172631) do
     t.index ["username"], name: "index_dokno_logs_on_username"
   end
 
+  add_foreign_key "dokno_article_slugs", "dokno_articles", column: "article_id"
   add_foreign_key "dokno_articles_categories", "dokno_articles", column: "article_id"
   add_foreign_key "dokno_articles_categories", "dokno_categories", column: "category_id"
   add_foreign_key "dokno_categories", "dokno_categories", column: "category_id"

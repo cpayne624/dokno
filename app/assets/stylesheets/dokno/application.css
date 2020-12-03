@@ -122,6 +122,11 @@ div#change-log {
   #dokno-content-container h4 { font-size: 120%; }
   #dokno-content-container h5 { font-size: 110%; }
 
+  .dokno-search-term {
+    border: 2px solid #000;
+    border-radius: 3px;
+  }
+
   .flex {
     display: block !important;
   }

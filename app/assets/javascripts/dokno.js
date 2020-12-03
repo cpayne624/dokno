@@ -6,6 +6,10 @@ function elem(selector) {
   return document.querySelector(selector);
 }
 
+function elems(selector) {
+  return document.getElementsByClassName(selector);
+}
+
 function sendRequest(url, data, callback, method) {
   const request = new XMLHttpRequest();
   request.open(method, url, true);
@@ -118,4 +122,23 @@ function reloadLogs() {
     initIcons();
   }
   sendRequest(dokno__base_path + 'article_log', { category_id: category_id, article_id: article_id }, callback, 'POST');
+}
+
+// Pass containers_selector as class name (no prefix)
+function highlightTerm(terms, containers_selector) {
+  var containers = elems(containers_selector);
+
+  for (var i=0, len=containers.length|0; i<len; i=i+1|0) {
+    var content = containers[i].innerHTML;
+
+    terms.forEach(term => {
+      content = content.replace(new RegExp(term, 'gi'), (match) => wrapTermWithHTML(match));
+    });
+
+    containers[i].innerHTML = content;
+  }
+}
+
+function wrapTermWithHTML(term) {
+  return `<span title="Matching search term" class="dokno-search-term bg-yellow-300 text-gray-900 p-2 rounded mx-1">${term}</span>`
 }

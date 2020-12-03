@@ -95,7 +95,7 @@ module Dokno
 
         expect(response.body).to include "Title can&#39;t be blank"
         expect(response.body).to include "Title is too short (minimum is 5 characters)"
-        expect(response.body).to include "Slug is too long (maximum is 12 characters)"
+        expect(response.body).to include "Slug is too long (maximum is 20 characters)"
       end
     end
 
@@ -129,7 +129,7 @@ module Dokno
           patch dokno.article_path(article), params: { slug: 'invalidbecausetoolongtopassvalidation' }
         end.to change(Article, :count).by(0)
 
-        expect(response.body).to include "Slug is too long (maximum is 12 characters)"
+        expect(response.body).to include "Slug is too long (maximum is 20 characters)"
       end
     end
 
@@ -143,7 +143,7 @@ module Dokno
 
     describe '#panel' do
       it 'returns the article in-context panel hash' do
-        get dokno.panel_path, params: { slug: article.slug }, xhr: true
+        get dokno.panel_path(article.slug), xhr: true
 
         response_hash = JSON.parse(response.body).symbolize_keys
 
@@ -188,7 +188,7 @@ module Dokno
         old_summary = article.summary
         article.update!(title: article.title + 'new', summary: article.summary + 'new')
 
-        post dokno.article_log_path, xhr: true
+        post dokno.article_log_path, params: { article_id: article.id }, xhr: true
 
         expect(response.code).to eq '200'
         expect(response.body).to include "Title changed from &#39;#{old_title}&#39; to &#39;#{article.title}&#39;"

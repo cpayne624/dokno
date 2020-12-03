@@ -8,9 +8,11 @@ module Dokno
 
     def user
       # Attempt to eval the currently signed in 'user' object from the host app
+      sanitized_user_obj_string = Dokno.config.app_user_object.to_s.split(/\b/).first
+
       proc {
         $safe = 1
-        eval Dokno::Config::APP_USER_OBJECT
+        eval sanitized_user_obj_string
       }.call
 
     rescue NameError => _e
@@ -18,15 +20,15 @@ module Dokno
     end
 
     def username
-      user&.send(Dokno::Config::APP_USER_NAME_METHOD.to_sym).to_s
+      user&.send(Dokno.config.app_user_name_method.to_sym).to_s
     end
 
     def can_edit?
       # Allow editing by default if host app user object is not configured
       return true  unless user.present?
-      return false unless user.respond_to? Dokno::Config::APP_USER_AUTH_METHOD.to_sym
+      return false unless user.respond_to? Dokno.config.app_user_auth_method.to_sym
 
-      user.send(Dokno::Config::APP_USER_AUTH_METHOD.to_sym)
+      user.send(Dokno.config.app_user_auth_method.to_sym)
     end
 
     def authorize

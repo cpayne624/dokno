@@ -2,16 +2,18 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class ArticlesController < ApplicationController
-    before_action :authorize, except: [:show, :panel]
+    before_action :authorize,     except: [:show, :panel]
     before_action :fetch_article, only: [:show, :edit, :panel, :status]
+    before_action :update_views,  only: [:show]
 
     def show
       redirect_to root_path if @article.blank?
+      @search_term = params[:search_term]
     end
 
     def new
-      @article      = Dokno::Article.new
-      @template     = Dokno::Article.template
+      @article      = Article.new
+      @template     = Article.template
       @category_ids = [] << params[:category_id]
     end
 
@@ -21,11 +23,11 @@ module Dokno
     end
 
     def create
-      @article = Dokno::Article.new(article_params)
+      @article = Article.new(article_params)
       set_editor_username
 
       if @article.save
-        @article.categories = Dokno::Category.where(id: params[:category_id]) if params[:category_id].present?
+        @article.categories = Category.where(id: params[:category_id]) if params[:category_id].present?
         redirect_to article_path @article.slug
       else
         @category_ids = params[:category_id]
@@ -34,13 +36,13 @@ module Dokno
     end
 
     def update
-      @article = Dokno::Article.find_by(id: params[:id].to_i)
+      @article = Article.find_by(id: params[:id].to_i)
       return redirect_to root_path if @article.blank?
 
       set_editor_username
 
       if @article.update(article_params)
-        @article.categories = Dokno::Category.where(id: params[:category_id])
+        @article.categories = Category.where(id: params[:category_id])
         redirect_to article_path @article.slug
       else
         @category_ids = params[:category_id]
@@ -49,7 +51,7 @@ module Dokno
     end
 
     def destroy
-      Dokno::Article.find(params[:id].to_i).destroy!
+      Article.find(params[:id].to_i).destroy!
       render json: {}, layout: false
     end
 
@@ -60,7 +62,7 @@ module Dokno
 
     # Ajax-fetched preview of article content from article form
     def preview
-      content = Dokno::Article.parse_markdown params['markdown']
+      content = Article.parse_markdown params['markdown']
       render json: { parsed_content: content.presence || 'Nothing to preview' }, layout: false
     end
 
@@ -74,10 +76,7 @@ module Dokno
     # Ajax-fetched article change log
     def article_log
       render partial: '/partials/logs',
-        locals: {
-          category: Dokno::Category.find_by(id: params[:category_id].to_i),
-          article:  Dokno::Article.find_by(id: params[:article_id].to_i)
-        }, layout: false
+        locals: { article: Article.find_by(id: params[:article_id].to_i) }, layout: false
     end
 
     private
@@ -87,16 +86,30 @@ module Dokno
     end
 
     def fetch_article
+      # Find by slug
       slug = (params[:slug].presence || params[:id]).to_s.strip
-      @article = Dokno::Article.find_by(slug: slug)
+      @article = Article.find_by(slug: slug)
       return if @article.present?
 
-      @article = Dokno::Article.find_by(id: params[:id].to_i)
-      return redirect_to article_path(@article.slug) if @article.present?
+      # Find by an old slug that has been changed (redirect to current slug)
+      old_slug = ArticleSlug.find_by(slug: slug)
+      return redirect_to article_path(old_slug.article.slug) if old_slug.present?
+
+      # Find by ID (redirect to slug)
+      article = Article.find_by(id: params[:id].to_i)
+      return redirect_to article_path(article.slug) if article.present?
     end
 
     def set_editor_username
       @article&.editor_username = username
+    end
+
+    def update_views
+      return unless @article.present?
+      return unless (@article.last_viewed_at || 2.minutes.ago) < 1.minute.ago
+
+      # No callbacks here, intentionally
+      @article.update_columns(views: (@article.views + 1), last_viewed_at: Time.now.utc)
     end
   end
 end

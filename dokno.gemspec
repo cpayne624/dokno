@@ -28,4 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rails", "~> 6.0.3", ">= 6.0.3.4"
   spec.add_development_dependency "rspec-rails", "~> 4.0", ">= 4.0.1"
   spec.add_development_dependency "simplecov", "~> 0.19.1"
+  spec.add_development_dependency "bullet", "~> 6.1"
+  spec.add_development_dependency "faker", "~> 2.15"
 end

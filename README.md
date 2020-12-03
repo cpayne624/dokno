@@ -5,47 +5,6 @@ Dokno (such as, "I do' kno' the answer") is a lightweight Rails Engine for stori
 
 It's useful for storing and categorizing information about your app for posterity, such as term definitions, system logic and implementation details, background for past system design decisions, or anything else related to your app that would be beneficial for you and your users to know, now and in the future.
 
-## Screenshots
-
-### Knowledgebase Landing Page
-
-Users are presented with this landing page when first visiting the site.
-
-Browsing, searching, and adding new articles or categories are available from any page.
-
-![Landing Page](./README/landing_page.png)
-
-### Knowledgebase Article
-
-Each article is accessible via its unique `slug`, either through its permalink, as shown here, or by an [in-context link](#in-context-flyout-article) within your app.
-
-![Article](./README/article.png)
-
-### Editing An Article
-
-Each article can be assigned to 0+ categories, and categories can be "infinitely" nested.
-
-Articles can include basic HTML and markdown, and you can configure a starting template for all new articles in `/config/dokno_template.md`.
-
-By default, any visitor to the knowledgebase site can modify data.
-
-See `/config/initializers/dokno.rb` to link Dokno to the model in your app that stores your users. Doing so will allow you to restrict Dokno data modification to certain users, and to include indentifying information in Dokno change logs.
-
-![Editing An Article](./README/article_edit.png)
-
-### In-Context Flyout Article
-
-You can put useful information in front of your users by adding links to articles in context within your app.
-
-![Host App Page](./README/host_app_flyout.png)
-
-## Dependencies
-Dokno is purposefully lightweight and fast.
-
-It has two gem dependencies, the [redcarpet](https://github.com/vmg/redcarpet) gem for markdown processing, and the [diffy](https://github.com/samg/diffy) gem for change log diffing, each of which are excellent and have no further dependencies.
-
-It is expected that Dokno is mounted to a Rails app using ActiveRecord.
-
 ## Installation
 Add this line to your application's Gemfile:
 ```ruby
@@ -76,6 +35,34 @@ To enable [in-context articles](#in-context-flyout-article) in your app, add the
 ```erb
 <%= render 'dokno/article_panel' %>
 ```
+
+## Screenshots
+
+| Landing Page  | Article | Editing an Article  | Article Flyout |
+| ------------- | ------------- | ------------- | ------------- |
+| <img src="./README/landing_page.png" width="250"> | <img src="./README/article.png" width="250"> | <img src="./README/article_edit.png" width="250"> | <img src="./README/host_app_flyout.png" width="250"> |
+
+### Knowledgebase Landing Page
+
+Users are presented with this landing page when first visiting the site. Browsing, searching, and adding new articles or categories are available from any page.
+
+### Article
+
+Each article is accessible via its unique `slug`, either through its permalink, as shown here, or by an [in-context link](#in-context-flyout-article) within your app.
+
+### Editing an Article
+
+Each article can be assigned to 0+ categories, and categories can be "infinitely" nested.
+
+Articles can include basic HTML and markdown, and you can configure a starting template for all new articles in `/config/dokno_template.md`.
+
+By default, any visitor to the knowledgebase site can modify data.
+
+See `/config/initializers/dokno.rb` to link Dokno to the model in your app that stores your users. Doing so will allow you to restrict Dokno data modification to certain users, and to include indentifying information in Dokno change logs.
+
+### In-Context Article Flyout
+
+You can put useful information in front of your users by adding links to articles in context within your app.
 
 ## Usage
 
@@ -115,6 +102,13 @@ Dokno::Category.take.parent
 Dokno::Category.take.children
 => #<ActiveRecord::Relation [#<Dokno::Category id: 3, name: "Child Category Name", ... >, ...]
 ```
+
+## Dependencies
+Dokno is purposefully lightweight and fast.
+
+It has two (excellent) gem dependencies: the [redcarpet](https://github.com/vmg/redcarpet) gem for markdown processing, and the [diffy](https://github.com/samg/diffy) gem for change diffing, neither of which have further dependencies.
+
+It is expected that Dokno is mounted to a Rails app using ActiveRecord.
 
 ## Pull Requests
 Contributions are welcome.

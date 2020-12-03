@@ -9,7 +9,7 @@
   <div class="mb-5">
     <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
     <input placeholder="Article unique identifier" type="text" name="slug" id="slug" value="<%= article.slug %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/3" />
-    <div class="text-gray-500 mt-2">Unique identifier for this article (required) (2-12 alphanumeric chars)</div>
+    <div class="text-gray-500 mt-2">Unique identifier for this article (required) (2-20 alphanumeric chars)</div>
   </div>
 
   <% if Dokno::Category.exists? %>

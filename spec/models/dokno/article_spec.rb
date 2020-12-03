@@ -16,7 +16,7 @@ module Dokno
         articles.first.slug = articles.last.slug
 
         expect(articles.first.validate).to be false
-        expect(articles.first.errors[:slug]).to include "must be unique, #{articles.last.slug} already exists"
+        expect(articles.first.errors[:slug]).to include "must be unique, #{articles.last.slug} has already been used"
 
         articles.first.slug = 'dummy3'
         expect(articles.first.validate).to be true
@@ -52,7 +52,8 @@ module Dokno
           valid_article.categories = categories
           valid_article.save
 
-          expect(valid_article.category_name_list).to eq 'Categories: dummy 1 and dummy 2'
+          expect(valid_article.category_name_list).to include 'dummy 1'
+          expect(valid_article.category_name_list).to include 'dummy 2'
         end
       end
 

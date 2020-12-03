@@ -43,7 +43,7 @@ module Dokno
           parent_category.update!(category_id: parent_parent_category.id)
           valid_category.update!(category_id: parent_category.id)
 
-          expect(valid_category.breadcrumb).to eq "#{parent_parent_category.name} / #{parent_category.name} / #{valid_category.name}"
+          expect(valid_category.breadcrumb).to eq "#{parent_parent_category.name} > #{parent_category.name} > #{valid_category.name}"
         end
       end
 
@@ -75,21 +75,21 @@ module Dokno
         it 'builds and returns the category select option markup' do
           valid_category.save!
           categories = [valid_category, Category.create!(name: 'Test Category 2'), Category.create!(name: 'Test Category 3')]
-          selected_category   = categories.pop
-          exclude_category_id = categories.sample.id
+          selected_category = categories.pop
+          excluded_category = categories.sample
 
           select_option_markup = Category.select_option_markup
           categories.each do |category|
-            expect(select_option_markup).to include category.id.to_s
+            expect(select_option_markup).to include category.code
             expect(select_option_markup).to include category.name
           end
 
           select_option_markup = Category.select_option_markup(selected_category_ids: [selected_category.id])
-          expect(select_option_markup).to include "<option value=\"#{selected_category.id}\" selected=\"selected\">#{selected_category.name}</option>"
-          expect(select_option_markup).to include exclude_category_id.to_s
+          expect(select_option_markup).to include "<option value=\"#{selected_category.code}\" selected=\"selected\">#{selected_category.name}</option>"
+          expect(select_option_markup).to include "\"#{excluded_category.code}\""
 
-          select_option_markup = Category.select_option_markup(exclude_category_id: exclude_category_id)
-          expect(select_option_markup).not_to include exclude_category_id.to_s
+          select_option_markup = Category.select_option_markup(exclude_category_id: excluded_category.id)
+          expect(select_option_markup).not_to include "\"#{excluded_category.code}\""
         end
       end
     end

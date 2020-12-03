@@ -2,17 +2,27 @@ require_dependency 'dokno/application_controller'
 
 module Dokno
   class CategoriesController < ApplicationController
-    before_action :authorize, except: [:index]
+    before_action :authorize,      except: [:index]
     before_action :fetch_category, only: [:index, :edit, :update]
 
     def index
-      search if params[:search_term].present?
-      @articles = @category&.articles_in_branch if @articles.nil?
-      @articles = Dokno::Article.uncategorized  if @articles.nil?
+      @search_term = params[:search_term]
+      @order       = params[:order]&.strip
+      @order       = 'updated' unless %w(updated newest views alpha).include?(@order)
+
+      articles = if @search_term.present?
+                   Article.search(term: @search_term, category_id: @category&.id, order: @order&.to_sym)
+                 elsif @category.present?
+                   @category.articles_in_branch(order: @order&.to_sym)
+                 else
+                   Article.uncategorized(order: @order&.to_sym)
+                 end
+
+      @articles = paginate(articles)
     end
 
     def new
-      @category = Dokno::Category.new
+      @category = Category.new
       @parent_category_id = params[:parent_category_id]
     end
 
@@ -22,7 +32,7 @@ module Dokno
     end
 
     def create
-      @category = Dokno::Category.new(category_params)
+      @category = Category.new(category_params)
 
       if @category.save
         redirect_to "#{root_path}?id=#{@category.id}"
@@ -50,27 +60,8 @@ module Dokno
     end
 
     def fetch_category
-      @category = Dokno::Category.find_by(id: params[:id].to_i)
-    end
-
-    def search
-      @search_term = params[:search_term].to_s.strip
-      @articles = Dokno::Article
-        .where(
-          'LOWER(title) LIKE :search_term OR '\
-          'LOWER(summary) LIKE :search_term OR '\
-          'LOWER(markdown) LIKE :search_term OR '\
-          'LOWER(slug) LIKE :search_term',
-          search_term: "%#{@search_term.downcase}%"
-        )
-        .order(active: :desc, updated_at: :desc)
-
-      fetch_category
-      return if @category.blank?
-
-      # Search within the specified category and all children categories within it
-      category_ids = Dokno::Category.branch(parent_category_id: @category.id).pluck(:id)
-      @articles = @articles.joins(:categories).where(dokno_categories: {id: category_ids}).uniq
+      @category = Category.find_by(code: params[:cat_code].to_s.strip)
+      @category = Category.find_by(id: params[:id].to_i) if @category.blank?
     end
   end
 end
