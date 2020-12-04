@@ -27,9 +27,11 @@ module Dokno
       set_editor_username
 
       if @article.save
+        flash[:green] = 'Article was created'
         @article.categories = Category.where(code: params[:category_code]) if params[:category_code].present?
         redirect_to article_path @article.slug
       else
+        flash.now[:red] = 'Article could not be created'
         @category_codes = params[:category_code]
         render :new
       end
@@ -42,9 +44,11 @@ module Dokno
       set_editor_username
 
       if @article.update(article_params)
+        flash[:green] = 'Article was updated'
         @article.categories = Category.where(code: params[:category_code])
         redirect_to article_path @article.slug
       else
+        flash.now[:red] = 'Article could not be updated'
         @category_codes = params[:category_code]
         render :edit
       end
@@ -52,6 +56,8 @@ module Dokno
 
     def destroy
       Article.find(params[:id].to_i).destroy!
+
+      flash[:green] = 'Article was deleted'
       render json: {}, layout: false
     end
 

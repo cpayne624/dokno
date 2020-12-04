@@ -20,6 +20,8 @@ module Dokno
 
     before_validation :set_code
 
+    scope :alpha_order, -> { order(:name) }
+
     # The display breadcrumb for the Category
     def breadcrumb
       crumbs = [name]
@@ -71,18 +73,39 @@ module Dokno
       categories.flatten
     end
 
-    # HTML markup for Category SELECT field OPTION lists
-    def self.select_option_markup(selected_category_codes: nil, exclude_category_id: nil)
-      breadcrumbs = all
-        .reject { |category| category.id == exclude_category_id.to_i }
-        .map { |category| { code: category.code, name: category.breadcrumb } }
-      breadcrumbs.sort_by { |category_hash| category_hash[:name] }.map do |category_hash|
-        selected = selected_category_codes&.include?(category_hash[:code])
-        %(<option value="#{category_hash[:code]}" #{'selected="selected"' if selected}>#{category_hash[:name]}</option>)
-      end.join
+    def self.select_option_markup(selected_category_codes: nil, exclude_category_id: nil, context_category: nil, level: 0)
+      return '' if level.positive? && context_category.blank?
+
+      options = []
+      level_categories = where(category_id: context_category&.id).alpha_order
+
+      level_categories.each do |category|
+        options << option_markup(
+          category:                category,
+          selected_category_codes: selected_category_codes,
+          exclude_category_id:     exclude_category_id,
+          level:                   level
+        )
+
+        options << select_option_markup(
+          selected_category_codes: selected_category_codes,
+          exclude_category_id:     exclude_category_id,
+          context_category:        category,
+          level:                   (level + 1)
+        )
+      end
+
+      options.join
     end
 
     private
+
+    def self.option_markup(category:, selected_category_codes:, exclude_category_id:, level: 0)
+      return '' if category.id == exclude_category_id
+
+      selected = selected_category_codes&.include?(category.code)
+      %(<option value="#{category.code}" #{'selected="selected"' if selected}>#{('&nbsp;&nbsp;' * level)}#{category.name}</option>)
+    end
 
     # Never allow setting of parent to self
     def circular_parent_check

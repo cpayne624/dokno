@@ -35,8 +35,10 @@ module Dokno
       @category = Category.new(name: params[:name], parent: Category.find_by(code: params[:parent_category_code]))
 
       if @category.save
+        flash[:green] = 'Category was created'
         redirect_to article_index_path(@category.code)
       else
+        flash.now[:red] = 'Category could not be created'
         @parent_category_code = params[:parent_category_code]
         render :new
       end
@@ -46,11 +48,20 @@ module Dokno
       return redirect_to root_path if @category.blank?
 
       if @category.update(name: params[:name], parent: Category.find_by(code: params[:parent_category_code]))
+        flash[:green] = 'Category was updated'
         redirect_to article_index_path(@category.code)
       else
+        flash.now[:red] = 'Category could not be updated'
         @parent_category_code = params[:parent_category_code]
         render :edit
       end
+    end
+
+    def destroy
+      Category.find(params[:id].to_i).destroy!
+
+      flash[:green] = 'Category was deleted'
+      render json: {}, layout: false
     end
 
     private

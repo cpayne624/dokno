@@ -1,6 +1,14 @@
 <%= render 'dokno/article_formatting' %>
 
 <section>
+  <% if @article.categories.present? %>
+    <div class="text-gray-500 mb-5">
+      <% @article.categories.each do |category| %>
+        <div><a href="<%= article_index_path(category.code) %>"><%= category.breadcrumb %></a></div>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="flex">
     <div id="dokno-article-sidebar" class="w-2/5 pr-10">
       <div id="article-deprecated-alert" class="<%= 'hidden' if @article.active %> bg-yellow-700 p-4 mb-5 rounded text-lg border-t-4 border-yellow-900 text-white font-base">

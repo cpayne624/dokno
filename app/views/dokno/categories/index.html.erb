@@ -1,3 +1,8 @@
+<% if @category&.parent.present? %>
+  <div class="text-gray-500 mb-5">
+    <div><%= @category.breadcrumb %></div>
+  </div>
+<% end %>
 
 <div class="flex items-center mb-10">
   <% if Dokno::Category.exists? %>
