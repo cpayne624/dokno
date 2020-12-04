@@ -77,6 +77,9 @@ module Dokno
           post dokno.articles_path, params: { category_code: categories.map(&:code) }.merge(attrs)
         end.to change(Article, :count).by(1)
 
+        follow_redirect!
+        expect(response.body).to include 'Article was created'
+
         new_article = Article.find_by(slug: 'testslug')
 
         expect(new_article.present?).to be true
@@ -112,6 +115,9 @@ module Dokno
         expect do
           patch dokno.article_path(article), params: { category_code: categories.map(&:code) }.merge(attrs)
         end.to change(Article, :count).by(0)
+
+        follow_redirect!
+        expect(response.body).to include 'Article was updated'
 
         updated_article = Article.find_by(slug: article.slug + 'new')
 

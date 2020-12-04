@@ -63,6 +63,13 @@
     <% end %>
 
     <div id="dokno-content-container" class="w-full max-w-screen-xl m-auto print-this">
+      <% flash.each do |color, msg| %>
+        <div class="bg-<%= color %>-700 p-4 mb-5 rounded text-lg border-t-4 border-<%= color %>-900 text-white font-base">
+          <i data-feather="<%= (color == 'green' ? 'check-circle' : (color == 'yellow' ? 'alert-circle' : 'x-circle')) %>" class="inline mr-2"></i>
+          <%= msg %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </div>
   </main>

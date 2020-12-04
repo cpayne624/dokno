@@ -9,8 +9,7 @@ Gem::Specification.new do |spec|
   spec.email       = ["cpayne624@gmail.com"]
   spec.homepage    = "https://github.com/cpayne624/dokno"
   spec.summary     = "Dokno (dough-no) is a lightweight mountable Rails Engine for storing and managing your app's domain knowledge."
-  spec.description = "Dokno allows you to easily mount a self-contained knowledgebase / wiki / help system to "\
-                     "your Rails app where you and your users can author articles relevant to your app."
+  spec.description = "Dokno allows you to easily mount a self-contained knowledgebase / wiki / help system to your Rails app."
   spec.license     = "MIT"
   spec.metadata = {
     "bug_tracker_uri" => "https://github.com/cpayne624/dokno/issues",

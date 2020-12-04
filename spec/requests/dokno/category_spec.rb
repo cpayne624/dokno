@@ -146,6 +146,9 @@ module Dokno
           post dokno.categories_path, params: { name: 'Created Category', parent_category_code: parent_category.code }
         end.to change(Category, :count).by(1)
 
+        follow_redirect!
+        expect(response.body).to include 'Category was created'
+
         new_category = Category.find_by(name: 'Created Category')
 
         expect(new_category.present?).to be true
@@ -169,6 +172,9 @@ module Dokno
           patch dokno.category_path(category), params: { name: category.name + 'new', parent_category_code: parent_category.code }
         end.to change(Category, :count).by(0)
 
+        follow_redirect!
+        expect(response.body).to include 'Category was updated'
+
         updated_category = Category.find_by(name: category.name + 'new')
 
         expect(updated_category.present?).to be true
@@ -181,6 +187,14 @@ module Dokno
         end.to change(Category, :count).by(0)
 
         expect(response.body).to include "Name can&#39;t be blank"
+      end
+    end
+
+    describe '#destroy' do
+      it 'deletes a category instance' do
+        expect do
+          delete dokno.category_path(category)
+        end.to change(Category, :count).by(-1)
       end
     end
   end

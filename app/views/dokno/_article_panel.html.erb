@@ -67,6 +67,7 @@
 
         // Close on escape
         document.addEventListener('keydown', dokno__keydown_listener, false);
+        document.addEventListener('click', dokno__click_listener, false);
       }
     };
 
@@ -78,6 +79,7 @@
     dokno__panel.classList.remove('open');
     document.body.classList.remove('dokno-no-scroll');
     document.removeEventListener('keydown', dokno__keydown_listener, false);
+    document.removeEventListener('click', dokno__click_listener, false);
 
     dokno__slug = null;
   }
@@ -104,6 +106,11 @@
 
   const dokno__keydown_listener = function(e) {
     if (e.key === 'Escape') { doknoClosePanel(); }
+  }
+
+  const dokno__click_listener = function(e) {
+    var isClickInside = dokno__panel.contains(e.target);
+    if (!isClickInside) { doknoClosePanel(); }
   }
 
   dokno__close.onclick = function() { doknoClosePanel(); }

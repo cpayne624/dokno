@@ -61,6 +61,17 @@ function deleteArticle(id) {
   sendRequest(dokno__base_path + 'articles/' + id, {}, callback, 'DELETE');
 }
 
+function deleteCategory(id) {
+  if (!confirm('Delete Category\n\nThis will remove this category. Any articles in this category will become uncategorized and appear on the home page until re-categorized.')) {
+    return true;
+  }
+
+  const callback = function(_data) {
+    location.href = dokno__base_path;
+  }
+  sendRequest(dokno__base_path + 'categories/' + id, {}, callback, 'DELETE');
+}
+
 function previewArticleToggle() {
   const markdown = elem('div#dokno-content-container textarea#markdown').value;
   const callback = function(data) {
