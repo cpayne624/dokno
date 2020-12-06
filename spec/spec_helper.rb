@@ -14,19 +14,33 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'simplecov'
-require 'pry'
-
 ENV["RAILS_ENV"] = 'test'
 
+require 'simplecov'
 SimpleCov.start :rails do
   add_filter 'lib/'
 end
 
 require 'rails_helper'
 require 'database_cleaner/active_record'
+require 'pry'
+require 'capybara/rails'
+require 'capybara/rspec'
+require 'webdrivers/chromedriver'
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+Capybara.server = :puma
+Capybara.default_driver = :chrome
+Capybara.javascript_driver = :chrome
 
 RSpec.configure do |config|
+  # Don't run slow js specs on GitHub CI builds
+  if ENV['SKIP_JS'].present? || ENV['GITHUB_WORKFLOW'].present?
+    config.filter_run_excluding js: true
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -57,6 +71,7 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.include Rails.application.routes.url_helpers
+  config.include Capybara::DSL
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
   config.example_status_persistence_file_path = './rspec_failures.txt'
@@ -67,6 +82,13 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
     DatabaseCleaner.start
   end
 
