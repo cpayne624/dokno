@@ -13,13 +13,6 @@
 
 <!-- Slide-out panel markup -->
 <div id="dokno-panel-container">
-  <div id="dokno-panel-close" class="dokno-hidden">
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#eee" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="15" y1="9" x2="9" y2="15"></line>
-      <line x1="9" y1="9" x2="15" y2="15"></line>
-    </svg>
-  </div>
   <div id="dokno-panel-title"></div>
   <div id="dokno-panel-summary"></div>
   <div id="dokno-panel-markdown" class="dokno-article-content-markup"></div>
@@ -29,10 +22,12 @@
 <!-- Slide-out panel behavior -->
 <script>
   function doknoOpenPanel(slug) {
-    if (slug == dokno__slug) {
-      doknoClosePanel();
-      return true;
-    }
+    if (slug == dokno__slug) { return true; }
+
+    // Set flag to avoid flicker when closing the panel before opening the panel
+    dokno__link_just_clicked = true;
+    setTimeout(function() { dokno__link_just_clicked = false; }, 200);
+
     dokno__slug = slug;
 
     // Can't use fetch API; IE
@@ -62,9 +57,6 @@
         dokno__panel.classList.add('open');
         document.body.classList.add('dokno-no-scroll');
 
-        // Reveal fixed close icon
-        setTimeout(function() { dokno__close.classList.remove('dokno-hidden'); }, 200);
-
         // Close on escape
         document.addEventListener('keydown', dokno__keydown_listener, false);
         document.addEventListener('click', dokno__click_listener, false);
@@ -75,7 +67,9 @@
   }
 
   function doknoClosePanel() {
-    dokno__close.classList.add('dokno-hidden');
+    // Just clicked a link to open a panel, so don't close to avoid flicker
+    if (dokno__link_just_clicked) { return true; }
+
     dokno__panel.classList.remove('open');
     document.body.classList.remove('dokno-no-scroll');
     document.removeEventListener('keydown', dokno__keydown_listener, false);
@@ -98,7 +92,6 @@
   }
 
   const dokno__panel          = document.getElementById('dokno-panel-container');
-  const dokno__close          = document.querySelector('div#dokno-panel-close');
   const dokno__panel_title    = document.getElementById('dokno-panel-title');
   const dokno__panel_summary  = document.getElementById('dokno-panel-summary');
   const dokno__panel_footer   = document.getElementById('dokno-panel-footer');
@@ -113,7 +106,5 @@
     if (!isClickInside) { doknoClosePanel(); }
   }
 
-  dokno__close.onclick = function() { doknoClosePanel(); }
-
-  var dokno__id, dokno__slug;
+  var dokno__id, dokno__slug, dokno__link_just_clicked;
 </script>

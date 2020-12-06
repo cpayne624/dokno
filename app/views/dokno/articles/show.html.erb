@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <div class="mt-5 flex">
+        <div class="mt-5 flex no-print">
           <div class="no-print w-8"><i data-feather="eye" class="inline-block h-5"></i></div>
           <div class="w-full">
             Views:<br />
@@ -57,7 +57,7 @@
         <% end %>
 
         <% if @article.reading_time.present? %>
-          <div class="mt-5 flex">
+          <div class="mt-5 flex no-print">
             <div class="no-print w-8"><i data-feather="watch" class="inline-block h-5"></i></div>
             <div class="w-full">
               Reading time:<br />
@@ -75,7 +75,7 @@
         </div>
 
         <% if can_edit? %>
-          <div class="mt-5 flex">
+          <div class="mt-5 flex no-print">
             <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5"></i></div>
             <div class="w-full">
               Unique slug:<br />
@@ -94,7 +94,7 @@
         <% end %>
 
         <% if @article.categories.exists? %>
-          <div class="mt-5 flex">
+          <div class="mt-5 flex no-print">
             <div class="no-print w-8"><i data-feather="folder" class="inline-block h-5"></i></div>
             <div class="w-full">
               <%= 'Category'.pluralize @article.categories.count %>:<br />

@@ -5,11 +5,10 @@
 
   <span class="mr-1 inline-block">Page</span>
 
-  <%= form_with(url: article_index_path, method: :get, class: 'inline') do %>
-    <input type="hidden" name="id" value="<%= @category&.id %>">
+  <%= form_with(url: article_index_path(@category&.code), method: :get, class: 'inline') do %>
     <input type="hidden" name="search_term" value="<%= @search_term %>">
     <input type="hidden" name="order" value="<%= @order %>">
-    <input type="text" name="page" id="page" value="<%= @page %>" onclick="this.select();" class="w-10 text-center bg-gray-200 rounded" />
+    <input type="text" name="page" value="<%= @page %>" onclick="this.select();" class="w-10 text-center bg-gray-200 rounded" />
 
     <span class="mx-1 inline-block">of</span>
     <span class="text-center inline-block"><%= @total_pages %></span>

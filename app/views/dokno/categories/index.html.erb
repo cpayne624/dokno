@@ -7,17 +7,18 @@
 <div class="flex items-center mb-10">
   <% if Dokno::Category.exists? %>
     <div class="w-1/2 pr-5">
-      <select name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="location.href='<%= article_index_path %>' + this.value + '?search_term=' + elem('#search_term').value + '&order=<%= @order %>';">
+
+      <select name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="changeCategory(this.value, elem('#search_term').value, '<%= @order %>');">
         <option value="">Select a category</option>
-        <%= Dokno::Category.select_option_markup(selected_category_codes: [@category&.code]).html_safe %>
+        <% cache Dokno::Category do %>
+          <%= Dokno::Category.select_option_markup.html_safe %>
+        <% end %>
       </select>
+
     </div>
   <% end %>
   <div class="w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
-    <%= form_with(url: article_index_path(@category&.code), method: :get) do %>
-      <input type="hidden" name="order" value="<%= @order %>">
-      <input placeholder="Search article content, titles, and slugs" type="text" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
-    <% end %>
+    <input onsearch="search(this.value, '<%= @order %>');" placeholder="Search article content, titles, and slugs" type="search" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
   </div>
 </div>
 
@@ -53,7 +54,7 @@
   </div>
 
   <div id="dokno-article-list">
-    <% @articles.each_with_index do |article, i| %>
+    <% @articles.each do |article| %>
       <section class="border-t border-gray-300 py-10 text-xl flex">
         <div class="w-1/3 pr-10">
           <div class="flex">
@@ -72,17 +73,17 @@
 
           <span class="dokno-article-content-highlight"><%= article.summary.presence || 'No summary provided' %></span>
 
-          <div class="text-base mt-2">
-            <div class="text-gray-500"><%= article.category_name_list(context_category_id: @category&.id, order: @order, search_term: @search_term) %></div>
-
-            <% if @order == 'views' %>
-              <div class="text-gray-500">Viewed <%= number_with_delimiter(article.views, delimiter: ',') %> <%= 'time'.pluralize(article.views) %></div>
-            <% elsif @order == 'updated' %>
-              <div class="text-gray-500">Last updated <%= time_ago_in_words article.updated_at %> ago</div>
-            <% elsif @order == 'newest' %>
-              <div class="text-gray-500">Added <%= time_ago_in_words article.created_at %> ago</div>
-            <% end %>
-          </div>
+          <% unless @order == 'alpha' %>
+            <div class="text-base mt-2">
+              <% if @order == 'views' %>
+                <div class="text-gray-500">Viewed <%= number_with_delimiter(article.views, delimiter: ',') %> <%= 'time'.pluralize(article.views) %></div>
+              <% elsif @order == 'updated' %>
+                <div class="text-gray-500">Last updated <%= time_ago_in_words article.updated_at %> ago</div>
+              <% elsif @order == 'newest' %>
+                <div class="text-gray-500">Added <%= time_ago_in_words article.created_at %> ago</div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </section>
     <% end %>
@@ -96,6 +97,11 @@
   </div>
 <% end %>
 
+<script>
+  // Client-side select of cached select list
+  selectOption('category', '<%= j @category&.code %>');
+</script>
+
 <% if @search_term.present? %>
-  <script>highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight');</script>
+  <script> highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight'); </script>
 <% end %>

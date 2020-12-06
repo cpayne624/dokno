@@ -10,6 +10,31 @@ function elems(selector) {
   return document.getElementsByClassName(selector);
 }
 
+function selectOption(id, value) {
+  var sel = elem('#' + id);
+  var opts = sel.options;
+
+  for (var opt, j = 0; opt = opts[j]; j++) {
+    if (opt.value == value) {
+      sel.selectedIndex = j;
+      break;
+    }
+  }
+}
+
+function changeCategory(category_code, term, order) {
+  goToPage(dokno__base_path + category_code + '?search_term=' + term + '&order=' + order);
+}
+
+function search(term, order) {
+  goToPage('?search_term=' + term + '&order=' + order);
+}
+
+function goToPage(url) {
+  var param_join = url.indexOf('?') >= 0 ? '&' : '?';
+  location.href=url + param_join + '_=' + Math.round(new Date().getTime());
+}
+
 function sendRequest(url, data, callback, method) {
   const request = new XMLHttpRequest();
   request.open(method, url, true);

@@ -57,6 +57,11 @@ module Dokno
       self.class.branch(parent_category_id: id)
     end
 
+    # Used to invalidate the fragment cache of the hierarchical category select options
+    def self.cache_key
+      maximum :updated_at
+    end
+
     # The given Category and all child Categories. Useful for filtering associated articles.
     def self.branch(parent_category_id:, at_top: true)
       return if parent_category_id.blank?

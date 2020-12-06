@@ -16,15 +16,15 @@ module Dokno
 
   def self.faker_markdown
     %(
-#{Faker::Markdown.sandwich(sentences: 15)}
+# #{Faker::Company.catch_phrase}
+#{Faker::Markdown.emphasis} #{Faker::Markdown.emphasis}
 
-#{Faker::Markdown.unordered_list}
+## #{Faker::Company.catch_phrase}
+#{Faker::Lorem.paragraph(sentence_count: 20, random_sentences_to_add: 50)}
 
-#{Faker::Lorem.paragraphs(number: 20).join("\n")}
-
+### #{Faker::Company.catch_phrase}
 #{Faker::Markdown.table}
-
-#{Faker::Lorem.paragraphs(number: 20).join("\n")}
+#{Faker::Lorem.paragraph(sentence_count: 20, random_sentences_to_add: 50)}
       )
   end
 
@@ -53,8 +53,8 @@ module Dokno
     rand(0..15).times do
       category.articles << Article.new(
         slug:     Faker::Lorem.characters(number: 12),
-        title:    Faker::Lorem.sentence,
-        summary:  Faker::Lorem.paragraphs.join("\n"),
+        title:    Faker::Company.catch_phrase,
+        summary:  Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
         markdown: faker_markdown
       )
       show_progress
@@ -65,8 +65,8 @@ module Dokno
   15.times do
     Article.create(
       slug:     Faker::Lorem.characters(number: 12),
-      title:    Faker::Lorem.sentence,
-      summary:  Faker::Lorem.paragraphs.join("\n"),
+      title:    Faker::Company.catch_phrase,
+      summary:  Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
       markdown: faker_markdown
     )
     show_progress
