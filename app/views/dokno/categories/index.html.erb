@@ -4,23 +4,26 @@
   </div>
 <% end %>
 
-<div class="flex items-center mb-10">
-  <% if Dokno::Category.exists? %>
-    <div class="w-1/2 pr-5">
+<% if Dokno::Category.exists? || Dokno::Article.exists? %>
+  <div class="flex items-center mb-10">
+    <% if Dokno::Category.exists? %>
+      <div class="w-1/2 pr-5">
+        <select aria-label="Category" name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="changeCategory(this.value, elem('#search_term').value, '<%= @order %>');">
+          <option value="">Select a category</option>
+          <% cache Dokno::Category do %>
+            <%= Dokno::Category.select_option_markup.html_safe %>
+          <% end %>
+        </select>
+      </div>
+    <% end %>
 
-      <select aria-label="Category" name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="changeCategory(this.value, elem('#search_term').value, '<%= @order %>');">
-        <option value="">Select a category</option>
-        <% cache Dokno::Category do %>
-          <%= Dokno::Category.select_option_markup.html_safe %>
-        <% end %>
-      </select>
-
-    </div>
-  <% end %>
-  <div class="w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
-    <input onsearch="search(this.value, '<%= @order %>');" placeholder="Search article content, titles, and slugs" type="search" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
+    <% if Dokno::Article.exists? %>
+      <div class="w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
+        <input onsearch="search(this.value, '<%= @order %>');" placeholder="Search article content, titles, and slugs" type="search" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
+      </div>
+    <% end %>
   </div>
-</div>
+<% end %>
 
 <% if @articles.blank? %>
 
@@ -46,10 +49,10 @@
     </div>
     <div class="w-1/3 text-right">
       <i data-feather="corner-right-down" class="h-5 inline-block" title="Sort order"></i>
-      <a class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'updated' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=updated">Updated</a>
-      <a class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'newest' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=newest">Newest</a>
-      <a class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'views' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=views">Views</a>
-      <a class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'alpha' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=alpha">Title</a>
+      <a id="dokno-order-link-updated" class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'updated' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=updated">Updated</a>
+      <a id="dokno-order-link-newest" class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'newest' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=newest">Newest</a>
+      <a id="dokno-order-link-views" class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'views' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=views">Views</a>
+      <a id="dokno-order-link-alpha" class="ml-3 pb-1 <%= 'border-b-2 border-blue-900' if @order == 'alpha' %>" href="?search_term=<%= CGI.escape @search_term.to_s %>&order=alpha">Title</a>
     </div>
   </div>
 
@@ -60,7 +63,7 @@
           <div class="flex">
             <div class="no-print w-10 text-gray-300"><i data-feather="chevron-right" class="inline-block"></i></div>
             <div class="w-full">
-              <a class="" href="<%= article_path article.slug %>?search_term=<%= @search_term %>" title="View article"><%= article.title %></a>
+              <a class="dokno-article-title" href="<%= article_path article.slug %>?search_term=<%= @search_term %>" title="View article"><%= article.title %></a>
             </div>
           </div>
         </div>

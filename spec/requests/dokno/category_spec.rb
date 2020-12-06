@@ -64,7 +64,7 @@ module Dokno
         expect(response.code).to eq '200'
         expect(response.body).to include "name=\"category\" id=\"category\""
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
-        expect(response.body).to include category.id.to_s
+        expect(response.body).to include category.code
         expect(response.body).to include category.name
 
         # Includes uncategorized article
@@ -80,7 +80,7 @@ module Dokno
         expect(response.code).to eq '200'
         expect(response.body).to include "name=\"category\" id=\"category\""
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
-        expect(response.body).to include category.id.to_s
+        expect(response.body).to include category.code
         expect(response.body).to include category.name
 
         # Does not include the categorized article
