@@ -3,6 +3,19 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.1.1
+### Added
+- Caching category hierarchy SELECT list OPTIONs
+
+### Changed
+- Increased font weight in flyout articles
+- Removed extraneous metadata from printed articles
+- Improved Faker seed data
+
+### Fixed
+- Search results count showed records on page instead of total results
+- Changing page number via input caused loss of category context
+
 ## 1.1.0
 ### Added
 - Ability to delete categories

@@ -39,7 +39,7 @@ module Dokno
         article = Article.create!(slug: 'slug', title: 'Test Title', summary: 'Test Summary banana', markdown: 'Test Markdown')
         article.categories << category
 
-        get "#{dokno.root_path}?id=#{another_category.id}&search_term=#{CGI.escape('summary banana')}"
+        get "#{dokno.article_index_path(another_category.code)}?search_term=#{CGI.escape('summary banana')}"
 
         expect(response.code).to eq '200'
         expect(response.body).to include "No articles"
@@ -47,7 +47,7 @@ module Dokno
         expect(response.body).to include "<span class=\"font-serif\">&ldquo;</span> summary banana <span class=\"font-serif\">&rdquo;</span>"
         expect(response.body).to include "No articles found in this category matching the given search criteria"
 
-        get "#{dokno.root_path}?id=#{category.id}&search_term=#{CGI.escape('summary banana')}"
+        get "#{dokno.article_index_path(category.code)}?search_term=#{CGI.escape('summary banana')}"
 
         expect(response.body).to include "1 article"
         expect(response.body).to include "found containing the search term"
@@ -75,14 +75,13 @@ module Dokno
       it 'returns a category index page' do
         article = Article.create!(slug: 'slug', title: 'Test Title', summary: 'Test Summary', markdown: 'Test Markdown')
 
-        get "#{dokno.root_path}?id=#{category.id}"
+        get "#{dokno.article_index_path(category.code)}?"
 
         expect(response.code).to eq '200'
         expect(response.body).to include "name=\"category\" id=\"category\""
         expect(response.body).to include "name=\"search_term\" id=\"search_term\""
         expect(response.body).to include category.id.to_s
         expect(response.body).to include category.name
-        expect(response.body).to include "<option value=\"#{category.code}\" selected=\"selected\">#{category.name}</option>"
 
         # Does not include the categorized article
         expect(response.body).not_to include article.title
@@ -90,7 +89,7 @@ module Dokno
 
         article.categories << category
 
-        get "#{dokno.root_path}?id=#{category.id}"
+        get "#{dokno.article_index_path(category.code)}?"
 
         # Now includes the categorized article
         expect(response.body).to include article.title

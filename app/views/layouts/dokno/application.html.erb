@@ -45,7 +45,7 @@
       <div class="text-center m-auto mb-10 w-full max-w-screen-xl">
         <% if @search_term.present? %>
           <div class="text-gray-600 text-2xl uppercase">
-            <%= (article_count = @articles.count).positive? ? "#{article_count} #{'article'.pluralize(article_count)}" : 'No articles' %>
+            <%= @total_records.positive? ? "#{@total_records} #{'article'.pluralize(@total_records)}" : 'No articles' %>
             found containing the search term
             <div class="text-4xl leading-tight"><span class="font-serif">&ldquo;</span> <%= @search_term %> <span class="font-serif">&rdquo;</span> </div>
           </div>
@@ -76,11 +76,10 @@
 
   <footer id="dokno-footer-container">
     <% if @article.present? && action_name == 'show' %>
-      <div id="dokno-article-log-container" data-category-id="<%= @category&.id %>" data-article-id="<%= @article&.id %>">
+      <div id="dokno-article-log-container" data-category-id="<%= @category&.id %>" data-article-id="<%= @article.id %>">
         <%= render 'partials/logs', category: @category, article: @article %>
       </div>
     <% end %>
-
 
     <div class="py-10 px-16 text-gray-400 bg-blue-900">
       <div class="w-full max-w-screen-xl m-auto flex">
@@ -99,7 +98,6 @@
         </div>
       </div>
     </div>
-
   </footer>
 
   <%= javascript_include_tag 'init' %>

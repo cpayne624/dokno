@@ -92,6 +92,20 @@ module Dokno
           expect(select_option_markup).not_to include "\"#{excluded_category.code}\""
         end
       end
+
+      describe '.cache_key' do
+        it 'returns the updated_at timestamp of the most-recently updated category' do
+          valid_category.save!
+          expected_cache_key = valid_category.updated_at
+
+          expect(Category.cache_key).to eq expected_cache_key
+
+          valid_category.update!(name: valid_category.name + 'changed')
+
+          expect(Category.cache_key).not_to eq expected_cache_key
+          expect(Category.cache_key).to eq valid_category.updated_at
+        end
+      end
     end
   end
 end
