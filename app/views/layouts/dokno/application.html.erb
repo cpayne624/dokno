@@ -101,5 +101,9 @@
   </footer>
 
   <%= javascript_include_tag 'init' %>
+
+  <% if @search_term.present? %>
+    <script>highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight');</script>
+  <% end %>
 </body>
 </html>

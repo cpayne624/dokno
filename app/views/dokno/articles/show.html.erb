@@ -2,7 +2,7 @@
 
 <% if @category.present? %>
   <div class="no-print text-gray-500 mb-5">
-    <div><a href="<%= article_index_path(@category.code) %>?search_term=<%= CGI.escape(@search_term.to_s) %>&order=<%= @order %>"><%= @category.breadcrumb %></a></div>
+    <div>Category: <a href="<%= article_index_path(@category.code) %>?search_term=<%= CGI.escape(@search_term.to_s) %>&order=<%= @order %>"><%= @category.breadcrumb %></a></div>
   </div>
 <% end %>
 
@@ -116,20 +116,20 @@
       <% if @article.summary.blank? && @article.markdown.blank? %>
         <div class="mb-10">No content</div>
       <% end %>
-
-      <% if can_edit? %>
-        <div class="no-print">
-          <hr class="mt-5" />
-          <div class="mt-10 text-right">
-            <% if @article.active %>
-              <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
-            <% else %>
-              <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
-            <% end %>
-            <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> PERMANENTLY DELETE</button>
-          </div>
-        </div>
-      <% end %>
     </div>
   </div>
 </section>
+
+<% if can_edit? %>
+  <div class="no-print">
+    <hr class="mt-5 mb-10" />
+    <div class="text-right">
+      <% if @article.active %>
+        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+      <% else %>
+        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+      <% end %>
+      <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> PERMANENTLY DELETE</button>
+    </div>
+  </div>
+<% end %>
