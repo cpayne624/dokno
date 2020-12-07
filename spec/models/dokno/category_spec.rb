@@ -94,8 +94,10 @@ module Dokno
       end
 
       describe '.cache_key' do
-        it 'returns the updated_at timestamp of the most-recently updated category' do
+        it 'returns the updated_at timestamp of the most-recently updated category or article' do
+          article = Article.create!(slug: 'testslug', title: 'Test Title', created_at: 1.day.ago, updated_at: 1.day.ago)
           valid_category.save!
+
           expected_cache_key = valid_category.updated_at
 
           expect(Category.cache_key).to eq expected_cache_key
@@ -104,6 +106,11 @@ module Dokno
 
           expect(Category.cache_key).not_to eq expected_cache_key
           expect(Category.cache_key).to eq valid_category.updated_at
+
+          article.update!(title: article.title + 'changed')
+
+          expect(Category.cache_key).not_to eq valid_category.updated_at
+          expect(Category.cache_key).to eq article.updated_at
         end
       end
     end

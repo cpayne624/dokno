@@ -1,29 +1,28 @@
 <%= render 'dokno/article_formatting' %>
 
-<section>
-  <% if @article.categories.present? %>
-    <div class="text-gray-500 mb-5">
-      <% @article.categories.each do |category| %>
-        <div><a href="<%= article_index_path(category.code) %>"><%= category.breadcrumb %></a></div>
-      <% end %>
-    </div>
-  <% end %>
+<% if @category.present? %>
+  <div class="no-print text-gray-500 mb-5">
+    <div><a href="<%= article_index_path(@category.code) %>?search_term=<%= CGI.escape(@search_term.to_s) %>&order=<%= @order %>"><%= @category.breadcrumb %></a></div>
+  </div>
+<% end %>
 
+<%= render 'partials/category_header' %>
+
+<div class="my-10 no-print"><hr /></div>
+
+<section>
   <div class="flex">
     <div id="dokno-article-sidebar" class="w-2/5 pr-10">
-      <div id="article-deprecated-alert" class="<%= 'hidden' if @article.active %> bg-yellow-700 p-4 mb-5 rounded text-lg border-t-4 border-yellow-900 text-white font-base">
-        <i data-feather="alert-circle" class="inline-block mr-2"></i> This article is no longer active
-      </div>
-
       <h1 class="dokno-article-content-highlight text-4xl mb-10 leading-tight font-light"><%= @article.title %></h1>
 
       <div>
         <div class="mb-10 no-print">
-          <button title="Email article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold text-xs" onclick="window.open('mailto:?subject=<%= CGI.escape(@article.title) %>&body=<%= CGI.escape(article_url(@article.slug)) %>');"><i data-feather="send" class="inline h-4"></i> EMAIL THIS</button>
-          <button title="Print article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold text-xs" onclick="window.print();"><i data-feather="printer" class="inline h-4"></i> PRINT THIS</button>
+          <button title="Copy link" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><i data-feather="clipboard" class="inline h-5"></i> COPY</button>
+          <button title="Email article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="window.open('mailto:?subject=<%= CGI.escape(@article.title.to_s) %>&body=<%= CGI.escape(article_url(@article.slug)) %>');"><i data-feather="send" class="inline h-5"></i> EMAIL</button>
+          <button title="Print article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="window.print();"><i data-feather="printer" class="inline h-5"></i> PRINT</button>
 
           <% if can_edit? %>
-            <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-xs" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-4"></i> EDIT THIS</button>
+            <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
           <% end %>
         </div>
 
@@ -93,12 +92,11 @@
           </div>
         <% end %>
 
-        <% if @article.categories.exists? %>
+        <% if (category_name_list = @article.category_name_list(context_category_id: @category&.id)).present? %>
           <div class="mt-5 flex no-print">
             <div class="no-print w-8"><i data-feather="folder" class="inline-block h-5"></i></div>
             <div class="w-full">
-              <%= 'Category'.pluralize @article.categories.count %>:<br />
-              <%= @article.category_name_list.split(':').last.html_safe %>
+              <%= category_name_list.sub(':', ':<br />').html_safe %>
             </div>
           </div>
         <% end %>
@@ -123,16 +121,15 @@
         <div class="no-print">
           <hr class="mt-5" />
           <div class="mt-10 text-right">
-            <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold text-xs <% if !@article.active %>hidden<% end %>" onclick="deactiveArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-4"></i> DEACTIVATE THIS</button>
-            <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-3 py-2 px-3 font-bold text-xs <% if @article.active %>hidden<% end %>" onclick="activeArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-4"></i> RE-ACTIVATE THIS</button>
-            <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-xs" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-4"></i> DELETE THIS</button>
+            <% if @article.active %>
+              <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+            <% else %>
+              <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+            <% end %>
+            <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> PERMANENTLY DELETE</button>
           </div>
         </div>
       <% end %>
     </div>
   </div>
 </section>
-
-<% if @search_term.present? %>
-  <script>highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight');</script>
-<% end %>

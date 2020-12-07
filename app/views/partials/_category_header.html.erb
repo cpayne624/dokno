@@ -1,0 +1,30 @@
+<div class="no-print flex items-center mb-10">
+  <% if Dokno::Category.exists? %>
+    <div class="w-1/2 pr-5">
+      <select aria-label="Category" name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="applyCategoryCriteria(this.value, elem('#search_term').value, '<%= @order %>');">
+        <option value="">Select a category</option>
+        <% cache Dokno::Category do %>
+          <%= Dokno::Category.select_option_markup.html_safe %>
+        <% end %>
+      </select>
+    </div>
+  <% end %>
+
+  <% if Dokno::Article.exists? %>
+    <div class="relative w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
+      <i data-feather="search" class="absolute ml-4 mt-3 inline-block text-gray-300" title="Search"></i>
+      <input title="Press / to search" onsearch="applyCategoryCriteria('<%= @category&.code %>', this.value, '<%= @order %>');" onfocus="disableSearchHotkey();" onblur="enableSearchHotkey();" placeholder="Search articles<%= ' under this category' if @category.present? %>" type="search" name="search_term" id="search_term" value="<%= @search_term %>" class="pl-12 pr-8 py-2 rounded text-xl shadow-inner bg-gray-100 w-full" />
+      <div title="Press / to search" class="absolute -ml-6 mt-3 inline-block text-gray-300 font-semibold">/</div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  // Client-side select of cached select list
+  selectOption('category', '<%= j @category&.code %>');
+  enableSearchHotkey();
+</script>
+
+<% if @search_term.present? %>
+  <script>highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight');</script>
+<% end %>

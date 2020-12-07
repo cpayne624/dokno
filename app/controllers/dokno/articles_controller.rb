@@ -8,7 +8,13 @@ module Dokno
 
     def show
       redirect_to root_path if @article.blank?
+
       @search_term = params[:search_term]
+      @order       = params[:order]
+      @category    = Category.find_by(code: params[:cat_code].to_s.strip) if params[:cat_code].present?
+      @category    = @article.categories.first if @category.blank?
+
+      flash.now[:yellow] = 'This article is no longer active' unless @article.active
     end
 
     def new
@@ -77,12 +83,6 @@ module Dokno
       set_editor_username
       @article.update!(active: params[:active])
       render json: {}, layout: false
-    end
-
-    # Ajax-fetched article change log
-    def article_log
-      render partial: '/partials/logs',
-        locals: { article: Article.find_by(id: params[:article_id].to_i) }, layout: false
     end
 
     private
