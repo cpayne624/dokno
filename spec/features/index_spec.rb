@@ -44,7 +44,7 @@ describe 'category index page', js: true do
 
     # Global search, not scoped to a category
     within('#dokno-content-container') do
-      select('Select a category', from: 'category').select_option
+      select('Uncategorized', from: 'category').select_option
     end
 
     expect(page).to have_content('2 articles')

@@ -13,17 +13,13 @@
 <section>
   <div class="flex">
     <div id="dokno-article-sidebar" class="w-2/5 pr-10">
-      <h1 class="dokno-article-content-highlight text-4xl mb-10 leading-tight font-light"><%= @article.title %></h1>
+      <h1 class="dokno-article-content-highlight text-4xl mb-8 leading-tight font-light"><%= @article.title %></h1>
 
       <div>
-        <div class="mb-10 no-print">
-          <button title="Copy link" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><i data-feather="clipboard" class="inline h-5"></i> COPY</button>
-          <button title="Email article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="window.open('mailto:?subject=<%= CGI.escape(@article.title.to_s) %>&body=<%= CGI.escape(article_url(@article.slug)) %>');"><i data-feather="send" class="inline h-5"></i> EMAIL</button>
-          <button title="Print article" class="bg-gray-600 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-sm" onclick="window.print();"><i data-feather="printer" class="inline h-5"></i> PRINT</button>
-
-          <% if can_edit? %>
-            <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
-          <% end %>
+        <div class="mb-8 no-print">
+          <button title="Copy link" class="bg-gray-600 text-gray-300 hover:text-white rounded my-2 mr-2 py-2 px-3 font-bold text-sm" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><i data-feather="clipboard" class="inline h-5"></i> COPY</button>
+          <button title="Email article" class="bg-gray-600 text-gray-300 hover:text-white rounded my-2 mr-2 py-2 px-3 font-bold text-sm" onclick="window.open('mailto:?subject=<%= CGI.escape(@article.title.to_s) %>&body=<%= CGI.escape(article_url(@article.slug)) %>');"><i data-feather="send" class="inline h-5"></i> EMAIL</button>
+          <button title="Print article" class="bg-gray-600 text-gray-300 hover:text-white rounded my-2 py-2 px-3 font-bold text-sm" onclick="window.print();"><i data-feather="printer" class="inline h-5"></i> PRINT</button>
         </div>
 
         <div class="flex">
@@ -124,12 +120,14 @@
   <div class="no-print">
     <hr class="mt-5 mb-10" />
     <div class="text-right">
+      <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
+
       <% if @article.active %>
-        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
       <% else %>
-        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-2 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
       <% end %>
-      <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> PERMANENTLY DELETE</button>
+      <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> DELETE</button>
     </div>
   </div>
 <% end %>

@@ -2,10 +2,13 @@
   <% if Dokno::Category.exists? %>
     <div class="w-1/2 pr-5">
       <select aria-label="Category" name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="applyCategoryCriteria(this.value, elem('#search_term').value, '<%= @order %>');">
-        <option value="">Select a category</option>
-        <% cache Dokno::Category do %>
-          <%= Dokno::Category.select_option_markup.html_safe %>
-        <% end %>
+        <option value="">Uncategorized</option>
+
+        <optgroup label="Categories">
+          <% cache Dokno::Category do %>
+            <%= Dokno::Category.select_option_markup.html_safe %>
+          <% end %>
+        </optgroup>
       </select>
     </div>
   <% end %>
