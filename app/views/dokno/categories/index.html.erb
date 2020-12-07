@@ -5,24 +5,7 @@
 <% end %>
 
 <% if Dokno::Category.exists? || Dokno::Article.exists? %>
-  <div class="flex items-center mb-10">
-    <% if Dokno::Category.exists? %>
-      <div class="w-1/2 pr-5">
-        <select aria-label="Category" name="category" id="category" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full" onchange="changeCategory(this.value, elem('#search_term').value, '<%= @order %>');">
-          <option value="">Select a category</option>
-          <% cache Dokno::Category do %>
-            <%= Dokno::Category.select_option_markup.html_safe %>
-          <% end %>
-        </select>
-      </div>
-    <% end %>
-
-    <% if Dokno::Article.exists? %>
-      <div class="w-<%= Dokno::Category.exists? ? '1/2 pl-5' : 'full' %>">
-        <input onsearch="search(this.value, '<%= @order %>');" placeholder="Search article content, titles, and slugs" type="search" name="search_term" id="search_term" value="<%= @search_term %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full" />
-      </div>
-    <% end %>
-  </div>
+  <%= render 'partials/category_header' %>
 <% end %>
 
 <% if @articles.blank? %>
@@ -63,7 +46,7 @@
           <div class="flex">
             <div class="no-print w-10 text-gray-300"><i data-feather="chevron-right" class="inline-block"></i></div>
             <div class="w-full">
-              <a class="dokno-article-title" href="<%= article_path article.slug %>?search_term=<%= @search_term %>" title="View article"><%= article.title %></a>
+              <a class="dokno-article-title <% unless article.active %>text-gray-500 italic<% end %>" href="<%= article_path article.slug %>?search_term=<%= @search_term %>&cat_code=<%= @category&.code %>&order=<%= @order %>" title="View article"><%= article.title %></a>
             </div>
           </div>
         </div>
@@ -74,10 +57,14 @@
             </div>
           <% end %>
 
-          <span class="dokno-article-content-highlight"><%= article.summary.presence || 'No summary provided' %></span>
+          <div class="dokno-article-content-highlight mb-2"><%= article.summary.presence || 'No summary provided' %></div>
+
+          <div class="text-base text-gray-500">
+            <%= article.category_name_list(context_category_id: @category&.id, order: @order, search_term: @search_term) %>
+          </div>
 
           <% unless @order == 'alpha' %>
-            <div class="text-base mt-2">
+            <div class="text-base">
               <% if @order == 'views' %>
                 <div class="text-gray-500">Viewed <%= number_with_delimiter(article.views, delimiter: ',') %> <%= 'time'.pluralize(article.views) %></div>
               <% elsif @order == 'updated' %>
@@ -100,11 +87,6 @@
   </div>
 <% end %>
 
-<script>
-  // Client-side select of cached select list
-  selectOption('category', '<%= j @category&.code %>');
-</script>
-
-<% if @search_term.present? %>
-  <script> highlightTerm(['<%= j @search_term.strip %>'], 'dokno-article-content-highlight'); </script>
+<% if @search_term.present? && @articles.blank? %>
+  <script> handleSearchHotKey(); </script>
 <% end %>

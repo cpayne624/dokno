@@ -18,6 +18,7 @@ module Dokno
     before_save :log_changes
     before_save :track_slug
 
+    scope :active,        -> { where(active: true) }
     scope :alpha_order,   -> { order(active: :desc, title: :asc) }
     scope :view_order,    -> { order(active: :desc, views: :desc, title: :asc) }
     scope :newest_order,  -> { order(active: :desc, created_at: :desc, title: :asc) }

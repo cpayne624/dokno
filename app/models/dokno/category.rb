@@ -59,7 +59,7 @@ module Dokno
 
     # Used to invalidate the fragment cache of the hierarchical category select options
     def self.cache_key
-      maximum :updated_at
+      [maximum(:updated_at), Article.maximum(:updated_at)].max
     end
 
     # The given Category and all child Categories. Useful for filtering associated articles.
@@ -109,7 +109,8 @@ module Dokno
       return '' if category.id == exclude_category_id
 
       selected = selected_category_codes&.include?(category.code)
-      %(<option value="#{category.code}" #{'selected="selected"' if selected}>#{('&nbsp;&nbsp;' * level)}#{category.name}</option>)
+      article_count = category.articles_in_branch.size
+      %(<option value="#{category.code}" #{'selected="selected"' if selected}>#{('&nbsp;&nbsp;' * level)}#{category.name}#{' (' + article_count.to_s + ')' if article_count.positive?}</option>)
     end
 
     # Never allow setting of parent to self

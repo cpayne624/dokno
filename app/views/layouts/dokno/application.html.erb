@@ -12,7 +12,7 @@
     var dokno__base_path = '<%= root_path %>';
   </script>
 </head>
-<body class="bg-white font-sans font-light subpixel-antialiased">
+<body class="bg-white font-sans font-light subpixel-antialiased text-lg">
 
   <nav id="dokno-nav-container" class="bg-blue-900 text-white py-10 px-16 text-lg">
     <div class="flex items-center m-auto w-full max-w-screen-xl">
@@ -40,6 +40,13 @@
     </div>
   </nav>
 
+  <% flash.each do |color, msg| %>
+    <div class="bg-<%= color %>-700 text-lg text-white font-base py-10 px-16">
+      <i data-feather="<%= (color == 'green' ? 'check-circle' : (color == 'yellow' ? 'alert-circle' : 'x-circle')) %>" class="inline mr-2"></i>
+      <%= msg %>
+    </div>
+  <% end %>
+
   <main class="py-10 px-16">
     <% if @article.blank? && (@category.blank? || @search_term.present?) %>
       <div class="text-center m-auto mb-10 w-full max-w-screen-xl">
@@ -63,13 +70,6 @@
     <% end %>
 
     <div id="dokno-content-container" class="w-full max-w-screen-xl m-auto print-this">
-      <% flash.each do |color, msg| %>
-        <div class="bg-<%= color %>-700 p-4 mb-5 rounded text-lg border-t-4 border-<%= color %>-900 text-white font-base">
-          <i data-feather="<%= (color == 'green' ? 'check-circle' : (color == 'yellow' ? 'alert-circle' : 'x-circle')) %>" class="inline mr-2"></i>
-          <%= msg %>
-        </div>
-      <% end %>
-
       <%= yield %>
     </div>
   </main>

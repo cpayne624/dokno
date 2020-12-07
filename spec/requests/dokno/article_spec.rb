@@ -187,21 +187,5 @@ module Dokno
         expect(article.reload.active).to be true
       end
     end
-
-    describe '#article_log' do
-      it 'returns article change log markup' do
-        old_title   = article.title
-        old_summary = article.summary
-        article.update!(title: article.title + 'new', summary: article.summary + 'new')
-
-        post dokno.article_log_path, params: { article_id: article.id }, xhr: true
-
-        expect(response.code).to eq '200'
-        expect(response.body).to include "Title changed from &#39;#{old_title}&#39; to &#39;#{article.title}&#39;"
-        expect(response.body).to include "Summary was changed"
-        expect(response.body).to include "<li class=\"del\"><del>#{old_summary}</del></li>"
-        expect(response.body).to include "<li class=\"ins\"><ins>#{old_summary}<strong>new</strong></ins></li>"
-      end
-    end
   end
 end

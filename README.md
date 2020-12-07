@@ -119,6 +119,8 @@ $ bundle exec rspec
 ```
 
 ## Hat Tips
+- [tailwindcss](https://tailwindcss.com/)
+  - CSS framework
 - [diffy](https://github.com/samg/diffy)
   - Text diffing Ruby gem
 - [Feather Icons](https://github.com/feathericons/feather)

@@ -1,5 +1,23 @@
+const dokno__search_hotkey_listener = function(e) {
+  if (e.key === '/') { handleSearchHotKey(); }
+}
+
+function handleSearchHotKey() {
+  const search_input = elem('input#search_term');
+  search_input.focus();
+  search_input.select();
+}
+
+function enableSearchHotkey() {
+  document.addEventListener('keyup', dokno__search_hotkey_listener, false);
+}
+
+function disableSearchHotkey() {
+  document.removeEventListener('keyup', dokno__search_hotkey_listener, false);
+}
+
 function copyToClipboard(text) {
-  window.prompt('Copy to clipboard: CTRL+C, Enter', text);
+  window.prompt('Copy to clipboard: CTRL + C, Enter', text);
 }
 
 function elem(selector) {
@@ -22,17 +40,18 @@ function selectOption(id, value) {
   }
 }
 
-function changeCategory(category_code, term, order) {
+function applyCategoryCriteria(category_code, term, order) {
   goToPage(dokno__base_path + category_code + '?search_term=' + term + '&order=' + order);
-}
-
-function search(term, order) {
-  goToPage('?search_term=' + term + '&order=' + order);
 }
 
 function goToPage(url) {
   var param_join = url.indexOf('?') >= 0 ? '&' : '?';
   location.href=url + param_join + '_=' + Math.round(new Date().getTime());
+}
+
+function reloadPage() {
+  window.onbeforeunload = function () { window.scrollTo(0, 0); }
+  location.reload();
 }
 
 function sendRequest(url, data, callback, method) {
@@ -55,23 +74,13 @@ function sendRequest(url, data, callback, method) {
   request.send(JSON.stringify(data));
 }
 
-function deactiveArticle(slug) {
-  const callback = function(_data) {
-    elem('button#article-deactivate-button').classList.add('hidden');
-    elem('div#article-deprecated-alert').classList.remove('hidden');
-    elem('button#article-activate-button').classList.remove('hidden');
-    reloadLogs();
-  }
+function deactivateArticle(slug) {
+  const callback = function(_data) { reloadPage(); }
   sendRequest(dokno__base_path + 'article_status', { slug: slug, active: false }, callback, 'POST');
 }
 
-function activeArticle(slug) {
-  const callback = function(_data) {
-    elem('button#article-activate-button').classList.add('hidden');
-    elem('div#article-deprecated-alert').classList.add('hidden');
-    elem('button#article-deactivate-button').classList.remove('hidden');
-    reloadLogs();
-  }
+function activateArticle(slug) {
+  const callback = function(_data) { reloadPage(); }
   sendRequest(dokno__base_path + 'article_status', { slug: slug, active: true }, callback, 'POST');
 }
 
@@ -146,18 +155,6 @@ function toggleVisibility(selector_id) {
   $icon.remove();
   elem('div.toggle-visibility-indicator-container.' + selector_id).appendChild(new_icon);
   initIcons();
-}
-
-function reloadLogs() {
-  var $log_container = elem('div#dokno-article-log-container');
-  var category_id = $log_container.getAttribute('data-category-id');
-  var article_id = $log_container.getAttribute('data-article-id');
-
-  const callback = function(markup) {
-    elem('div#dokno-article-log-container').innerHTML = markup;
-    initIcons();
-  }
-  sendRequest(dokno__base_path + 'article_log', { category_id: category_id, article_id: article_id }, callback, 'POST');
 }
 
 // Pass containers_selector as class name (no prefix)
