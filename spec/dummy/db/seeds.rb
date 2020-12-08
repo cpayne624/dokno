@@ -23,7 +23,6 @@ module Dokno
 #{Faker::Lorem.paragraph(sentence_count: 20, random_sentences_to_add: 50)}
 
 ### #{Faker::Company.catch_phrase}
-#{Faker::Markdown.table}
 #{Faker::Lorem.paragraph(sentence_count: 20, random_sentences_to_add: 50)}
       )
   end
