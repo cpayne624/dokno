@@ -59,7 +59,7 @@ module Dokno
 
     # Used to invalidate the fragment cache of the hierarchical category select options
     def self.cache_key
-      [maximum(:updated_at), Article.maximum(:updated_at)].max
+      updated_timestamps = [maximum(:updated_at), Article.maximum(:updated_at)].compact.max
     end
 
     # The given Category and all child Categories. Useful for filtering associated articles.
