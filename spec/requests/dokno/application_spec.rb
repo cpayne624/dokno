@@ -54,8 +54,15 @@ module Dokno
       end
 
       context 'improper host app user configuration' do
-        it 'indicates that the authenticated host app user has edit permissions by default' do
+        it 'indicates that the authenticated host app user does not have edit permissions' do
           allow(Dokno.config).to receive(:app_user_object).and_return('bogus')
+          expect(subject.can_edit?).to be false
+        end
+      end
+
+      context 'host app user setting not configured' do
+        it 'indicates that the authenticated host app user has edit permissions by default' do
+          allow(Dokno.config).to receive(:app_user_object).and_return('')
           expect(subject.can_edit?).to be true
         end
       end

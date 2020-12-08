@@ -3,6 +3,17 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.2.1
+### Fixed
+- Problem with invalidating the category option cache when no category is yet in the database
+
+## 1.2.0
+### Added
+- Search hotkey
+- Category context to article pages
+- Article counts to category options list
+- Capybara tests
+
 ## 1.1.1
 ### Added
 - Caching category hierarchy SELECT list OPTIONs

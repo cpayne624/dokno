@@ -8,8 +8,6 @@ module Dokno
 
     def user
       # Attempt to eval the currently signed in 'user' object from the host app
-      sanitized_user_obj_string = Dokno.config.app_user_object.to_s.split(/\b/).first
-
       proc {
         $safe = 1
         eval sanitized_user_obj_string
@@ -19,13 +17,17 @@ module Dokno
       nil
     end
 
+    def sanitized_user_obj_string
+      Dokno.config.app_user_object.to_s.split(/\b/).first
+    end
+
     def username
       user&.send(Dokno.config.app_user_name_method.to_sym).to_s
     end
 
     def can_edit?
       # Allow editing by default if host app user object is not configured
-      return true  unless user.present?
+      return true  unless sanitized_user_obj_string.present?
       return false unless user.respond_to? Dokno.config.app_user_auth_method.to_sym
 
       user.send(Dokno.config.app_user_auth_method.to_sym)
