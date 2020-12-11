@@ -2,6 +2,8 @@
 <html>
 <head>
   <title><%= Dokno.config.app_name %> KNOWLEDGEBASE</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -24,12 +26,12 @@
       <div class="w-2/3 text-right">
         <% if can_edit? %>
           <% if action_name != 'new' %>
-            <button title="Add a new article" class="bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= new_article_path %>/?category_code=<%= @category&.code %>';"><i data-feather="plus-circle" class="inline h-5"></i> ARTICLE</button>
-            <button title="Add a new category" class="bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= new_category_path %>/?parent_category_code=<%= @category&.code %>';"><i data-feather="plus-circle" class="inline h-5"></i> CATEGORY</button>
+            <button title="Add a new article" class="bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= new_article_path %>/?category_code=<%= @category&.code %>';"><i data-feather="plus" class="inline h-5"></i> ARTICLE</button>
+            <button title="Add a new category" class="bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= new_category_path %>/?parent_category_code=<%= @category&.code %>';"><i data-feather="plus" class="inline h-5"></i> CATEGORY</button>
           <% end %>
 
           <% if @category&.persisted? && action_name != 'edit' %>
-            <button title="Edit this category" class="bg-gray-700 text-gray-100 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit" class="inline h-5"></i> CATEGORY</button>
+            <button title="Edit this category" class="bg-gray-700 text-gray-100 hover:text-white hover:bg-gray-900 rounded ml-3 py-2 px-3 font-bold text-base" onclick="location.href='<%= edit_category_path(@category) %>';"><i data-feather="edit-2" class="inline h-5"></i> CATEGORY</button>
           <% end %>
         <% end %>
 
@@ -40,15 +42,15 @@
     </div>
   </nav>
 
-  <% flash.each do |color, msg| %>
-    <div class="bg-<%= color %>-700 text-lg text-white font-base py-10 px-16">
-      <i data-feather="<%= (color == 'green' ? 'check-circle' : (color == 'yellow' ? 'alert-circle' : 'x-circle')) %>" class="inline mr-2"></i>
-      <%= msg %>
+  <% flash.each do |type, msg| %>
+    <div class="bg-<%= type %>-800 text-lg text-white font-base py-10 px-16 text-center">
+      <i data-feather="<%= (type == 'green' ? 'smile' : (type == 'yellow' ? 'info' : (type == 'gray' ? 'bell' : 'frown'))) %>" class="inline mr-1"></i>
+      <%= sanitize(msg, tags: %w[a], attributes: %w[href class]) %>
     </div>
   <% end %>
 
   <main class="py-10 px-16">
-    <% if @article.blank? && (@category.blank? || @search_term.present?) %>
+    <% if !current_page?(up_for_review_path) && @article.blank? && (@category.blank? || @search_term.present?) %>
       <div class="text-center m-auto mb-10 w-full max-w-screen-xl">
         <% if @search_term.present? %>
           <div class="text-gray-600 text-2xl uppercase">
@@ -81,10 +83,24 @@
       </div>
     <% end %>
 
+    <% if can_edit? && !current_page?(up_for_review_path) && action_name == 'index' && (up_for_review_count = Dokno::Article.up_for_review.count).positive? %>
+      <div id="dokno-articles-up-for-review-container">
+        <div class="py-10 px-16 bg-gray-900">
+          <div class="w-full max-w-screen-xl m-auto">
+            <div class="text-xl text-white cursor-pointer" onclick="location.href='<%= up_for_review_path %>';">
+              <i data-feather="bell" class="inline mr-1"></i>
+              There <%= "#{up_for_review_count == 1 ? 'is' : 'are'} #{up_for_review_count}" %> <%= 'article'.pluralize(up_for_review_count) %> up for accuracy / relevance review
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="py-10 px-16 text-gray-400 bg-blue-900">
       <div class="w-full max-w-screen-xl m-auto flex">
         <div class="w-1/2">
-          <a target="_blank" href="https://github.com/cpayne624/dokno" title="Knowledgebase">dokno</a>
+          <i data-feather="github" class="inline mr-1"></i>
+          <a target="_blank" href="https://github.com/cpayne624/dokno" title="Dokno on GitHub">dokno</a>
         </div>
         <div class="w-1/2 text-right">
           <% if user.present? %>

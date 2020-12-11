@@ -1,3 +1,4 @@
+DatabaseCleaner.allow_remote_database_url = true
 DatabaseCleaner.clean_with(:truncation)
 
 module Dokno
@@ -51,10 +52,11 @@ module Dokno
   Category.find_each do |category|
     rand(0..15).times do
       category.articles << Article.new(
-        slug:     Faker::Lorem.characters(number: 12),
-        title:    Faker::Company.catch_phrase,
-        summary:  Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
-        markdown: faker_markdown
+        slug:          Faker::Lorem.characters(number: 12),
+        title:         Faker::Company.catch_phrase,
+        summary:       Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
+        markdown:      faker_markdown,
+        review_due_at: Date.today + (rand(-30..365)).days
       )
       show_progress
     end
@@ -63,13 +65,17 @@ module Dokno
   show_step 'Uncategorized articles'
   15.times do
     Article.create(
-      slug:     Faker::Lorem.characters(number: 12),
-      title:    Faker::Company.catch_phrase,
-      summary:  Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
-      markdown: faker_markdown
+      slug:          Faker::Lorem.characters(number: 12),
+      title:         Faker::Company.catch_phrase,
+      summary:       Faker::Lorem.paragraph(sentence_count: 5, random_sentences_to_add: 10),
+      markdown:      faker_markdown,
+      review_due_at: Date.today + (rand(-30..365)).days
     )
     show_progress
   end
+
+  show_step 'Starred articles'
+  Article.where(id: Article.all.pluck(:id).shuffle.first(15)).update_all(starred: true)
 
   show_done
 end

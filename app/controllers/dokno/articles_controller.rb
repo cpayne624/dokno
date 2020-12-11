@@ -14,7 +14,13 @@ module Dokno
       @category    = Category.find_by(code: params[:cat_code].to_s.strip) if params[:cat_code].present?
       @category    = @article.categories.first if @category.blank?
 
-      flash.now[:yellow] = 'This article is no longer active' unless @article.active
+      if !@article.active
+        flash.now[:yellow] = 'This article is no longer active'
+      elsif @article.up_for_review?
+        flash_msg = @article.review_due_days_string
+        flash_msg += " - <a href='#{edit_article_path(@article.slug)}' class='font-bold'>review it now</a>" if can_edit?
+        flash.now[:gray] = flash_msg
+      end
     end
 
     def new
@@ -33,7 +39,7 @@ module Dokno
       set_editor_username
 
       if @article.save
-        flash[:green] = 'Article was created'
+        flash[:green]       = 'Article was created'
         @article.categories = Category.where(code: params[:category_code]) if params[:category_code].present?
         redirect_to article_path @article.slug
       else
@@ -50,12 +56,14 @@ module Dokno
       set_editor_username
 
       if @article.update(article_params)
-        flash[:green] = 'Article was updated'
+        flash[:green]       = 'Article was updated'
         @article.categories = Category.where(code: params[:category_code])
         redirect_to article_path @article.slug
       else
-        flash.now[:red] = 'Article could not be updated'
-        @category_codes = params[:category_code]
+        flash.now[:red]    = 'Article could not be updated'
+        @category_codes    = params[:category_code]
+        @reset_review_date = params[:reset_review_date]
+        @review_notes      = params[:review_notes]
         render :edit
       end
     end
@@ -88,7 +96,7 @@ module Dokno
     private
 
     def article_params
-      params.permit(:slug, :title, :summary, :markdown)
+      params.permit(:slug, :title, :summary, :markdown, :reset_review_date, :review_notes, :starred)
     end
 
     def fetch_article

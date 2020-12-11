@@ -99,21 +99,28 @@ module Dokno
           original_attrs = valid_article.attributes
           valid_article.save
           valid_article.update!(
-            active:   false,
-            slug:     valid_article.slug + 'new',
-            title:    valid_article.title + 'new',
-            summary:  valid_article.summary + 'new',
-            markdown: valid_article.markdown + 'new'
+            reset_review_date: true,
+            active:            false,
+            review_notes:      Faker::Lorem.paragraph,
+            slug:              valid_article.slug + 'new',
+            title:             valid_article.title + 'new',
+            summary:           valid_article.summary + 'new',
+            markdown:          valid_article.markdown + 'new'
           )
 
-          expect(valid_article.logs.count).to eq 2
-          expect(valid_article.logs.last.meta).to eq "Slug changed from 'slug' to 'slugnew', "\
+          expect(valid_article.logs.count).to eq 3
+          expect(valid_article.logs.second.meta).to eq "Slug changed from 'slug' to 'slugnew', "\
             "Title changed from 'Test Title' to 'Test Titlenew', Active changed from 'true' to "\
             "'false', Summary was changed, and Markdown was changed"
-          expect(valid_article.logs.last.diff_left).to include "<li class=\"del\"><del>"\
+          expect(valid_article.logs.second.diff_left).to include "<li class=\"del\"><del>"\
             "#{original_attrs['summary']} #{original_attrs['markdown']}</del></li>"
-          expect(valid_article.logs.last.diff_right).to include "<li class=\"ins\"><ins>"\
+          expect(valid_article.logs.second.diff_right).to include "<li class=\"ins\"><ins>"\
             "#{original_attrs['summary']}<strong>new</strong> #{original_attrs['markdown']}<strong>new</strong></ins></li>"
+
+          expect(valid_article.logs.third.meta).to include "Reviewed for accuracy / relevance. "\
+            "Next review date reset to #{valid_article.review_due_at.to_date}."
+
+          expect(valid_article.logs.third.meta).to include valid_article.review_notes
         end
       end
 

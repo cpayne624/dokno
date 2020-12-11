@@ -1,66 +1,41 @@
-<div id="dummy-page">
-  <h1>A page in your app</h1>
+<h1>Dokno Example Rails App</h1>
+<p>This is a minimal example Rails app with the <a href="https://github.com/cpayne624/dokno" target="_blank">Dokno engine</a> mounted.</p>
+<p>Dokno can be mounted to your desired path within your app. The demo path has been configured to <%= dokno_path %>.</p>
+
+<blockquote>
+  <a href="<%= dokno_path %>" target="_blank">Open the Demo</a>
+</blockquote>
+
+<h2>Source</h2>
+<p>Reference the <a href="https://github.com/cpayne624/try_dokno" target="_blank">repo for this site</a> for example configuration.</p>
+
+<% unless Dokno::Article.exists? %>
+  <h2>Demo</h2>
+  <p>
+    The above link will take you to the mounted Dokno site.
+  </p>
+<% else %>
+  <h2>A page in your app</h2>
   <p>
     This might be something in your app that needs clarification or further<br />
-    background, with an <%= dokno_article_link('in-context link like this one', slug: Dokno::Article.take&.slug) %>,
+    background, with an <%= dokno_article_link('in-context link like this one', slug: Dokno::Article.take&.slug) %>
     that explains it all.<br />
     Clicking that link opens a flyout within your app (to the right) containing<br />
     the article referenced by its unique slug or token.
   </p>
 
-  <h2>Inline Article View Helper</h2>
+  <h2>Flyout Article View Helper</h2>
   <p>
-    You can add these in-context article links within your app via this Rails helper:
+    You can add in-context article links like these within your app via the <tt>dokno_article_link</tt> view helper:
   </p>
-  <p>
-    &lt;%= dokno_article_link({link-text}, slug: {unique-article-slug}) %&gt;
-  </p>
+  <blockquote>
+    <tt>&lt;%= dokno_article_link({link-text}, slug: {unique-article-slug}) %&gt;</tt>
+  </blockquote>
 
-  <h2>Defined Articles</h2>
+  <h2>Created Articles</h2>
   <ul>
-    <% Dokno::Article.select(:slug, :title).order(:title).each do |article| %>
+    <% Dokno::Article.select(:slug, :title).alpha_order.each do |article| %>
       <li><%= dokno_article_link(article.title, slug: article.slug) %> (<%= article.slug %>)</li>
     <% end %>
   </ul>
-
-  <% if (stale_slug = Dokno::ArticleSlug.take&.slug).present? %>
-    <h2>Link With Stale Slug</h2>
-    <p>
-      <%= dokno_article_link("Link to stale slug #{stale_slug}", slug: stale_slug) %>
-    </p>
-  <% end %>
-
-  <h2>Link With Missing Slug</h2>
-  <p>
-    <%= dokno_article_link('Link to bogus slug', slug: '') %>
-  </p>
-
-  <h2>Link With Invalid Slug</h2>
-  <p>
-    <%= dokno_article_link('Link to bogus slug', slug: 'doesnotexist') %>
-  </p>
-
-  <hr />
-
-  <p>
-    <a target="_blank" href="<%= dokno_path %>">Open the knowledgebase site</a>
-  </p>
-
-  <hr />
-
-  <p>
-    Lorem ipsum dolor sit amet, consecutive adipiscing elit, updated. Vivamus a leo ut sem dapibus porta. Sed sagittis velit ac lorem hendrerit dapibus. Nullam tincidunt ultricies accumsan. In pellentesque feugiat ornare. Sed pulvinar metus vel pharetra gravida. Nulla vitae auctor lectus. Sed gravida cursus est ut congue. Vestibulum nisl tellus, faucibus sit amet nibh quis, congue ultricies nisi. Vivamus eu facilisis diam. Morbi id euismod sapien.
-  </p>
-
-  <p>
-    Lorem ipsum dolor sit amet, consecutive adipiscing elit, updated. Vivamus a leo ut sem dapibus porta. Sed sagittis velit ac lorem hendrerit dapibus. Nullam tincidunt ultricies accumsan. In pellentesque feugiat ornare. Sed pulvinar metus vel pharetra gravida. Nulla vitae auctor lectus. Sed gravida cursus est ut congue. Vestibulum nisl tellus, faucibus sit amet nibh quis, congue ultricies nisi. Vivamus eu facilisis diam. Morbi id euismod sapien.
-  </p>
-
-  <p>
-    Lorem ipsum dolor sit amet, consecutive adipiscing elit, updated. Vivamus a leo ut sem dapibus porta. Sed sagittis velit ac lorem hendrerit dapibus. Nullam tincidunt ultricies accumsan. In pellentesque feugiat ornare. Sed pulvinar metus vel pharetra gravida. Nulla vitae auctor lectus. Sed gravida cursus est ut congue. Vestibulum nisl tellus, faucibus sit amet nibh quis, congue ultricies nisi. Vivamus eu facilisis diam. Morbi id euismod sapien.
-  </p>
-
-  <p>
-    Lorem ipsum dolor sit amet, consecutive adipiscing elit, updated. Vivamus a leo ut sem dapibus porta. Sed sagittis velit ac lorem hendrerit dapibus. Nullam tincidunt ultricies accumsan. In pellentesque feugiat ornare. Sed pulvinar metus vel pharetra gravida. Nulla vitae auctor lectus. Sed gravida cursus est ut congue. Vestibulum nisl tellus, faucibus sit amet nibh quis, congue ultricies nisi. Vivamus eu facilisis diam. Morbi id euismod sapien.
-  </p>
-</div>
+<% end %>

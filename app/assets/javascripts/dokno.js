@@ -175,3 +175,22 @@ function highlightTerm(terms, containers_selector) {
 function wrapTermWithHTML(term) {
   return `<span title="Matching search term" class="dokno-search-term bg-yellow-300 text-gray-900 p-2 rounded mx-1">${term}</span>`
 }
+
+function setReviewForm() {
+  const reset_review_date_checkbox = elem('input#reset_review_date');
+  const review_notes_textarea = elem('textarea#review_notes');
+
+  if (!reset_review_date_checkbox) {
+    return true;
+  }
+
+  if (reset_review_date_checkbox.checked) {
+    review_notes_textarea.removeAttribute('disabled');
+    review_notes_textarea.classList.remove('cursor-not-allowed');
+    review_notes_textarea.focus();
+  } else {
+    review_notes_textarea.setAttribute('disabled', 'disabled');
+    review_notes_textarea.classList.add('cursor-not-allowed');
+    reset_review_date_checkbox.focus();
+  }
+}

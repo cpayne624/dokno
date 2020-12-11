@@ -4,10 +4,6 @@ module Dokno
   class Engine < ::Rails::Engine
     isolate_namespace Dokno
 
-    initializer 'Dokno precompile', group: :all do |app|
-      app.config.assets.precompile << "dokno_manifest.js"
-    end
-
     config.generators do |g|
       g.test_framework :rspec
     end
@@ -16,6 +12,10 @@ module Dokno
       config.paths["db/migrate"].expanded.each do |expanded_path|
         app.config.paths["db/migrate"] << expanded_path
       end
+    end
+
+    initializer 'Dokno precompile', group: :all do |app|
+      app.config.assets.precompile << "dokno_manifest.js"
     end
 
     initializer 'local_helper.action_controller' do

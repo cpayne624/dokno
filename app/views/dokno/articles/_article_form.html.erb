@@ -3,8 +3,31 @@
 <section class="mb-10">
 
   <div class="text-2xl mb-5 text-gray-500"><%= article.persisted? ? 'Edit' : 'New' %> Article</div>
-  <h1 class="text-4xl mb-5 leading-tight font-light"><%= article.title %></h1>
-  <hr class="mb-5" />
+  <h1 class="text-4xl leading-tight font-light"><%= article.title %></h1>
+  <hr class="mt-8 mb-10" />
+
+  <% if article.up_for_review? %>
+    <div class="bg-gray-800 text-gray-100 rounded mb-10">
+      <h2 class="bg-gray-900 p-10 rounded-t text-2xl leading-tight font-light">Review for Accuracy / Relevance</h2>
+
+      <div class="flex p-10">
+        <div class="w-1/2 pr-5">
+          <div>
+            <span class="text-lg font-semibold"><label for="reset_review_date">Reset the next review date?</label></span>
+            <input onchange="setReviewForm();" type="checkbox" name="reset_review_date" id="reset_review_date" value="true" class="ml-2 text-lg" <%= "checked='checked'" if @reset_review_date %> />
+          </div>
+          <div class="text-gray-400">
+            <%= article.review_due_days_string %>.
+            Check the box above to mark this article as reviewed and reset the next review date to <span class="px-2 py-1 bg-gray-900 rounded text-white font-semibold"><%= "#{Date.today + Dokno.config.article_review_period}" %></span>
+          </div>
+        </div>
+        <div class="w-1/2">
+          <div class="text-lg font-semibold"><label for="review_notes">Reviewer Notes</label></div>
+          <textarea placeholder="Any review notes here will be added to the change history for this article" name="review_notes" id="review_notes" class="rounded text-xl shadow-inner bg-gray-100 p-3 mt-2 w-full text-gray-900" rows="2"><%= @review_notes %></textarea>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <div class="mb-5">
     <div class="text-lg font-semibold"><label for="slug">Slug</label></div>
@@ -27,7 +50,7 @@
     </div>
   <% end %>
 
-  <hr class="mb-5" />
+  <hr class="my-10" />
 
   <div class="mb-5">
     <div class="text-lg font-semibold"><label for="title">Title</label></div>
@@ -52,11 +75,27 @@
     <div class="text-gray-500 mt-2">Detailed documentation of the described topic. Basic HTML &amp; <a target="_blank" href="https://commonmark.org/help/" title="Markdown formatting examples">markdown</a> OK.</div>
   </div>
 
-  <div class="mt-10 text-right">
+  <div class="mb-5">
+    <div>
+      <span class="text-lg font-semibold"><label for="starred">Starred article?</label></span>
+      <input type="hidden" name="starred" value="false" />
+      <input type="checkbox" name="starred" id="starred" value="true" class="ml-2 text-lg" <%= "checked='checked'" if article.starred %> />
+    </div>
+    <div class="text-gray-400">
+      Starred articles are always listed first when browsing.
+    </div>
+  </div>
+
+  <hr class="my-10" />
+
+  <div class="text-right">
     <span class="text-lg mr-5"><a class="no-underline" href="<%= article.persisted? ? article_path(article.slug) : root_path %>">Cancel</a></span>
     <button type="submit" class="bg-gray-700 text-gray-300 hover:bg-gray-900 hover:text-white rounded py-2 px-3 font-bold"><i data-feather="check" class="inline h-5"></i> SAVE ARTICLE</button>
   </div>
 
 </section>
 
-<script> elem('input#slug').focus(); </script>
+<script>
+  elem('input#slug').focus();
+  setReviewForm();
+</script>
