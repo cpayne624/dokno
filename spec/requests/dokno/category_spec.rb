@@ -3,6 +3,22 @@ module Dokno
     let!(:category) { Category.create!(name: 'Test Category') }
 
     describe '#index' do
+      it 'returns articles that are up for review' do
+        days_out = Dokno.config.article_review_prompt_days
+        article_not_up_for_review = Article.create!(slug: 'slug1', title: 'Test Title 1', review_due_at: Date.today + (days_out + 1).days)
+        article_up_for_review     = Article.create!(slug: 'slug2', title: 'Test Title 2', review_due_at: Date.today + days_out.days)
+        article_past_due          = Article.create!(slug: 'slug3', title: 'Test Title 3', review_due_at: Date.today - 1.day)
+
+        get dokno.up_for_review_path
+
+        expect(response.body).to include article_up_for_review.title
+        expect(response.body).to include article_past_due.title
+        expect(response.body).not_to include article_not_up_for_review.title
+        expect(response.body.squish).to include "2 articles up for review"
+        expect(response.body).to include "This article was up for an accuracy / relevance review 1 days ago"
+        expect(response.body).to include "This article is up for an accuracy / relevance review in #{days_out} days"
+      end
+
       it 'returns search results (all articles)' do
         article = Article.create!(slug: 'slug', title: 'Test Title', summary: 'Test Summary banana', markdown: 'Test Markdown')
 

@@ -45,12 +45,7 @@ module Dokno
         .joins(:categories)
         .where(dokno_categories: { id: self.class.branch(parent_category_id: id).pluck(:id) })
 
-      records = records.updated_order if order == :updated
-      records = records.newest_order  if order == :newest
-      records = records.view_order    if order == :views
-      records = records.alpha_order   if order == :alpha
-
-      records
+      Article.apply_sort(records, order: order)
     end
 
     def branch
@@ -59,7 +54,7 @@ module Dokno
 
     # Used to invalidate the fragment cache of the hierarchical category select options
     def self.cache_key
-      updated_timestamps = [maximum(:updated_at), Article.maximum(:updated_at)].compact.max
+      [maximum(:updated_at), Article.maximum(:updated_at)].compact.max
     end
 
     # The given Category and all child Categories. Useful for filtering associated articles.

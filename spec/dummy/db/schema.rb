@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_190330) do
+ActiveRecord::Schema.define(version: 2020_12_13_165700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 2020_12_03_190330) do
     t.boolean "active", default: true
     t.bigint "views", default: 0
     t.datetime "last_viewed_at"
+    t.datetime "review_due_at"
+    t.boolean "starred", default: false
+    t.index ["review_due_at"], name: "index_dokno_articles_on_review_due_at"
     t.index ["slug"], name: "index_dokno_articles_on_slug", unique: true
   end
 

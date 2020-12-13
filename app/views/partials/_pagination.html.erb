@@ -1,28 +1,31 @@
-<span class="mr-5">
-  <% if @page > 1 %>
-    <span class="mr-1 inline-block"><a href="?search_term=<%= CGI.escape @search_term.to_s %>&order=<%= @order %>&page=<%= (@page - 1) %>"><i data-feather="arrow-left" class="h-5 inline-block" title="Previous page"></i></a></span>
-  <% end %>
+<% if @total_pages > 1 %>
+  <span class="mr-5">
+    <% if @page > 1 %>
+      <span class="mr-1 inline-block"><a href="?search_term=<%= CGI.escape @search_term.to_s %>&order=<%= @order %>&page=<%= (@page - 1) %>"><i data-feather="arrow-left" class="h-5 inline-block" title="Previous page"></i></a></span>
+    <% end %>
 
-  <span class="mr-1 inline-block">Page</span>
+    <span class="mr-1 inline-block">Page</span>
 
-  <%= form_with(url: article_index_path(@category&.code), method: :get, class: 'inline') do %>
-    <input type="hidden" name="search_term" value="<%= @search_term %>">
-    <input type="hidden" name="order" value="<%= @order %>">
-    <input aria-label="Page" type="text" name="page" value="<%= @page %>" onclick="this.select();" class="w-10 text-center bg-gray-200 rounded" />
+    <%= form_with(url: article_index_path(@category&.code), method: :get, class: 'inline') do %>
+      <input type="hidden" name="search_term" value="<%= @search_term %>">
+      <input type="hidden" name="order" value="<%= @order %>">
+      <input aria-label="Page" type="text" name="page" value="<%= @page %>" onclick="this.select();" class="w-10 text-center bg-gray-200 rounded" />
 
-    <span class="mx-1 inline-block">of</span>
-    <span class="text-center inline-block"><%= @total_pages %></span>
-  <% end %>
+      <span class="mx-1 inline-block">of</span>
+      <span class="text-center inline-block"><%= @total_pages %></span>
+    <% end %>
 
-  <% if @page < @total_pages %>
-    <span class="ml-1 inline-block"><a href="?search_term=<%= CGI.escape @search_term.to_s %>&order=<%= @order %>&page=<%= (@page + 1) %>"><i data-feather="arrow-right" class="h-5 inline-block" title="Next page"></i></a></span>
-  <% end %>
-</span>
+    <% if @page < @total_pages %>
+      <span class="ml-1 inline-block"><a href="?search_term=<%= CGI.escape @search_term.to_s %>&order=<%= @order %>&page=<%= (@page + 1) %>"><i data-feather="arrow-right" class="h-5 inline-block" title="Next page"></i></a></span>
+    <% end %>
+  </span>
+<% end %>
 
 <span class="text-gray-400">
   <%= @total_records %>
-  <%= 'uncategorized' if @category.blank? && @search_term.blank? %>
+  <%= 'uncategorized' if !current_page?(up_for_review_path) && @category.blank? && @search_term.blank? %>
   <%= 'article'.pluralize(@total_records) %>
+  <%= 'up for review' if current_page?(up_for_review_path) %>
 
   <% if @search_term.present? %>
     containing <span class="font-serif">&ldquo;</span><%= @search_term %><span class="font-serif">&rdquo;</span>

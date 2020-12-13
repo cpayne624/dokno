@@ -36,11 +36,11 @@ To enable [in-context articles](#in-context-article-links) in your app, add the 
 <%= render 'dokno/article_panel' %>
 ```
 
-## Screenshots
+### Configuration
 
-| Landing Page  | Article | Editing an Article  | Article Flyout |
-| ------------- | ------------- | ------------- | ------------- |
-| <img src="./README/landing_page.png" width="250"> | <img src="./README/article.png" width="250"> | <img src="./README/article_edit.png" width="250"> | <img src="./README/host_app_flyout.png" width="250"> |
+#### Dokno Settings
+
+Running `rails g dokno:install` creates `/config/initializers/dokno.rb` within your app, containing the available Dokno configuration options. Remember to restart your app whenever you make configuration changes.
 
 ### Articles
 
@@ -71,8 +71,6 @@ Each article has a unique `slug` or token that is used to access it from within 
 Clicking a link fetches the article asynchronously and reveals it to the user via flyout panel overlay within your app.
 
     <%= dokno_article_link({link-text}, slug: {unique-article-slug}) %>
-
-<img src="./README/host_app_flyout.png" width="50%">
 
 ### Dokno Data Querying
 You typically won't need to interact with Dokno data directly, but it is stored within your database and is accessible via ActiveRecord as is any other model.

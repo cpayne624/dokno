@@ -13,7 +13,10 @@
 <section>
   <div class="flex">
     <div id="dokno-article-sidebar" class="w-2/5 pr-10">
-      <h1 class="dokno-article-content-highlight text-4xl mb-8 leading-tight font-light"><%= @article.title %></h1>
+      <h1 class="dokno-article-content-highlight text-4xl mb-8 leading-tight font-light">
+        <%= @article.title %>
+        <% if @article.starred %><i title="Starred article" data-feather="star" class="inline align-middle"></i><% end %>
+      </h1>
 
       <div>
         <div class="mb-8 no-print">
@@ -23,7 +26,7 @@
         </div>
 
         <div class="flex">
-          <div class="no-print w-8"><i data-feather="clock" class="inline-block h-5"></i></div>
+          <div class="no-print w-8"><i data-feather="clock" class="inline-block h-5 mr-2"></i></div>
           <div class="w-full">
             Last updated:<br />
             <%= time_ago_in_words @article.updated_at %> ago
@@ -34,7 +37,7 @@
         </div>
 
         <div class="mt-5 flex no-print">
-          <div class="no-print w-8"><i data-feather="eye" class="inline-block h-5"></i></div>
+          <div class="no-print w-8"><i data-feather="eye" class="inline-block h-5 mr-2"></i></div>
           <div class="w-full">
             Views:<br />
             <%= number_with_delimiter(@article.views, delimiter: ',') %>
@@ -43,7 +46,7 @@
 
         <% if @article.contributors.present? %>
           <div class="mt-5 flex">
-            <div class="no-print w-8"><i data-feather="user-check" class="inline-block h-5"></i></div>
+            <div class="no-print w-8"><i data-feather="user-check" class="inline-block h-5 mr-2"></i></div>
             <div class="w-full">
               Contributors:<br />
               <%= @article.contributors %>
@@ -53,7 +56,7 @@
 
         <% if @article.reading_time.present? %>
           <div class="mt-5 flex no-print">
-            <div class="no-print w-8"><i data-feather="watch" class="inline-block h-5"></i></div>
+            <div class="no-print w-8"><i data-feather="watch" class="inline-block h-5 mr-2"></i></div>
             <div class="w-full">
               Reading time:<br />
               <%= @article.reading_time %>
@@ -62,7 +65,7 @@
         <% end %>
 
         <div class="mt-5 flex">
-          <div class="no-print w-8"><i data-feather="link" class="inline-block h-5"></i></div>
+          <div class="no-print w-8"><i data-feather="link" class="inline-block h-5 mr-2"></i></div>
           <div class="w-full">
             Permalink:<br />
             <a class="inline-block mt-1 -ml-2 px-2 py-1 bg-blue-100 rounded" title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= @article.permalink(request.base_url) %>');"><%= @article.permalink(request.base_url) %></a>
@@ -71,7 +74,7 @@
 
         <% if can_edit? %>
           <div class="mt-5 flex no-print">
-            <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5"></i></div>
+            <div class="no-print w-8"><i data-feather="crosshair" class="inline-block h-5 mr-2"></i></div>
             <div class="w-full">
               Unique slug:<br />
               <a class="inline-block mt-1 -ml-2 px-2 py-1 bg-blue-100 rounded" title="Copy to clipboard" href="javascript:;" onclick="copyToClipboard('<%= j @article.slug %>');"><%= @article.slug %></a>
@@ -90,7 +93,7 @@
 
         <% if (category_name_list = @article.category_name_list(context_category_id: @category&.id)).present? %>
           <div class="mt-5 flex no-print">
-            <div class="no-print w-8"><i data-feather="folder" class="inline-block h-5"></i></div>
+            <div class="no-print w-8"><i data-feather="folder" class="inline-block h-5 mr-2"></i></div>
             <div class="w-full">
               <%= category_name_list.sub(':', ':<br />').html_safe %>
             </div>
@@ -120,14 +123,14 @@
   <div class="no-print">
     <hr class="mt-5 mb-10" />
     <div class="text-right">
-      <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit" class="inline h-5"></i> EDIT</button>
+      <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
 
       <% if @article.active %>
-        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="sunset" class="inline h-5"></i> DEACTIVATE</button>
+        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="file-minus" class="inline h-5"></i> DEACTIVATE</button>
       <% else %>
-        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="sunrise" class="inline h-5"></i> RE-ACTIVATE</button>
+        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="file-plus" class="inline h-5"></i> RE-ACTIVATE</button>
       <% end %>
-      <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="trash" class="inline h-5"></i> DELETE</button>
+      <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="slash" class="inline h-5"></i> DELETE</button>
     </div>
   </div>
 <% end %>

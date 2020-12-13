@@ -16,7 +16,7 @@
 
 /* Additional knowledgebase site styles that are not in tailwind */
 
-svg.feather {
+button svg.feather {
   vertical-align: sub;
 }
 

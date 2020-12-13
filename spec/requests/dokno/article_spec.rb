@@ -1,20 +1,50 @@
 module Dokno
   describe 'Articles', type: :request do
     let!(:article) { Article.create!(slug: 'slug', title: 'Test Title', summary: 'Test Summary', markdown: 'Test Markdown') }
+    let(:days_out) { Dokno.config.article_review_prompt_days }
 
     describe '#show' do
-      it 'returns an article show page' do
-        get dokno.article_path(article)
+      context 'standard article' do
+        it 'returns an article show page' do
+          get dokno.article_path(article)
 
-        # Testing that accessing the article via ID redirects to the article permalink via its slug
-        expect(response).to redirect_to(dokno.article_path(article.slug))
+          # Testing that accessing the article via ID redirects to the article permalink via its slug
+          expect(response).to redirect_to(dokno.article_path(article.slug))
 
-        follow_redirect!
+          follow_redirect!
 
-        expect(response.body).to include article.slug
-        expect(response.body).to include article.title
-        expect(response.body).to include article.summary
-        expect(response.body).to include article.markdown_parsed
+          expect(response.body).to include article.slug
+          expect(response.body).to include article.title
+          expect(response.body).to include article.summary
+          expect(response.body).to include article.markdown_parsed
+        end
+      end
+
+      context 'special case articles' do
+        let(:inactive_article) { Article.create!(slug: 'slug2', title: 'Test Title 2', active: false) }
+        let(:up_for_review_article) { Article.create!(slug: 'slug3', title: 'Test Title 3', review_due_at: Date.today + days_out.days) }
+        let(:past_due_review_article) { Article.create!(slug: 'slug4', title: 'Test Title 4', review_due_at: Date.today - 1.day) }
+        let(:review_due_today_article) { Article.create!(slug: 'slug5', title: 'Test Title 5', review_due_at: Date.today) }
+
+        it 'returns an article show page that is up for review' do
+          get dokno.article_path(up_for_review_article.slug)
+          expect(response.body.squish).to include up_for_review_article.review_due_days_string
+        end
+
+        it 'returns an article show page that is up for review today' do
+          get dokno.article_path(review_due_today_article.slug)
+          expect(response.body.squish).to include review_due_today_article.review_due_days_string
+        end
+
+        it 'returns an article show page that is past due for review' do
+          get dokno.article_path(past_due_review_article.slug)
+          expect(response.body.squish).to include past_due_review_article.review_due_days_string
+        end
+
+        it 'returns an article show page that is inactive' do
+          get dokno.article_path(inactive_article.slug)
+          expect(response.body.squish).to include 'This article is no longer active'
+        end
       end
     end
 
@@ -70,7 +100,8 @@ module Dokno
           slug:     'testslug',
           title:    'Test Title',
           summary:  'Test Summary',
-          markdown: 'Test Markdown'
+          markdown: 'Test Markdown',
+          starred:  true
         }
 
         expect do
@@ -87,7 +118,7 @@ module Dokno
         expect(new_article.categories).to include categories.first
         expect(new_article.categories).to include categories.last
 
-        persisted_attrs = new_article.attributes.slice('slug', 'title', 'summary', 'markdown').symbolize_keys
+        persisted_attrs = new_article.attributes.slice('slug', 'title', 'summary', 'markdown', 'starred').symbolize_keys
         expect(persisted_attrs).to eq attrs
       end
 
@@ -109,7 +140,8 @@ module Dokno
           slug:     article.slug + 'new',
           title:    article.title + 'new',
           summary:  article.summary + 'new',
-          markdown: article.markdown + 'new'
+          markdown: article.markdown + 'new',
+          starred:  true
         }
 
         expect do
@@ -126,7 +158,7 @@ module Dokno
         expect(updated_article.categories).to include categories.first
         expect(updated_article.categories).to include categories.last
 
-        persisted_attrs = updated_article.attributes.slice('slug', 'title', 'summary', 'markdown').symbolize_keys
+        persisted_attrs = updated_article.attributes.slice('slug', 'title', 'summary', 'markdown', 'starred').symbolize_keys
         expect(persisted_attrs).to eq attrs
       end
 

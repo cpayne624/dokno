@@ -5,6 +5,6 @@ module Dokno
     include UserConcern
     include PaginationConcern
 
-    add_flash_types :green, :yellow, :red
+    add_flash_types :green, :yellow, :red, :gray
   end
 end

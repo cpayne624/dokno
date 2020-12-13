@@ -10,7 +10,9 @@ module Dokno
       @order       = params[:order]&.strip
       @order       = 'updated' unless %w(updated newest views alpha).include?(@order)
 
-      articles = if @search_term.present?
+      articles = if request.path.include? up_for_review_path
+                   Article.up_for_review(order: @order&.to_sym)
+                 elsif @search_term.present?
                    Article.search(term: @search_term, category_id: @category&.id, order: @order&.to_sym)
                  elsif @category.present?
                    @category.articles_in_branch(order: @order&.to_sym)
@@ -22,7 +24,7 @@ module Dokno
     end
 
     def new
-      @category = Category.new
+      @category             = Category.new
       @parent_category_code = params[:parent_category_code]
     end
 
@@ -38,7 +40,7 @@ module Dokno
         flash[:green] = 'Category was created'
         redirect_to article_index_path(@category.code)
       else
-        flash.now[:red] = 'Category could not be created'
+        flash.now[:red]       = 'Category could not be created'
         @parent_category_code = params[:parent_category_code]
         render :new
       end
@@ -51,7 +53,7 @@ module Dokno
         flash[:green] = 'Category was updated'
         redirect_to article_index_path(@category.code)
       else
-        flash.now[:red] = 'Category could not be updated'
+        flash.now[:red]       = 'Category could not be updated'
         @parent_category_code = params[:parent_category_code]
         render :edit
       end

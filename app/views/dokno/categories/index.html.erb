@@ -4,7 +4,7 @@
   </div>
 <% end %>
 
-<% if Dokno::Category.exists? || Dokno::Article.exists? %>
+<% if !current_page?(up_for_review_path) && (Dokno::Category.exists? || Dokno::Article.exists?) %>
   <%= render 'partials/category_header' %>
 <% end %>
 
@@ -44,7 +44,7 @@
       <section class="border-t border-gray-300 py-10 text-xl flex">
         <div class="w-1/3 pr-10">
           <div class="flex">
-            <div class="no-print w-10 text-gray-300"><i data-feather="chevron-right" class="inline-block"></i></div>
+            <div title="<%= 'Starred article' if article.starred %>" class="no-print w-10 text-gray-300"><i data-feather="<%= article.starred ? 'star' : 'chevron-right' %>" class="inline-block"></i></div>
             <div class="w-full">
               <a class="dokno-article-title <% unless article.active %>text-gray-500 italic<% end %>" href="<%= article_path article.slug %>?search_term=<%= @search_term %>&cat_code=<%= @category&.code %>&order=<%= @order %>" title="View article"><%= article.title %></a>
             </div>
@@ -53,7 +53,7 @@
         <div class="dokno-article-summary w-2/3 <% unless article.active %>text-gray-500 italic<% end %>">
           <% unless article.active %>
             <div class="bg-yellow-700 p-4 mb-5 rounded text-lg border-t-4 border-yellow-900 text-white font-base not-italic">
-              <i data-feather="alert-circle" class="inline-block"></i> This article is no longer active
+              <i data-feather="info" class="inline-block"></i> This article is no longer active
             </div>
           <% end %>
 
@@ -66,14 +66,21 @@
           <% unless @order == 'alpha' %>
             <div class="text-base">
               <% if @order == 'views' %>
-                <div class="text-gray-500">Viewed <%= number_with_delimiter(article.views, delimiter: ',') %> <%= 'time'.pluralize(article.views) %></div>
+                <div class="text-gray-500">This article was viewed <%= number_with_delimiter(article.views, delimiter: ',') %> <%= 'time'.pluralize(article.views) %></div>
               <% elsif @order == 'updated' %>
-                <div class="text-gray-500">Last updated <%= time_ago_in_words article.updated_at %> ago</div>
+                <div class="text-gray-500">This article was last updated <%= time_ago_in_words article.updated_at %> ago</div>
               <% elsif @order == 'newest' %>
-                <div class="text-gray-500">Added <%= time_ago_in_words article.created_at %> ago</div>
+                <div class="text-gray-500">This article was added <%= time_ago_in_words article.created_at %> ago</div>
               <% end %>
             </div>
           <% end %>
+
+          <% if article.up_for_review? %>
+            <div class="bg-<%= article.review_due_days.negative? ? 'red' : 'gray' %>-800 p-4 mt-5 rounded text-lg border-t-4 border-<%= article.review_due_days.negative? ? 'red' : 'gray' %>-900 text-white font-base not-italic">
+              <i data-feather="bell" class="inline-block mr-1"></i> <%= article.review_due_days_string %>
+            </div>
+          <% end %>
+
         </div>
       </section>
     <% end %>

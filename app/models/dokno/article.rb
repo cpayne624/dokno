@@ -15,18 +15,27 @@ module Dokno
     validates :title, length: { in: 5..255 }
     validate :unique_slug_check
 
+    attr_accessor :editor_username, :reset_review_date, :review_notes
+
+    before_save :set_review_date, if: :should_set_review_date?
     before_save :log_changes
     before_save :track_slug
 
     scope :active,        -> { where(active: true) }
-    scope :alpha_order,   -> { order(active: :desc, title: :asc) }
-    scope :view_order,    -> { order(active: :desc, views: :desc, title: :asc) }
-    scope :newest_order,  -> { order(active: :desc, created_at: :desc, title: :asc) }
-    scope :updated_order, -> { order(active: :desc, updated_at: :desc, title: :asc) }
-
-    attr_accessor :editor_username
+    scope :alpha_order,   -> { order(active: :desc, starred: :desc, title: :asc) }
+    scope :views_order,   -> { order(active: :desc, starred: :desc, views: :desc, title: :asc) }
+    scope :newest_order,  -> { order(active: :desc, starred: :desc, created_at: :desc, title: :asc) }
+    scope :updated_order, -> { order(active: :desc, starred: :desc, updated_at: :desc, title: :asc) }
 
     MARKDOWN_PARSER = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+
+    def review_due_at
+      super || (Date.today + 30.years)
+    end
+
+    def markdown
+      super || ''
+    end
 
     def reading_time
       minutes_decimal = (("#{summary} #{markdown}".squish.scan(/[\w-]+/).size) / 200.0)
@@ -36,8 +45,22 @@ module Dokno
       "~ #{approx_minutes} minutes"
     end
 
-    def markdown
-      super || ''
+    def review_due_days
+      (review_due_at.to_date - Date.today).to_i
+    end
+
+    def up_for_review?
+      active && review_due_days <= Dokno.config.article_review_prompt_days
+    end
+
+    def review_due_days_string
+      if review_due_days.positive?
+        "This article is up for an accuracy / relevance review in #{review_due_days} #{'day'.pluralize(review_due_days)}"
+      elsif review_due_days.negative?
+        "This article was up for an accuracy / relevance review #{review_due_days.abs} #{'day'.pluralize(review_due_days)} ago"
+      else
+        "This article is up for an accuracy / relevance review today"
+      end
     end
 
     def markdown_parsed
@@ -112,19 +135,49 @@ module Dokno
         .to_sentence
     end
 
+    # All articles up for review
+    def self.up_for_review(order: :updated)
+      records = Article
+        .includes(:categories_dokno_articles, :categories)
+        .where(active: true)
+        .where('review_due_at <= ?', Date.today + Dokno.config.article_review_prompt_days)
+
+      apply_sort(records, order: order)
+    end
+
     # All uncategorized Articles
     def self.uncategorized(order: :updated)
       records = Article
         .includes(:categories_dokno_articles, :categories)
         .left_joins(:categories)
-        .where(active: true, dokno_categories: { id: nil })
+        .where(dokno_categories: { id: nil })
 
-      records = records.updated_order if order == :updated
-      records = records.newest_order  if order == :newest
-      records = records.view_order    if order == :views
-      records = records.alpha_order   if order == :alpha
+      apply_sort(records, order: order)
+    end
 
+    def self.search(term:, category_id: nil, order: :updated)
+      records = where(
+        'LOWER(title) LIKE :search_term OR '\
+        'LOWER(summary) LIKE :search_term OR '\
+        'LOWER(markdown) LIKE :search_term OR '\
+        'LOWER(slug) LIKE :search_term',
+        search_term: "%#{term.downcase}%"
+      )
+      .includes(:categories_dokno_articles)
+      .includes(:categories)
+
+      records = apply_sort(records, order: order)
+
+      return records unless category_id.present?
+
+      # Scope to the context category and its children
       records
+        .joins(:categories)
+        .where(
+          dokno_categories: {
+            id: Category.branch(parent_category_id: category_id).pluck(:id)
+          }
+        )
     end
 
     def self.parse_markdown(content)
@@ -142,32 +195,11 @@ module Dokno
       File.read(template_file).to_s
     end
 
-    def self.search(term:, category_id: nil, order: :updated)
-      records = where(
-        'LOWER(title) LIKE :search_term OR '\
-        'LOWER(summary) LIKE :search_term OR '\
-        'LOWER(markdown) LIKE :search_term OR '\
-        'LOWER(slug) LIKE :search_term',
-        search_term: "%#{term.downcase}%"
-      )
-      .includes(:categories_dokno_articles)
-      .includes(:categories)
+    def self.apply_sort(records, order: :updated)
+      order_scope = "#{order}_order"
+      return records unless records.respond_to? order_scope
 
-      records = records.updated_order if order == :updated
-      records = records.newest_order  if order == :newest
-      records = records.view_order    if order == :views
-      records = records.alpha_order   if order == :alpha
-
-      return records unless category_id.present?
-
-      # Scope to the context category and its children
-      records
-        .joins(:categories)
-        .where(
-          dokno_categories: {
-            id: Category.branch(parent_category_id: category_id).pluck(:id)
-          }
-        )
+      records.send(order_scope.to_sym)
     end
 
     private
@@ -189,7 +221,7 @@ module Dokno
     end
 
     def log_changes
-      return if changes.blank?
+      return if changes.blank? && !reset_review_date
 
       meta_changes    = changes.with_indifferent_access.slice(:slug, :title, :active)
       content_changes = changes.with_indifferent_access.slice(:summary, :markdown)
@@ -207,10 +239,26 @@ module Dokno
         content[:after]  += values.last.to_s + ' '
       end
 
-      return unless meta.present?
+      if meta.present?
+        diff = Diffy::SplitDiff.new(content[:before].squish, content[:after].squish, format: :html)
+        logs << Log.new(username: editor_username, meta: meta.to_sentence, diff_left: diff.left, diff_right: diff.right)
+      end
 
-      diff = Diffy::SplitDiff.new(content[:before].squish, content[:after].squish, format: :html)
-      logs << Log.new(username: editor_username, meta: meta.to_sentence, diff_left: diff.left, diff_right: diff.right)
+      # Reviewed for accuracy / relevance?
+      return unless reset_review_date
+
+      review_log = "Reviewed for accuracy / relevance. Next review date reset to #{review_due_at.to_date}."
+      review_log += " Review notes: #{review_notes.squish}" if review_notes.present?
+      logs << Log.new(username: editor_username, meta: review_log)
+    end
+
+    def should_set_review_date?
+      # User requested a reset or it's a new article w/out a review due date
+      reset_review_date || (!persisted? && review_due_at.blank?)
+    end
+
+    def set_review_date
+      self.review_due_at = Date.today + Dokno.config.article_review_period
     end
   end
 end
