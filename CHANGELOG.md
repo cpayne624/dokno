@@ -3,6 +3,11 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.3.0
+### Added
+- Up for review articles
+- Starred articles
+
 ## 1.2.1
 ### Fixed
 - Problem with invalidating the category option cache when no category is yet in the database
