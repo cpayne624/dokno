@@ -3,9 +3,6 @@ require 'redcarpet'
 
 module Dokno
   class Article < ApplicationRecord
-    include Engine.routes.url_helpers
-    include ActionView::Helpers::DateHelper
-
     has_and_belongs_to_many :categories
     has_many :logs, dependent: :destroy
     has_many :article_slugs, dependent: :destroy
@@ -76,7 +73,10 @@ module Dokno
         .where(dokno_articles_categories: { article_id: id })
         .all
         .map do |category|
-          "<a class='underline' href='#{article_index_path(category.code)}?search_term=#{CGI.escape(search_term.to_s)}&order=#{CGI.escape(order.to_s)}'>#{category.name}</a>" if context_category_id != category.id
+          next if context_category_id == category.id
+
+          "<a class='underline' href='#{article_index_path(category.code)}?search_term="\
+          "#{CGI.escape(search_term.to_s)}&order=#{CGI.escape(order.to_s)}'>#{category.name}</a>"
         end.compact
 
       return '' if names.blank?

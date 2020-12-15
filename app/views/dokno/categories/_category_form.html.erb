@@ -10,13 +10,20 @@
   </div>
 
   <% if Dokno::Category.exists? %>
-    <div class="mb-5">
+    <div class="mb-5 w-1/2">
       <div class="text-lg font-semibold"><label for="parent_category_code">Parent Category</label></div>
-      <select name="parent_category_code" id="parent_category_code" class="rounded text-xl shadow-inner bg-gray-100 p-2 mt-2 w-1/2 max-w-full">
-        <option></option>
-        <%= Dokno::Category.select_option_markup(selected_category_codes: [@parent_category_code], exclude_category_id: category.id).html_safe %>
+
+      <select name="parent_category_code" id="parent_category_code" size="1" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full max-w-full">
+        <option value="">No Parent Category</option>
+
+        <optgroup label="Categories">
+          <% cache Dokno::Category do %>
+            <%= Dokno::Category.select_option_markup.html_safe %>
+          <% end %>
+        </optgroup>
       </select>
-      <div class="text-gray-500 mt-2 w-1/2">
+
+      <div class="text-gray-500 mt-2">
         The existing category to which this category belongs.
         <% if (article_count = category.articles.count).positive? %>
           There <%= article_count > 1 ? "are #{article_count} articles" : 'is an article' %> currently in this category.
@@ -35,4 +42,8 @@
   </div>
 </section>
 
-<script> elem('input#name').focus(); </script>
+<script>
+  // Client-side select of cached select list
+  selectOption('parent_category_code', '<%= j @parent_category_code %>');
+  elem('input#name').focus();
+</script>

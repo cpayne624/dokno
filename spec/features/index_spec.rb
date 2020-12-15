@@ -28,7 +28,6 @@ describe 'category index page', js: true do
       select(category.name, from: 'category').select_option
     end
 
-    expect(page).to have_content(category.breadcrumb)
     expect(page).to have_content(articles.last.title)
     expect(page).not_to have_content(articles.first.title)
 

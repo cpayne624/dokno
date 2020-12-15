@@ -60,10 +60,10 @@ module Dokno
         @article.categories = Category.where(code: params[:category_code])
         redirect_to article_path @article.slug
       else
-        flash.now[:red]    = 'Article could not be updated'
-        @category_codes    = params[:category_code]
-        @reset_review_date = params[:reset_review_date]
-        @review_notes      = params[:review_notes]
+        flash.now[:red]     = 'Article could not be updated'
+        @category_codes     = params[:category_code]
+        @reset_review_date  = params[:reset_review_date]
+        @review_notes       = params[:review_notes]
         render :edit
       end
     end

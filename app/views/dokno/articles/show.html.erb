@@ -2,7 +2,12 @@
 
 <% if @category.present? %>
   <div class="no-print text-gray-500 mb-5">
-    <div>Category: <a href="<%= article_index_path(@category.code) %>?search_term=<%= CGI.escape(@search_term.to_s) %>&order=<%= @order %>"><%= @category.breadcrumb %></a></div>
+    <div>
+      <% if request.referrer&.include? article_index_path %>
+        <a class="fixed left-0 ml-6" title="Back" href="javascript:history.back();"><i data-feather="chevrons-left" class="text-gray-300 h-5 align-text-bottom inline"></i></a>
+      <% end %>
+      <span class="text-gray-500 mr-1">Under</span> <%= @category.breadcrumb(search_term: @search_term, order: @order) %>
+    </div>
   </div>
 <% end %>
 
@@ -126,9 +131,9 @@
       <button title="Edit article" class="bg-blue-900 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-sm" onclick="location.href='<%= edit_article_path(@article.slug) %>';"><i data-feather="edit-2" class="inline h-5"></i> EDIT</button>
 
       <% if @article.active %>
-        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="deactivateArticle('<%= @article.slug %>');"><i data-feather="file-minus" class="inline h-5"></i> DEACTIVATE</button>
+        <button title="Deactivate article" id="article-deactivate-button" class="bg-yellow-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="setArticleStatus('<%= @article.slug %>', false);"><i data-feather="file-minus" class="inline h-5"></i> DEACTIVATE</button>
       <% else %>
-        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="activateArticle('<%= @article.slug %>');"><i data-feather="file-plus" class="inline h-5"></i> RE-ACTIVATE</button>
+        <button title="Re-activate article" id="article-activate-button" class="bg-green-700 text-gray-300 hover:text-white rounded mr-5 py-2 px-3 font-bold text-base" onclick="setArticleStatus('<%= @article.slug %>', true);"><i data-feather="file-plus" class="inline h-5"></i> RE-ACTIVATE</button>
       <% end %>
       <button title="Permanently delete article" class="bg-red-700 text-gray-300 hover:text-white rounded py-2 px-3 font-bold text-base" onclick="deleteArticle('<%= @article.id %>');"><i data-feather="slash" class="inline h-5"></i> DELETE</button>
     </div>

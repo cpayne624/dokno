@@ -14,13 +14,11 @@
  *= require_self
  */
 
-/* Intentionally ugly base typography to test flyout CSS strength */
- body {
-  font-size: 23px;
-  margin: 2.5rem;
- }
+body {
+  margin: 1.5rem;
+}
 
- div#dummy-page p,
- div#dummy-page li {
-   line-height: 1.5rem;
- }
+div#dummy-page p,
+div#dummy-page li {
+  line-height: 1.5rem;
+}

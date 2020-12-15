@@ -1,6 +1,27 @@
+<% if !current_page?(up_for_review_path) && (@category.blank? || @search_term.present?) %>
+  <div class="text-center m-auto mb-10 w-full max-w-screen-xl">
+    <% if @search_term.present? %>
+      <div class="text-gray-600 text-2xl uppercase">
+        <%= @total_records.positive? ? "#{@total_records} #{'article'.pluralize(@total_records)}" : 'No articles' %>
+        found containing the search term
+        <div class="text-4xl leading-tight"><span class="font-serif">&ldquo;</span> <%= @search_term %> <span class="font-serif">&rdquo;</span> </div>
+      </div>
+    <% else %>
+      <div class="text-gray-600 text-2xl">
+        Browse or search
+        <% if (article_count = Dokno::Article.count) > 1 %>
+          <%= number_with_delimiter(article_count, delimiter: ',') %> articles in
+        <% end %>
+        the
+      </div>
+      <div class="text-gray-800 text-4xl leading-tight uppercase"><%= Dokno.config.app_name %> knowledgebase</div>
+    <% end %>
+  </div>
+<% end %>
+
 <% if @category&.parent.present? %>
   <div class="text-gray-500 mb-5">
-    <div><%= @category.breadcrumb %></div>
+    <div><span class="text-gray-500 mr-1">Under</span> <%= @category.breadcrumb(search_term: @search_term, order: @order, hide_self: true) %></div>
   </div>
 <% end %>
 
@@ -51,12 +72,6 @@
           </div>
         </div>
         <div class="dokno-article-summary w-2/3 <% unless article.active %>text-gray-500 italic<% end %>">
-          <% unless article.active %>
-            <div class="bg-yellow-700 p-4 mb-5 rounded text-lg border-t-4 border-yellow-900 text-white font-base not-italic">
-              <i data-feather="info" class="inline-block"></i> This article is no longer active
-            </div>
-          <% end %>
-
           <div class="dokno-article-content-highlight mb-2"><%= article.summary.presence || 'No summary provided' %></div>
 
           <div class="text-base text-gray-500">
@@ -72,6 +87,12 @@
               <% elsif @order == 'newest' %>
                 <div class="text-gray-500">This article was added <%= time_ago_in_words article.created_at %> ago</div>
               <% end %>
+            </div>
+          <% end %>
+
+          <% if !article.active %>
+            <div class="bg-yellow-700 p-4 mt-5 rounded text-lg border-t-4 border-yellow-900 text-white font-base not-italic">
+              <i data-feather="info" class="inline-block mr-1"></i> This article is no longer active
             </div>
           <% end %>
 

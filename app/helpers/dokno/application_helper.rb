@@ -9,7 +9,7 @@ module Dokno
 
       return "Dokno article slug '#{slug}' not found" if article.blank?
 
-      %Q(<a href="javascript:;" onclick="doknoOpenPanel('#{j article.slug}');">#{link_text.presence || article.title}</a>).html_safe
+      %Q(<a class="dokno-link" href="javascript:;" onclick="doknoOpenPanel('#{j article.slug}');">#{link_text.presence || article.title}</a>).html_safe
     end
   end
 end

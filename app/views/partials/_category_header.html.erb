@@ -11,6 +11,11 @@
         </optgroup>
       </select>
     </div>
+
+    <script>
+      // Client-side select of cached select list
+      selectOption('category', '<%= j @category&.code %>');
+    </script>
   <% end %>
 
   <% if Dokno::Article.exists? %>
@@ -22,8 +27,4 @@
   <% end %>
 </div>
 
-<script>
-  // Client-side select of cached select list
-  selectOption('category', '<%= j @category&.code %>');
-  enableSearchHotkey();
-</script>
+<script> enableSearchHotkey(); </script>

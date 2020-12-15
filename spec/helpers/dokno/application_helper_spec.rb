@@ -6,11 +6,11 @@ module Dokno
 
         # Without link text
         markup = dokno_article_link(slug: article.slug)
-        expect(markup).to include "<a href=\"javascript:;\" onclick=\"doknoOpenPanel('#{article.slug}');\">#{article.title}</a>"
+        expect(markup).to include "<a class=\"dokno-link\" href=\"javascript:;\" onclick=\"doknoOpenPanel('#{article.slug}');\">#{article.title}</a>"
 
         # With link text
         markup = dokno_article_link('Test Link Text', slug: article.slug)
-        expect(markup).to include "<a href=\"javascript:;\" onclick=\"doknoOpenPanel('#{article.slug}');\">Test Link Text</a>"
+        expect(markup).to include "<a class=\"dokno-link\" href=\"javascript:;\" onclick=\"doknoOpenPanel('#{article.slug}');\">Test Link Text</a>"
       end
 
       it 'shows appropriate message when the slug is not provided' do
