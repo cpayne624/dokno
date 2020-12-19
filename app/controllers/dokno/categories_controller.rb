@@ -6,9 +6,10 @@ module Dokno
     before_action :fetch_category, only: [:index, :edit, :update]
 
     def index
-      @search_term = params[:search_term]
-      @order       = params[:order]&.strip
-      @order       = 'updated' unless %w(updated newest views alpha).include?(@order)
+      @search_term        = params[:search_term]
+      @order              = params[:order]&.strip
+      @order              = 'updated' unless %w(updated newest views alpha).include?(@order)
+      @show_up_for_review = can_edit? && !request.path.include?(up_for_review_path)
 
       articles = if request.path.include? up_for_review_path
                    Article.up_for_review(order: @order&.to_sym)

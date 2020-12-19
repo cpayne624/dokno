@@ -46,7 +46,7 @@ function applyCategoryCriteria(category_code, term, order) {
 
 function goToPage(url) {
   var param_join = url.indexOf('?') >= 0 ? '&' : '?';
-  location.href=url + param_join + '_=' + Math.round(new Date().getTime());
+  location.href = url + param_join + '_=' + Math.round(new Date().getTime());
 }
 
 function reloadPage() {
@@ -74,14 +74,9 @@ function sendRequest(url, data, callback, method) {
   request.send(JSON.stringify(data));
 }
 
-function deactivateArticle(slug) {
+function setArticleStatus(slug, active) {
   const callback = function(_data) { reloadPage(); }
-  sendRequest(dokno__base_path + 'article_status', { slug: slug, active: false }, callback, 'POST');
-}
-
-function activateArticle(slug) {
-  const callback = function(_data) { reloadPage(); }
-  sendRequest(dokno__base_path + 'article_status', { slug: slug, active: true }, callback, 'POST');
+  sendRequest(dokno__base_path + 'article_status', { slug: slug, active: active }, callback, 'POST');
 }
 
 function deleteArticle(id) {

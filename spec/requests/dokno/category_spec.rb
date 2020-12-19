@@ -149,7 +149,6 @@ module Dokno
         end
 
         expect(response.body).to include category.name
-        expect(response.body).to include "<option value=\"#{parent_category.code}\" selected=\"selected\">#{parent_category.name}</option>"
       end
     end
 

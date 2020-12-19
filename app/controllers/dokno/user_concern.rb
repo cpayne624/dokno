@@ -28,7 +28,7 @@ module Dokno
     def can_edit?
       # Allow editing by default if host app user object is not configured
       return true  unless sanitized_user_obj_string.present?
-      return false unless user.respond_to? Dokno.config.app_user_auth_method.to_sym
+      return false unless user&.respond_to? Dokno.config.app_user_auth_method.to_sym
 
       user.send(Dokno.config.app_user_auth_method.to_sym)
     end

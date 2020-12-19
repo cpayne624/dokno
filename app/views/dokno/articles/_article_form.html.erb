@@ -36,9 +36,9 @@
   </div>
 
   <% if Dokno::Category.exists? %>
-    <div class="mb-5">
-      <div class="text-lg font-semibold"><label for="category_id"><%= 'Category'.pluralize article.categories.count %></label></div>
-      <select name="category_code[]" id="category_code" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 4 ? (cat_count + 1).to_s : '5' %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full mt-2 w-full max-w-full">
+    <div class="mb-5 w-2/3">
+      <div class="text-lg font-semibold"><label for="category_code"><%= 'Category'.pluralize article.categories.count %></label></div>
+      <select name="category_code[]" id="category_code" multiple="multiple" size="<%= (cat_count = Dokno::Category.count) <= 9 ? (cat_count + 1).to_s : '10' %>" class="rounded text-xl shadow-inner bg-gray-100 p-2 w-full mt-2 w-full max-w-full">
         <option></option>
         <%= Dokno::Category.select_option_markup(selected_category_codes: @category_codes).html_safe %>
       </select>

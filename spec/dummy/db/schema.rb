@@ -28,12 +28,12 @@ ActiveRecord::Schema.define(version: 2020_12_13_165700) do
     t.string "slug"
     t.string "title"
     t.text "markdown"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.text "summary"
     t.boolean "active", default: true
     t.bigint "views", default: 0
     t.datetime "last_viewed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.datetime "review_due_at"
     t.boolean "starred", default: false
     t.index ["review_due_at"], name: "index_dokno_articles_on_review_due_at"
@@ -50,10 +50,10 @@ ActiveRecord::Schema.define(version: 2020_12_13_165700) do
 
   create_table "dokno_categories", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.bigint "category_id"
     t.string "code", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["category_id"], name: "index_dokno_categories_on_category_id"
     t.index ["code"], name: "index_dokno_categories_on_code", unique: true
     t.index ["name"], name: "index_dokno_categories_on_name", unique: true
