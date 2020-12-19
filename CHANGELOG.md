@@ -3,6 +3,18 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.0
+### Added
+- `dokno-link` class to the `dokno_article_link` helper markup to facilitate link styling by the host
+- The ability to quickly return to the prior index page location when viewing an article
+- Caching of the category option list within the Category form
+
+### Changed
+- Various code re-org
+
+### Fixed
+- Problem when the host app has an improperly configured `app_user_object` setting raising a `nil` error during initialization
+
 ## 1.3.0
 ### Added
 - Up for review articles
