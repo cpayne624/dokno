@@ -3,6 +3,13 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.1
+### Fixed
+- Security vulnerability gem updates
+  - [CVE-2021-22880](https://github.com/advisories/GHSA-8hc4-xxm3-5ppp)
+  - [CVE-2021-22881](https://github.com/advisories/GHSA-8877-prq4-9xfw)
+  - [GHSA-vr8q-g5c7-m54m](https://github.com/advisories/GHSA-vr8q-g5c7-m54m)
+
 ## 1.4.0
 ### Added
 - `dokno-link` class to the `dokno_article_link` helper markup to facilitate link styling by the host
