@@ -1,3 +1,5 @@
+require 'active_support/time'
+
 module Dokno
   module Error
     class Config < StandardError; end

@@ -3,7 +3,7 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 1.4.2
+## 1.4.3
 ### Fixed
 - Security vulnerability gem updates
   - [CVE-2021-22902](https://github.com/advisories/GHSA-g8ww-46x2-2p65)
