@@ -3,6 +3,11 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.4
+### Fixed
+- Security vulnerability gem updates
+  - [CCVE-2019-16770](https://github.com/puma/puma/security/advisories/GHSA-7xx3-m584-x994)
+
 ## 1.4.3
 ### Fixed
 - Security vulnerability gem updates
