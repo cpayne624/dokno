@@ -3,6 +3,11 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.5
+### Fixed
+- Security vulnerability gem updates
+  - [CCVE-2021-32740](https://github.com/advisories/GHSA-jxhc-q857-3j6g)
+
 ## 1.4.4
 ### Fixed
 - Security vulnerability gem updates
