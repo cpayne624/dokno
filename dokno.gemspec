@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "redcarpet", "~> 3.5" # Markdown to HTML processor
 
   spec.add_development_dependency "bullet", "~> 6.1"
-  spec.add_development_dependency "capybara", "~> 3.34"
+  spec.add_development_dependency "capybara", "~> 3.35"
   spec.add_development_dependency "database_cleaner-active_record", "~> 1.8"
   spec.add_development_dependency "faker", "~> 2.15"
   spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
