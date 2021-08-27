@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
   spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "puma", "~> 5.3.0", ">= 5.3.1"
-  spec.add_development_dependency "rails", "~> 6.1.3", ">= 6.1.3.2"
+  spec.add_development_dependency "rails", "~> 6.1", ">= 6.1.4.1"
   spec.add_development_dependency "rspec-rails", "~> 4.1", ">= 4.1.2"
   spec.add_development_dependency "selenium-webdriver", "~> 3.142", ">= 3.142.7"
   spec.add_development_dependency "simplecov", "~> 0.21.2"
