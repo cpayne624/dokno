@@ -3,34 +3,42 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.8
+### Patched
+- Security vulnerability gem updates
+  - [GHSA-wh98-p28r-vrc9](https://github.com/advisories/GHSA-wh98-p28r-vrc9)
+  - [GHSA-rmj8-8hhh-gv5h](https://github.com/advisories/GHSA-rmj8-8hhh-gv5h)
+  - [GHSA-fq42-c5rg-92c2](https://github.com/advisories/GHSA-fq42-c5rg-92c2)
+  - [GHSA-w749-p3v6-hccq](https://github.com/advisories/GHSA-w749-p3v6-hccq)
+
 ## 1.4.7
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2021-41098](https://github.com/advisories/GHSA-2rr5-8q37-2w7h)
   - [CVE-2021-41136](https://github.com/advisories/GHSA-48w2-rm65-62xx)
 
 ## 1.4.6
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2021-22942](https://github.com/advisories/GHSA-2rqw-v265-jf8c)
 
 ## 1.4.5
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2021-32740](https://github.com/advisories/GHSA-jxhc-q857-3j6g)
 
 ## 1.4.4
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2019-16770](https://github.com/puma/puma/security/advisories/GHSA-7xx3-m584-x994)
 
 ## 1.4.3
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2021-22902](https://github.com/advisories/GHSA-g8ww-46x2-2p65)
 
 ## 1.4.1
-### Fixed
+### Patched
 - Security vulnerability gem updates
   - [CVE-2021-22880](https://github.com/advisories/GHSA-8hc4-xxm3-5ppp)
   - [CVE-2021-22881](https://github.com/advisories/GHSA-8877-prq4-9xfw)
