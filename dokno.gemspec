@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "faker", "~> 2.15"
   spec.add_development_dependency "pg", "~> 1.2", ">= 1.2.3"
   spec.add_development_dependency "pry-byebug", "~> 3.9"
-  spec.add_development_dependency "puma", "~> 5.6.2"
+  spec.add_development_dependency "puma", "~> 5.6.4"
   spec.add_development_dependency "rails", '~> 6.1', '>= 6.1.5'
   spec.add_development_dependency "rspec-rails", "~> 4.1", ">= 4.1.2"
   spec.add_development_dependency "selenium-webdriver", "~> 3.142", ">= 3.142.7"
