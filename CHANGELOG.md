@@ -3,6 +3,11 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.9
+### Patched
+- Security vulnerability gem updates
+  - [GHSA-h99w-9q5r-gjq9](https://github.com/advisories/GHSA-h99w-9q5r-gjq9)
+
 ## 1.4.8
 ### Patched
 - Security vulnerability gem updates
