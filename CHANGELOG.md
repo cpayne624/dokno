@@ -3,6 +3,32 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.11
+### Patched
+- Development dependency security vulnerability gem updates
+  - [GHSA-3h57-hmj3-gj3p](https://github.com/advisories/GHSA-3h57-hmj3-gj3p)
+  - [GHSA-579w-22j4-4749](https://github.com/advisories/GHSA-579w-22j4-4749)
+  - [GHSA-hq7p-j377-6v63](https://github.com/advisories/GHSA-hq7p-j377-6v63)
+  - [GHSA-5x79-w82f-gw8w](https://github.com/advisories/GHSA-5x79-w82f-gw8w)
+  - [GHSA-486f-hjj9-9vhh](https://github.com/advisories/GHSA-486f-hjj9-9vhh)
+  - [GHSA-3x8r-x6xp-q4vm](https://github.com/advisories/GHSA-3x8r-x6xp-q4vm)
+  - [GHSA-qv4q-mr5r-qprj](https://github.com/advisories/GHSA-qv4q-mr5r-qprj)
+  - [GHSA-pj73-v5mw-pm9j](https://github.com/advisories/GHSA-pj73-v5mw-pm9j)
+  - [GHSA-9h9g-93gc-623h](https://github.com/advisories/GHSA-9h9g-93gc-623h)
+  - [GHSA-rrfc-7g8p-99q8](https://github.com/advisories/GHSA-rrfc-7g8p-99q8)
+  - [GHSA-mcvf-2q2m-x72m](https://github.com/advisories/GHSA-mcvf-2q2m-x72m)
+  - [GHSA-228g-948r-83gx](https://github.com/advisories/GHSA-228g-948r-83gx)
+  - [GHSA-2qc6-mcvw-92cw](https://github.com/advisories/GHSA-2qc6-mcvw-92cw)
+  - [GHSA-c6qg-cjj8-47qp](https://github.com/advisories/GHSA-c6qg-cjj8-47qp)
+  - [GHSA-8xww-x3g3-6jcv](https://github.com/advisories/GHSA-8xww-x3g3-6jcv)
+  - [GHSA-j6gc-792m-qgm2](https://github.com/advisories/GHSA-j6gc-792m-qgm2)
+  - [GHSA-p84v-45xj-wwqj](https://github.com/advisories/GHSA-p84v-45xj-wwqj)
+  - [GHSA-23c2-gwp5-pxw9](https://github.com/advisories/GHSA-23c2-gwp5-pxw9)
+  - [GHSA-93pm-5p5f-3ghx](https://github.com/advisories/GHSA-93pm-5p5f-3ghx)
+  - [GHSA-rqv2-275x-2jq5](https://github.com/advisories/GHSA-rqv2-275x-2jq5)
+  - [GHSA-65f5-mfpf-vfhj](https://github.com/advisories/GHSA-65f5-mfpf-vfhj)
+  - [GHSA-9chr-4fjh-5rgw](https://github.com/advisories/GHSA-9chr-4fjh-5rgw)
+
 ## 1.4.10
 ### Patched
 - Security vulnerability gem updates
