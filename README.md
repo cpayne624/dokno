@@ -5,6 +5,8 @@ Dokno (e.g., "I _do' kno'_ the answer") is a lightweight Rails Engine for storin
 
 It provides a repository to store information about your app for posterity, such as term definitions, system logic and implementation details, background for past system design decisions, or anything else related to your app that would be beneficial for you and your users to know, now and in the future.
 
+<img alt="Article Screenshot" src="https://github.com/cpayne624/dokno/assets/4603348/0dcd33a7-d056-474a-84ae-f4c3e67d350f">
+
 ## Installation
 Add this line to your application's Gemfile:
 ```ruby
