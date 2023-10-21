@@ -26,7 +26,6 @@ require 'database_cleaner/active_record'
 require 'pry'
 require 'capybara/rails'
 require 'capybara/rspec'
-require 'webdrivers/chromedriver'
 require 'faker'
 
 Capybara.register_driver :chrome do |app|

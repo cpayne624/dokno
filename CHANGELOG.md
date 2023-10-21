@@ -3,6 +3,14 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.12
+### Patched
+- Development dependency security vulnerability gem updates
+  - [GHSA-pxvg-2qj5-37jq](https://github.com/advisories/GHSA-pxvg-2qj5-37jq)
+  - [GHSA-68xg-gqqm-vgj8](https://github.com/advisories/GHSA-68xg-gqqm-vgj8)
+  - [GHSA-4g8v-vg43-wpgf](https://github.com/advisories/GHSA-4g8v-vg43-wpgf)
+  - [GHSA-cr5q-6q9f-rq6q](https://github.com/advisories/GHSA-cr5q-6q9f-rq6q)
+
 ## 1.4.11
 ### Patched
 - Development dependency security vulnerability gem updates
