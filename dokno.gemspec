@@ -21,15 +21,16 @@ Gem::Specification.new do |spec|
   spec.add_dependency "diffy", "~> 3.4"     # Change log diffing
   spec.add_dependency "redcarpet", "~> 3.6" # Markdown to HTML processor
 
-  spec.add_development_dependency "bullet", "~> 7.1"
-  spec.add_development_dependency "capybara", "~> 3.39"
-  spec.add_development_dependency "database_cleaner-active_record", "~> 2.1"
-  spec.add_development_dependency "faker", "~> 3.2"
-  spec.add_development_dependency "pg", "~> 1.5"
-  spec.add_development_dependency "pry-byebug", "~> 3.10"
-  spec.add_development_dependency "puma", "~> 6.4"
-  spec.add_development_dependency "rails", '~> 6.1'
-  spec.add_development_dependency "rspec-rails", "~> 6.0"
-  spec.add_development_dependency "selenium-webdriver", "~> 4.14"
-  spec.add_development_dependency "simplecov", "~> 0.22"
+  spec.add_development_dependency "rails", "~> 8"
+
+  spec.add_development_dependency "capybara"
+  spec.add_development_dependency "database_cleaner-active_record"
+  spec.add_development_dependency "faker"
+  spec.add_development_dependency "pg"
+  spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "puma"
+  spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "selenium-webdriver"
+  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "sprockets-rails"
 end

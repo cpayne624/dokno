@@ -118,7 +118,7 @@ To run the test suite:
 $ bundle exec rspec
 ```
 
-## Hat Tips
+## Hat Tip
 - [tailwindcss](https://tailwindcss.com/)
   - CSS framework
 - [diffy](https://github.com/samg/diffy)
