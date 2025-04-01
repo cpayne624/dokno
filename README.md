@@ -1,4 +1,8 @@
 # Dokno
+
+> [!WARNING]
+> This project is largely unmaintained now. I'll happily accept PRs to keep things in working order, but I no longer plan to make updates.
+
 ![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg) [![Gem Version](https://badge.fury.io/rb/dokno.svg)](https://badge.fury.io/rb/dokno)
 
 Dokno (e.g., "I _do' kno'_ the answer") is a lightweight Rails Engine for storing and managing your app's <b>do</b>main <b>kno</b>wledge.
