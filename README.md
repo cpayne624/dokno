@@ -1,6 +1,6 @@
 # Dokno
 
-> [!NOTE]
+> [!WARNING]
 > This project is largely unmaintained now. I'll happily accept PRs to keep things in working order, but I no longer plan to make updates.
 
 ![CI RSpec](https://github.com/cpayne624/dokno/workflows/CI%20RSpec/badge.svg) [![Gem Version](https://badge.fury.io/rb/dokno.svg)](https://badge.fury.io/rb/dokno)

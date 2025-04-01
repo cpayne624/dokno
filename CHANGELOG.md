@@ -3,6 +3,10 @@ All notable changes to this project are documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.14
+### Updated
+- Development dependency security vulnerability gem updates
+
 ## 1.4.13
 ### Updated
 - Development dependency security vulnerability gem updates
